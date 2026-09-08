@@ -1,4 +1,4 @@
-п»їimport 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../../features/projects/presentation/projects_screen.dart';
 
 class AppScaffold extends StatefulWidget {
@@ -10,14 +10,14 @@ class AppScaffold extends StatefulWidget {
 
 class _AppScaffoldState extends State<AppScaffold> {
   int _currentIndex = 0;
-  String _selectedBalanceOption = 'Р”РѕСЃС‚СѓРїРЅРѕ: 0 в‚Ѕ';
+  String _selectedBalanceOption = 'Доступно: 0 ?';
 
   static const List<String> _titles = [
-    'РЎРІРѕРґРєР°',
-    'Р›РµРЅС‚Р°',
-    'РћС‚С‡С‘С‚',
-    'Р—Р°С‘Рј',
-    'РЈРІРµРґ',
+    'Сводка',
+    'Лента',
+    'Отчёт',
+    'Заём',
+    'Увед',
   ];
 
   static const List<IconData> _icons = [
@@ -53,17 +53,17 @@ class _AppScaffoldState extends State<AppScaffold> {
               alignment: Alignment.center,
               items: [
                 DropdownMenuItem(
-                  value: 'Р”РѕСЃС‚СѓРїРЅРѕ: 0 в‚Ѕ',
+                  value: 'Доступно: 0 ?',
                   child: SizedBox(
                     width: double.infinity,
-                    child: Center(child: Text('Р”РѕСЃС‚СѓРїРЅРѕ: 0 в‚Ѕ')),
+                    child: Center(child: Text('Доступно: 0 ?')),
                   ),
                 ),
                 DropdownMenuItem(
-                  value: 'Р—Р°Р№РјС‹: 0 в‚Ѕ',
+                  value: 'Займы: 0 ?',
                   child: SizedBox(
                     width: double.infinity,
-                    child: Center(child: Text('Р—Р°Р№РјС‹: 0 в‚Ѕ')),
+                    child: Center(child: Text('Займы: 0 ?')),
                   ),
                 ),
               ],
@@ -99,13 +99,13 @@ class _AppScaffoldState extends State<AppScaffold> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'РњРµРЅСЋ',
+                        'Меню',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       TextButton.icon(
                         onPressed: () => Navigator.pop(context),
                         icon: const Icon(Icons.arrow_back),
-                        label: const Text('Р—Р°РєСЂС‹С‚СЊ'),
+                        label: const Text('Закрыть'),
                       ),
                     ],
                   ),
@@ -119,34 +119,27 @@ class _AppScaffoldState extends State<AppScaffold> {
             ),
             const ListTile(
               leading: Icon(Icons.person),
-              title: Text('РџСЂРѕС„РёР»СЊ'),
+              title: Text('Профиль'),
             ),
             const ListTile(
               leading: Icon(Icons.account_balance_wallet),
-              title: Text('РЎС‡РµС‚Р°'),
+              title: Text('Счета'),
             ),
             const ListTile(
               leading: Icon(Icons.category),
-              title: Text('РљР°С‚РµРіРѕСЂРёРё'),
+              title: Text('Категории'),
             ),
-            ListTile(
-              leading: const Icon(Icons.folder),
-              title: const Text('РџСЂРѕРµРєС‚С‹'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ProjectsScreen()),
-                );
-              },
+            const ListTile(
+              leading: Icon(Icons.folder),
+              title: Text('Проекты'),
             ),
             const ListTile(
               leading: Icon(Icons.people),
-              title: Text('РљРѕРЅС‚СЂР°РіРµРЅС‚С‹'),
+              title: Text('Контрагенты'),
             ),
             const ListTile(
               leading: Icon(Icons.settings),
-              title: Text('РќР°СЃС‚СЂРѕР№РєРё'),
+              title: Text('Настройки'),
             ),
           ],
         ),
@@ -154,11 +147,11 @@ class _AppScaffoldState extends State<AppScaffold> {
       body: IndexedStack(
         index: _currentIndex,
         children: const [
-          Center(child: Text('РЎРІРѕРґРєР°')),
-          Center(child: Text('Р›РµРЅС‚Р°')),
-          Center(child: Text('РћС‚С‡С‘С‚')),
-          Center(child: Text('Р—Р°С‘Рј')),
-          Center(child: Text('РЈРІРµРґ')),
+          Center(child: Text('Сводка')),
+          Center(child: Text('Лента')),
+          Center(child: Text('Отчёт')),
+          Center(child: Text('Заём')),
+          Center(child: Text('Увед')),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

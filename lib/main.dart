@@ -8,12 +8,14 @@ import 'core/theme/app_theme.dart';
 import 'core/widgets/app_scaffold.dart';
 import 'core/database/app_database.dart';
 import 'core/database/database_provider.dart';
+import 'core/database/initial_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dbDir = await getApplicationDocumentsDirectory();
   final dbFile = p.join(dbDir.path, 'wallet_app.sqlite');
   final db = AppDatabase(NativeDatabase(File(dbFile)));
+  await seedInitialData(db);
   runApp(ProviderScope(
     overrides: [appDatabaseProvider.overrideWithValue(db)],
     child: const WalletApp(),
