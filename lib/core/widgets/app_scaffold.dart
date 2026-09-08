@@ -11,6 +11,7 @@ class AppScaffold extends StatefulWidget {
 class _AppScaffoldState extends State<AppScaffold> {
   int _currentIndex = 0;
   String _selectedBalanceOption = 'Доступно: 0 ₽';
+  bool _showProjects = false;
 
   static const List<String> _titles = [
     'Сводка',
@@ -134,10 +135,9 @@ class _AppScaffoldState extends State<AppScaffold> {
               title: const Text('Проекты'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ProjectsScreen()),
-                );
+                setState(() {
+                  _showProjects = true;
+                });
               },
             ),
             const ListTile(
@@ -151,16 +151,22 @@ class _AppScaffoldState extends State<AppScaffold> {
           ],
         ),
       ),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: const [
-          Center(child: Text('Сводка')),
-          Center(child: Text('Лента')),
-          Center(child: Text('Отчёт')),
-          Center(child: Text('Заём')),
-          Center(child: Text('Увед')),
-        ],
-      ),
+      body: _showProjects
+          ? ProjectsScreen(onBack: () {
+              setState(() {
+                _showProjects = false;
+              });
+            })
+          : IndexedStack(
+              index: _currentIndex,
+              children: const [
+                Center(child: Text('Сводка')),
+                Center(child: Text('Лента')),
+                Center(child: Text('Отчёт')),
+                Center(child: Text('Заём')),
+                Center(child: Text('Увед')),
+              ],
+            ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
@@ -173,10 +179,11 @@ class _AppScaffoldState extends State<AppScaffold> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
+            _showProjects = false; // при переключении вкладок выходим из справочника
           });
         },
       ),
-      floatingActionButton: (_currentIndex == 0 || _currentIndex == 1)
+      floatingActionButton: (_currentIndex == 0 || _currentIndex == 1) && !_showProjects
           ? FloatingActionButton(
               onPressed: () {
                 // TODO: add new transaction

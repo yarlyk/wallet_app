@@ -34,6 +34,25 @@ class _IconPickerState extends State<IconPicker> {
     'attach_money': Icons.attach_money,
   };
 
+  static const Map<String, String> iconLabels = {
+    'folder': 'Папка',
+    'home': 'Дом',
+    'star': 'Звезда',
+    'work': 'Работа',
+    'shopping_cart': 'Корзина',
+    'account_balance_wallet': 'Кошелёк',
+    'credit_card': 'Карта',
+    'account_balance': 'Банк',
+    'receipt': 'Чек',
+    'category': 'Категория',
+    'person': 'Человек',
+    'group': 'Группа',
+    'settings': 'Настройки',
+    'favorite': 'Избранное',
+    'flag': 'Флаг',
+    'attach_money': 'Деньги',
+  };
+
   Future<void> _selectIcon() async {
     final selected = await showModalBottomSheet<String>(
       context: context,
@@ -48,7 +67,11 @@ class _IconPickerState extends State<IconPicker> {
                 children: [
                   Icon(entry.value, size: 32),
                   const SizedBox(height: 4),
-                  Text(entry.key, style: const TextStyle(fontSize: 12)),
+                  Text(
+                    iconLabels[entry.key] ?? entry.key,
+                    style: const TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ),
             );
@@ -77,7 +100,7 @@ class _IconPickerState extends State<IconPicker> {
                 children: [
                   Icon(availableIcons[widget.selectedIconName] ?? Icons.help),
                   const SizedBox(width: 8),
-                  Text(widget.selectedIconName!),
+                  Text(iconLabels[widget.selectedIconName] ?? widget.selectedIconName!),
                 ],
               ),
       ),

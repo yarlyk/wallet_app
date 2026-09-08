@@ -11,6 +11,7 @@ class EntityForm extends StatefulWidget {
   final VoidCallback? onDelete;
   final bool showDelete;
   final bool isEditing;
+  final TextCapitalization textCapitalization;
 
   const EntityForm({
     Key? key,
@@ -23,6 +24,7 @@ class EntityForm extends StatefulWidget {
     this.onDelete,
     this.showDelete = false,
     this.isEditing = false,
+    this.textCapitalization = TextCapitalization.words,
   }) : super(key: key);
 
   @override
@@ -62,6 +64,7 @@ class _EntityFormState extends State<EntityForm> {
             const SizedBox(height: 16),
             TextFormField(
               controller: widget.nameController,
+              textCapitalization: widget.textCapitalization,
               decoration: const InputDecoration(
                 labelText: 'Название',
                 border: OutlineInputBorder(),
