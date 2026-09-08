@@ -417,8 +417,13 @@ class $ProjectsTable extends Projects with TableInfo<$ProjectsTable, Project> {
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'),
       defaultValue: const Constant(true));
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
   @override
-  List<GeneratedColumn> get $columns => [id, name, isActive];
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+      'icon', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [id, name, isActive, icon];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -442,6 +447,10 @@ class $ProjectsTable extends Projects with TableInfo<$ProjectsTable, Project> {
       context.handle(_isActiveMeta,
           isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
     }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    }
     return context;
   }
 
@@ -457,6 +466,8 @@ class $ProjectsTable extends Projects with TableInfo<$ProjectsTable, Project> {
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       isActive: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+      icon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon']),
     );
   }
 
@@ -470,13 +481,21 @@ class Project extends DataClass implements Insertable<Project> {
   final int id;
   final String name;
   final bool isActive;
-  const Project({required this.id, required this.name, required this.isActive});
+  final String? icon;
+  const Project(
+      {required this.id,
+      required this.name,
+      required this.isActive,
+      this.icon});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['is_active'] = Variable<bool>(isActive);
+    if (!nullToAbsent || icon != null) {
+      map['icon'] = Variable<String>(icon);
+    }
     return map;
   }
 
@@ -485,6 +504,7 @@ class Project extends DataClass implements Insertable<Project> {
       id: Value(id),
       name: Value(name),
       isActive: Value(isActive),
+      icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
     );
   }
 
@@ -495,6 +515,7 @@ class Project extends DataClass implements Insertable<Project> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       isActive: serializer.fromJson<bool>(json['isActive']),
+      icon: serializer.fromJson<String?>(json['icon']),
     );
   }
   @override
@@ -504,19 +525,27 @@ class Project extends DataClass implements Insertable<Project> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'isActive': serializer.toJson<bool>(isActive),
+      'icon': serializer.toJson<String?>(icon),
     };
   }
 
-  Project copyWith({int? id, String? name, bool? isActive}) => Project(
+  Project copyWith(
+          {int? id,
+          String? name,
+          bool? isActive,
+          Value<String?> icon = const Value.absent()}) =>
+      Project(
         id: id ?? this.id,
         name: name ?? this.name,
         isActive: isActive ?? this.isActive,
+        icon: icon.present ? icon.value : this.icon,
       );
   Project copyWithCompanion(ProjectsCompanion data) {
     return Project(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
       isActive: data.isActive.present ? data.isActive.value : this.isActive,
+      icon: data.icon.present ? data.icon.value : this.icon,
     );
   }
 
@@ -525,54 +554,65 @@ class Project extends DataClass implements Insertable<Project> {
     return (StringBuffer('Project(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('isActive: $isActive')
+          ..write('isActive: $isActive, ')
+          ..write('icon: $icon')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, isActive);
+  int get hashCode => Object.hash(id, name, isActive, icon);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Project &&
           other.id == this.id &&
           other.name == this.name &&
-          other.isActive == this.isActive);
+          other.isActive == this.isActive &&
+          other.icon == this.icon);
 }
 
 class ProjectsCompanion extends UpdateCompanion<Project> {
   final Value<int> id;
   final Value<String> name;
   final Value<bool> isActive;
+  final Value<String?> icon;
   const ProjectsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.isActive = const Value.absent(),
+    this.icon = const Value.absent(),
   });
   ProjectsCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     this.isActive = const Value.absent(),
+    this.icon = const Value.absent(),
   }) : name = Value(name);
   static Insertable<Project> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<bool>? isActive,
+    Expression<String>? icon,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (isActive != null) 'is_active': isActive,
+      if (icon != null) 'icon': icon,
     });
   }
 
   ProjectsCompanion copyWith(
-      {Value<int>? id, Value<String>? name, Value<bool>? isActive}) {
+      {Value<int>? id,
+      Value<String>? name,
+      Value<bool>? isActive,
+      Value<String?>? icon}) {
     return ProjectsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       isActive: isActive ?? this.isActive,
+      icon: icon ?? this.icon,
     );
   }
 
@@ -588,6 +628,9 @@ class ProjectsCompanion extends UpdateCompanion<Project> {
     if (isActive.present) {
       map['is_active'] = Variable<bool>(isActive.value);
     }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
     return map;
   }
 
@@ -596,7 +639,8 @@ class ProjectsCompanion extends UpdateCompanion<Project> {
     return (StringBuffer('ProjectsCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('isActive: $isActive')
+          ..write('isActive: $isActive, ')
+          ..write('icon: $icon')
           ..write(')'))
         .toString();
   }
@@ -811,11 +855,13 @@ typedef $$ProjectsTableCreateCompanionBuilder = ProjectsCompanion Function({
   Value<int> id,
   required String name,
   Value<bool> isActive,
+  Value<String?> icon,
 });
 typedef $$ProjectsTableUpdateCompanionBuilder = ProjectsCompanion Function({
   Value<int> id,
   Value<String> name,
   Value<bool> isActive,
+  Value<String?> icon,
 });
 
 class $$ProjectsTableFilterComposer
@@ -835,6 +881,9 @@ class $$ProjectsTableFilterComposer
 
   ColumnFilters<bool> get isActive => $composableBuilder(
       column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
 }
 
 class $$ProjectsTableOrderingComposer
@@ -854,6 +903,9 @@ class $$ProjectsTableOrderingComposer
 
   ColumnOrderings<bool> get isActive => $composableBuilder(
       column: $table.isActive, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
 }
 
 class $$ProjectsTableAnnotationComposer
@@ -873,6 +925,9 @@ class $$ProjectsTableAnnotationComposer
 
   GeneratedColumn<bool> get isActive =>
       $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
 }
 
 class $$ProjectsTableTableManager extends RootTableManager<
@@ -901,21 +956,25 @@ class $$ProjectsTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<bool> isActive = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
           }) =>
               ProjectsCompanion(
             id: id,
             name: name,
             isActive: isActive,
+            icon: icon,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String name,
             Value<bool> isActive = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
           }) =>
               ProjectsCompanion.insert(
             id: id,
             name: name,
             isActive: isActive,
+            icon: icon,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (
