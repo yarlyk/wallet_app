@@ -1,6 +1,4 @@
-﻿import 'package:drift/drift.dart';
-import '../../../core/database/app_database.dart';
-import 'currencies_table.dart';
+﻿import '../../../core/database/app_database.dart';
 
 class CurrencyRepository {
   final AppDatabase _db;

@@ -68,9 +68,15 @@ class $CurrenciesTable extends Currencies
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: const Constant(1));
+  static const VerificationMeta _countryMeta =
+      const VerificationMeta('country');
+  @override
+  late final GeneratedColumn<String> country = GeneratedColumn<String>(
+      'country', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, code, name, symbol, isActive, numCode, nominal];
+      [id, code, name, symbol, isActive, numCode, nominal, country];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -114,6 +120,10 @@ class $CurrenciesTable extends Currencies
       context.handle(_nominalMeta,
           nominal.isAcceptableOrUnknown(data['nominal']!, _nominalMeta));
     }
+    if (data.containsKey('country')) {
+      context.handle(_countryMeta,
+          country.isAcceptableOrUnknown(data['country']!, _countryMeta));
+    }
     return context;
   }
 
@@ -137,6 +147,8 @@ class $CurrenciesTable extends Currencies
           .read(DriftSqlType.int, data['${effectivePrefix}num_code'])!,
       nominal: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}nominal'])!,
+      country: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}country']),
     );
   }
 
@@ -154,6 +166,7 @@ class Currency extends DataClass implements Insertable<Currency> {
   final bool isActive;
   final int numCode;
   final int nominal;
+  final String? country;
   const Currency(
       {required this.id,
       required this.code,
@@ -161,7 +174,8 @@ class Currency extends DataClass implements Insertable<Currency> {
       this.symbol,
       required this.isActive,
       required this.numCode,
-      required this.nominal});
+      required this.nominal,
+      this.country});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -174,6 +188,9 @@ class Currency extends DataClass implements Insertable<Currency> {
     map['is_active'] = Variable<bool>(isActive);
     map['num_code'] = Variable<int>(numCode);
     map['nominal'] = Variable<int>(nominal);
+    if (!nullToAbsent || country != null) {
+      map['country'] = Variable<String>(country);
+    }
     return map;
   }
 
@@ -187,6 +204,9 @@ class Currency extends DataClass implements Insertable<Currency> {
       isActive: Value(isActive),
       numCode: Value(numCode),
       nominal: Value(nominal),
+      country: country == null && nullToAbsent
+          ? const Value.absent()
+          : Value(country),
     );
   }
 
@@ -201,6 +221,7 @@ class Currency extends DataClass implements Insertable<Currency> {
       isActive: serializer.fromJson<bool>(json['isActive']),
       numCode: serializer.fromJson<int>(json['numCode']),
       nominal: serializer.fromJson<int>(json['nominal']),
+      country: serializer.fromJson<String?>(json['country']),
     );
   }
   @override
@@ -214,6 +235,7 @@ class Currency extends DataClass implements Insertable<Currency> {
       'isActive': serializer.toJson<bool>(isActive),
       'numCode': serializer.toJson<int>(numCode),
       'nominal': serializer.toJson<int>(nominal),
+      'country': serializer.toJson<String?>(country),
     };
   }
 
@@ -224,7 +246,8 @@ class Currency extends DataClass implements Insertable<Currency> {
           Value<String?> symbol = const Value.absent(),
           bool? isActive,
           int? numCode,
-          int? nominal}) =>
+          int? nominal,
+          Value<String?> country = const Value.absent()}) =>
       Currency(
         id: id ?? this.id,
         code: code ?? this.code,
@@ -233,6 +256,7 @@ class Currency extends DataClass implements Insertable<Currency> {
         isActive: isActive ?? this.isActive,
         numCode: numCode ?? this.numCode,
         nominal: nominal ?? this.nominal,
+        country: country.present ? country.value : this.country,
       );
   Currency copyWithCompanion(CurrenciesCompanion data) {
     return Currency(
@@ -243,6 +267,7 @@ class Currency extends DataClass implements Insertable<Currency> {
       isActive: data.isActive.present ? data.isActive.value : this.isActive,
       numCode: data.numCode.present ? data.numCode.value : this.numCode,
       nominal: data.nominal.present ? data.nominal.value : this.nominal,
+      country: data.country.present ? data.country.value : this.country,
     );
   }
 
@@ -255,14 +280,15 @@ class Currency extends DataClass implements Insertable<Currency> {
           ..write('symbol: $symbol, ')
           ..write('isActive: $isActive, ')
           ..write('numCode: $numCode, ')
-          ..write('nominal: $nominal')
+          ..write('nominal: $nominal, ')
+          ..write('country: $country')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode =>
-      Object.hash(id, code, name, symbol, isActive, numCode, nominal);
+      Object.hash(id, code, name, symbol, isActive, numCode, nominal, country);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -273,7 +299,8 @@ class Currency extends DataClass implements Insertable<Currency> {
           other.symbol == this.symbol &&
           other.isActive == this.isActive &&
           other.numCode == this.numCode &&
-          other.nominal == this.nominal);
+          other.nominal == this.nominal &&
+          other.country == this.country);
 }
 
 class CurrenciesCompanion extends UpdateCompanion<Currency> {
@@ -284,6 +311,7 @@ class CurrenciesCompanion extends UpdateCompanion<Currency> {
   final Value<bool> isActive;
   final Value<int> numCode;
   final Value<int> nominal;
+  final Value<String?> country;
   const CurrenciesCompanion({
     this.id = const Value.absent(),
     this.code = const Value.absent(),
@@ -292,6 +320,7 @@ class CurrenciesCompanion extends UpdateCompanion<Currency> {
     this.isActive = const Value.absent(),
     this.numCode = const Value.absent(),
     this.nominal = const Value.absent(),
+    this.country = const Value.absent(),
   });
   CurrenciesCompanion.insert({
     this.id = const Value.absent(),
@@ -301,6 +330,7 @@ class CurrenciesCompanion extends UpdateCompanion<Currency> {
     this.isActive = const Value.absent(),
     required int numCode,
     this.nominal = const Value.absent(),
+    this.country = const Value.absent(),
   })  : code = Value(code),
         name = Value(name),
         numCode = Value(numCode);
@@ -312,6 +342,7 @@ class CurrenciesCompanion extends UpdateCompanion<Currency> {
     Expression<bool>? isActive,
     Expression<int>? numCode,
     Expression<int>? nominal,
+    Expression<String>? country,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -321,6 +352,7 @@ class CurrenciesCompanion extends UpdateCompanion<Currency> {
       if (isActive != null) 'is_active': isActive,
       if (numCode != null) 'num_code': numCode,
       if (nominal != null) 'nominal': nominal,
+      if (country != null) 'country': country,
     });
   }
 
@@ -331,7 +363,8 @@ class CurrenciesCompanion extends UpdateCompanion<Currency> {
       Value<String?>? symbol,
       Value<bool>? isActive,
       Value<int>? numCode,
-      Value<int>? nominal}) {
+      Value<int>? nominal,
+      Value<String?>? country}) {
     return CurrenciesCompanion(
       id: id ?? this.id,
       code: code ?? this.code,
@@ -340,6 +373,7 @@ class CurrenciesCompanion extends UpdateCompanion<Currency> {
       isActive: isActive ?? this.isActive,
       numCode: numCode ?? this.numCode,
       nominal: nominal ?? this.nominal,
+      country: country ?? this.country,
     );
   }
 
@@ -367,6 +401,9 @@ class CurrenciesCompanion extends UpdateCompanion<Currency> {
     if (nominal.present) {
       map['nominal'] = Variable<int>(nominal.value);
     }
+    if (country.present) {
+      map['country'] = Variable<String>(country.value);
+    }
     return map;
   }
 
@@ -379,7 +416,8 @@ class CurrenciesCompanion extends UpdateCompanion<Currency> {
           ..write('symbol: $symbol, ')
           ..write('isActive: $isActive, ')
           ..write('numCode: $numCode, ')
-          ..write('nominal: $nominal')
+          ..write('nominal: $nominal, ')
+          ..write('country: $country')
           ..write(')'))
         .toString();
   }
@@ -666,6 +704,7 @@ typedef $$CurrenciesTableCreateCompanionBuilder = CurrenciesCompanion Function({
   Value<bool> isActive,
   required int numCode,
   Value<int> nominal,
+  Value<String?> country,
 });
 typedef $$CurrenciesTableUpdateCompanionBuilder = CurrenciesCompanion Function({
   Value<int> id,
@@ -675,6 +714,7 @@ typedef $$CurrenciesTableUpdateCompanionBuilder = CurrenciesCompanion Function({
   Value<bool> isActive,
   Value<int> numCode,
   Value<int> nominal,
+  Value<String?> country,
 });
 
 class $$CurrenciesTableFilterComposer
@@ -706,6 +746,9 @@ class $$CurrenciesTableFilterComposer
 
   ColumnFilters<int> get nominal => $composableBuilder(
       column: $table.nominal, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get country => $composableBuilder(
+      column: $table.country, builder: (column) => ColumnFilters(column));
 }
 
 class $$CurrenciesTableOrderingComposer
@@ -737,6 +780,9 @@ class $$CurrenciesTableOrderingComposer
 
   ColumnOrderings<int> get nominal => $composableBuilder(
       column: $table.nominal, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get country => $composableBuilder(
+      column: $table.country, builder: (column) => ColumnOrderings(column));
 }
 
 class $$CurrenciesTableAnnotationComposer
@@ -768,6 +814,9 @@ class $$CurrenciesTableAnnotationComposer
 
   GeneratedColumn<int> get nominal =>
       $composableBuilder(column: $table.nominal, builder: (column) => column);
+
+  GeneratedColumn<String> get country =>
+      $composableBuilder(column: $table.country, builder: (column) => column);
 }
 
 class $$CurrenciesTableTableManager extends RootTableManager<
@@ -800,6 +849,7 @@ class $$CurrenciesTableTableManager extends RootTableManager<
             Value<bool> isActive = const Value.absent(),
             Value<int> numCode = const Value.absent(),
             Value<int> nominal = const Value.absent(),
+            Value<String?> country = const Value.absent(),
           }) =>
               CurrenciesCompanion(
             id: id,
@@ -809,6 +859,7 @@ class $$CurrenciesTableTableManager extends RootTableManager<
             isActive: isActive,
             numCode: numCode,
             nominal: nominal,
+            country: country,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -818,6 +869,7 @@ class $$CurrenciesTableTableManager extends RootTableManager<
             Value<bool> isActive = const Value.absent(),
             required int numCode,
             Value<int> nominal = const Value.absent(),
+            Value<String?> country = const Value.absent(),
           }) =>
               CurrenciesCompanion.insert(
             id: id,
@@ -827,6 +879,7 @@ class $$CurrenciesTableTableManager extends RootTableManager<
             isActive: isActive,
             numCode: numCode,
             nominal: nominal,
+            country: country,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (

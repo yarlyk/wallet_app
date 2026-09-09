@@ -8,4 +8,5 @@ class Currencies extends Table {
   BoolColumn get isActive => boolean().withDefault(const Constant(true))();
   IntColumn get numCode => integer().unique()();
   IntColumn get nominal => integer().withDefault(const Constant(1))();
+  TextColumn get country => text().nullable()();
 }

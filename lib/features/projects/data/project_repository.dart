@@ -1,6 +1,4 @@
-﻿import 'package:drift/drift.dart';
-import '../../../core/database/app_database.dart';
-import 'projects_table.dart';
+﻿import '../../../core/database/app_database.dart';
 
 class ProjectRepository {
   final AppDatabase _db;

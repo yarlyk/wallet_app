@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' as drift;
 import '../../../core/database/app_database.dart';
 import '../../../core/widgets/entity_form.dart';
+import '../../../core/widgets/entity_list_screen.dart';
 import 'projects_provider.dart';
 
 class ProjectsScreen extends ConsumerWidget {
@@ -13,62 +14,35 @@ class ProjectsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final projectsAsync = ref.watch(projectsProvider);
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Проекты',
-            style: Theme.of(context).textTheme.titleLarge,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Expanded(
-          child: projectsAsync.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stack) => Center(child: Text('Ошибка: $error')),
-            data: (projects) => ListView.builder(
-              itemCount: projects.length,
-              itemBuilder: (context, index) {
-                final project = projects[index];
-                return ListTile(
-                  leading: Icon(
-                    project.icon != null
-                        ? _iconFromName(project.icon!)
-                        : Icons.folder,
-                  ),
-                  title: Text(project.name),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () => _showProjectForm(context, ref, project: project),
-                  ),
-                  onTap: () => _showProjectForm(context, ref, project: project),
-                );
-              },
-            ),
-          ),
-        ),
-        SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                TextButton.icon(
-                  onPressed: onBack,
-                  icon: const Icon(Icons.arrow_back),
-                  label: const Text('Назад'),
-                ),
-                const Spacer(),
-                ElevatedButton.icon(
-                  onPressed: () => _showProjectForm(context, ref),
-                  icon: const Icon(Icons.add),
-                  label: const Text('Проект'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+    return projectsAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Ошибка: $error')),
+      data: (projects) {
+        return EntityListScreen(
+          title: 'Проекты',
+          itemCount: projects.length,
+          itemBuilder: (context, index) {
+            final project = projects[index];
+            return ListTile(
+              leading: Icon(
+                project.icon != null
+                    ? _iconFromName(project.icon!)
+                    : Icons.folder,
+              ),
+              title: Text(project.name),
+              trailing: IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () => _showProjectForm(context, ref, project: project),
+              ),
+              onTap: () => _showProjectForm(context, ref, project: project),
+            );
+          },
+          onBack: onBack,
+          showAddItem: true,
+          addItemLabel: 'Проект',
+          onAddItem: () => _showProjectForm(context, ref),
+        );
+      },
     );
   }
 

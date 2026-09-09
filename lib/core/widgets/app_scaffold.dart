@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import '../../features/currencies/presentation/currencies_screen.dart';
 import '../../features/projects/presentation/projects_screen.dart';
 
 class AppScaffold extends StatefulWidget {
@@ -12,6 +13,7 @@ class _AppScaffoldState extends State<AppScaffold> {
   int _currentIndex = 0;
   String _selectedBalanceOption = 'Доступно: 0 ₽';
   bool _showProjects = false;
+  bool _showCurrencies = false;
 
   static const List<String> _titles = [
     'Сводка',
@@ -119,10 +121,6 @@ class _AppScaffoldState extends State<AppScaffold> {
               ),
             ),
             const ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Профиль'),
-            ),
-            const ListTile(
               leading: Icon(Icons.account_balance_wallet),
               title: Text('Счета'),
             ),
@@ -137,6 +135,18 @@ class _AppScaffoldState extends State<AppScaffold> {
                 Navigator.pop(context);
                 setState(() {
                   _showProjects = true;
+                  _showCurrencies = false;
+                });
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.currency_exchange),
+              title: const Text('Валюты'),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  _showCurrencies = true;
+                  _showProjects = false;
                 });
               },
             ),
@@ -157,16 +167,22 @@ class _AppScaffoldState extends State<AppScaffold> {
                 _showProjects = false;
               });
             })
-          : IndexedStack(
-              index: _currentIndex,
-              children: const [
-                Center(child: Text('Сводка')),
-                Center(child: Text('Лента')),
-                Center(child: Text('Отчёт')),
-                Center(child: Text('Заём')),
-                Center(child: Text('Увед')),
-              ],
-            ),
+          : _showCurrencies
+              ? CurrenciesScreen(onBack: () {
+                  setState(() {
+                    _showCurrencies = false;
+                  });
+                })
+              : IndexedStack(
+                  index: _currentIndex,
+                  children: const [
+                    Center(child: Text('Сводка')),
+                    Center(child: Text('Лента')),
+                    Center(child: Text('Отчёт')),
+                    Center(child: Text('Заём')),
+                    Center(child: Text('Увед')),
+                  ],
+                ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
@@ -179,11 +195,12 @@ class _AppScaffoldState extends State<AppScaffold> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            _showProjects = false; // при переключении вкладок выходим из справочника
+            _showProjects = false;
+            _showCurrencies = false;
           });
         },
       ),
-      floatingActionButton: (_currentIndex == 0 || _currentIndex == 1) && !_showProjects
+      floatingActionButton: (_currentIndex == 0 || _currentIndex == 1) && !_showProjects && !_showCurrencies
           ? FloatingActionButton(
               onPressed: () {
                 // TODO: add new transaction
