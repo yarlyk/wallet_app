@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import '../../features/accounts/presentation/accounts_screen.dart';
 import '../../features/categories/presentation/categories_screen.dart';
+import '../../features/counterparties/presentation/counterparties_screen.dart';
 import '../../features/currencies/presentation/currencies_screen.dart';
 import '../../features/projects/presentation/projects_screen.dart';
 
@@ -18,9 +19,14 @@ class _AppScaffoldState extends State<AppScaffold> {
   bool _showCurrencies = false;
   bool _showAccounts = false;
   bool _showCategories = false;
+  bool _showCounterparties = false;
 
   bool get _anyPanelOpen =>
-      _showProjects || _showCurrencies || _showAccounts || _showCategories;
+      _showProjects ||
+      _showCurrencies ||
+      _showAccounts ||
+      _showCategories ||
+      _showCounterparties;
 
   static const List<String> _titles = [
     'Сводка',
@@ -44,6 +50,19 @@ class _AppScaffoldState extends State<AppScaffold> {
       _showCurrencies = false;
       _showAccounts = false;
       _showCategories = false;
+      _showCounterparties = false;
+    });
+  }
+
+  void _openPanel(void Function() setFlag) {
+    Navigator.pop(context);
+    setState(() {
+      _showProjects = false;
+      _showCurrencies = false;
+      _showAccounts = false;
+      _showCategories = false;
+      _showCounterparties = false;
+      setFlag();
     });
   }
 
@@ -139,58 +158,27 @@ class _AppScaffoldState extends State<AppScaffold> {
             ListTile(
               leading: const Icon(Icons.account_balance_wallet),
               title: const Text('Счета'),
-              onTap: () {
-                Navigator.pop(context);
-                setState(() {
-                  _showAccounts = true;
-                  _showProjects = false;
-                  _showCurrencies = false;
-                  _showCategories = false;
-                });
-              },
+              onTap: () => _openPanel(() => _showAccounts = true),
             ),
             ListTile(
               leading: const Icon(Icons.category),
               title: const Text('Категории'),
-              onTap: () {
-                Navigator.pop(context);
-                setState(() {
-                  _showCategories = true;
-                  _showAccounts = false;
-                  _showProjects = false;
-                  _showCurrencies = false;
-                });
-              },
+              onTap: () => _openPanel(() => _showCategories = true),
             ),
             ListTile(
               leading: const Icon(Icons.folder),
               title: const Text('Проекты'),
-              onTap: () {
-                Navigator.pop(context);
-                setState(() {
-                  _showProjects = true;
-                  _showCurrencies = false;
-                  _showAccounts = false;
-                  _showCategories = false;
-                });
-              },
+              onTap: () => _openPanel(() => _showProjects = true),
             ),
             ListTile(
               leading: const Icon(Icons.currency_exchange),
               title: const Text('Валюты'),
-              onTap: () {
-                Navigator.pop(context);
-                setState(() {
-                  _showCurrencies = true;
-                  _showProjects = false;
-                  _showAccounts = false;
-                  _showCategories = false;
-                });
-              },
+              onTap: () => _openPanel(() => _showCurrencies = true),
             ),
-            const ListTile(
-              leading: Icon(Icons.people),
-              title: Text('Контрагенты'),
+            ListTile(
+              leading: const Icon(Icons.people),
+              title: const Text('Контрагенты'),
+              onTap: () => _openPanel(() => _showCounterparties = true),
             ),
             const ListTile(
               leading: Icon(Icons.settings),
@@ -199,24 +187,26 @@ class _AppScaffoldState extends State<AppScaffold> {
           ],
         ),
       ),
-      body: _showCategories
-          ? CategoriesScreen(onBack: _closeAllPanels)
-          : _showAccounts
-              ? AccountsScreen(onBack: _closeAllPanels)
-              : _showProjects
-                  ? ProjectsScreen(onBack: _closeAllPanels)
-                  : _showCurrencies
-                      ? CurrenciesScreen(onBack: _closeAllPanels)
-                      : IndexedStack(
-                          index: _currentIndex,
-                          children: const [
-                            Center(child: Text('Сводка')),
-                            Center(child: Text('Лента')),
-                            Center(child: Text('Отчёт')),
-                            Center(child: Text('Заём')),
-                            Center(child: Text('Увед')),
-                          ],
-                        ),
+      body: _showCounterparties
+          ? CounterpartiesScreen(onBack: _closeAllPanels)
+          : _showCategories
+              ? CategoriesScreen(onBack: _closeAllPanels)
+              : _showAccounts
+                  ? AccountsScreen(onBack: _closeAllPanels)
+                  : _showProjects
+                      ? ProjectsScreen(onBack: _closeAllPanels)
+                      : _showCurrencies
+                          ? CurrenciesScreen(onBack: _closeAllPanels)
+                          : IndexedStack(
+                              index: _currentIndex,
+                              children: const [
+                                Center(child: Text('Сводка')),
+                                Center(child: Text('Лента')),
+                                Center(child: Text('Отчёт')),
+                                Center(child: Text('Заём')),
+                                Center(child: Text('Увед')),
+                              ],
+                            ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,

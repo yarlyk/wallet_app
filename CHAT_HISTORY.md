@@ -143,3 +143,18 @@
 - Добавлена проверка удаления категории: если есть вложенные категории (рекурсивно), показывается AlertDialog с числом и склонением, форма остаётся открытой. Пустые категории удаляются без ограничений.
 - CategoryFormScreen принимает onDeleteOverride для кастомной логики удаления.
 - flutter analyze: No issues found!
+
+## 2026-09-13 (Контрагенты)
+- Добавлены таблицы: Counterparties, CounterpartyGroups, CounterpartyGroupParents (мультиродитель, @ReferenceName), CounterpartyGroupLinks (контрагент ↔ группы), CounterpartyProjects (контрагент ↔ проекты).
+- schemaVersion -> 5, миграция создаёт только новые таблицы, данные сохраняются.
+- Создан CounterpartyRepository и counterpartiesProvider (AsyncNotifier).
+- Создан PhoneInputFormatter (нормализует ввод к +7 XXX XXX XX XX) в lib/core/utils/phone_utils.dart.
+- Подключён url_launcher (звонок, email).
+- Создан CounterpartyFormScreen: имя, ИНН, телефон (маска +7 с нормализацией 7/8/9), email (валидация), заметка, иконка, группы (мультивыбор), проекты (мультивыбор). Кнопки: 📞 зелёная — звонок, 📧 — почта.
+- Создан CounterpartyGroupFormScreen с мультиродителем (как у категорий).
+- Создан CounterpartyGroupMultiSelectDialog (с защитой от циклов).
+- Создан CounterpartiesScreen: сверху группы верхнего уровня (ExpansionTile, мультиродитель показывается у обоих), затем контрагенты без групп. Запрет удаления группы с контрагентами (рекурсивный подсчёт).
+- AppScaffold: активирован пункт "Контрагенты", рефактор openPanel через _openPanel(setFlag).
+- Кнопка "+ Контрагент" заменена на компактную иконку Icons.person_add.
+- flutter analyze: No issues found!
+- Следующий шаг: импорт контрагентов из контактов (Android + iOS).

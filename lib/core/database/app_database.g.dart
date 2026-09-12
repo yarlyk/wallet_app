@@ -2406,6 +2406,1295 @@ class CategoryParentsCompanion extends UpdateCompanion<CategoryParent> {
   }
 }
 
+class $CounterpartiesTable extends Counterparties
+    with TableInfo<$CounterpartiesTable, Counterparty> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CounterpartiesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _innMeta = const VerificationMeta('inn');
+  @override
+  late final GeneratedColumn<String> inn = GeneratedColumn<String>(
+      'inn', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
+  @override
+  late final GeneratedColumn<String> phone = GeneratedColumn<String>(
+      'phone', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _emailMeta = const VerificationMeta('email');
+  @override
+  late final GeneratedColumn<String> email = GeneratedColumn<String>(
+      'email', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+      'note', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+      'icon', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, inn, phone, email, note, icon, isActive];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'counterparties';
+  @override
+  VerificationContext validateIntegrity(Insertable<Counterparty> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('inn')) {
+      context.handle(
+          _innMeta, inn.isAcceptableOrUnknown(data['inn']!, _innMeta));
+    }
+    if (data.containsKey('phone')) {
+      context.handle(
+          _phoneMeta, phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta));
+    }
+    if (data.containsKey('email')) {
+      context.handle(
+          _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Counterparty map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Counterparty(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      inn: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}inn']),
+      phone: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}phone']),
+      email: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}email']),
+      note: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}note']),
+      icon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon']),
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+    );
+  }
+
+  @override
+  $CounterpartiesTable createAlias(String alias) {
+    return $CounterpartiesTable(attachedDatabase, alias);
+  }
+}
+
+class Counterparty extends DataClass implements Insertable<Counterparty> {
+  final int id;
+  final String name;
+  final String? inn;
+  final String? phone;
+  final String? email;
+  final String? note;
+  final String? icon;
+  final bool isActive;
+  const Counterparty(
+      {required this.id,
+      required this.name,
+      this.inn,
+      this.phone,
+      this.email,
+      this.note,
+      this.icon,
+      required this.isActive});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || inn != null) {
+      map['inn'] = Variable<String>(inn);
+    }
+    if (!nullToAbsent || phone != null) {
+      map['phone'] = Variable<String>(phone);
+    }
+    if (!nullToAbsent || email != null) {
+      map['email'] = Variable<String>(email);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    if (!nullToAbsent || icon != null) {
+      map['icon'] = Variable<String>(icon);
+    }
+    map['is_active'] = Variable<bool>(isActive);
+    return map;
+  }
+
+  CounterpartiesCompanion toCompanion(bool nullToAbsent) {
+    return CounterpartiesCompanion(
+      id: Value(id),
+      name: Value(name),
+      inn: inn == null && nullToAbsent ? const Value.absent() : Value(inn),
+      phone:
+          phone == null && nullToAbsent ? const Value.absent() : Value(phone),
+      email:
+          email == null && nullToAbsent ? const Value.absent() : Value(email),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
+      isActive: Value(isActive),
+    );
+  }
+
+  factory Counterparty.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Counterparty(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      inn: serializer.fromJson<String?>(json['inn']),
+      phone: serializer.fromJson<String?>(json['phone']),
+      email: serializer.fromJson<String?>(json['email']),
+      note: serializer.fromJson<String?>(json['note']),
+      icon: serializer.fromJson<String?>(json['icon']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'inn': serializer.toJson<String?>(inn),
+      'phone': serializer.toJson<String?>(phone),
+      'email': serializer.toJson<String?>(email),
+      'note': serializer.toJson<String?>(note),
+      'icon': serializer.toJson<String?>(icon),
+      'isActive': serializer.toJson<bool>(isActive),
+    };
+  }
+
+  Counterparty copyWith(
+          {int? id,
+          String? name,
+          Value<String?> inn = const Value.absent(),
+          Value<String?> phone = const Value.absent(),
+          Value<String?> email = const Value.absent(),
+          Value<String?> note = const Value.absent(),
+          Value<String?> icon = const Value.absent(),
+          bool? isActive}) =>
+      Counterparty(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        inn: inn.present ? inn.value : this.inn,
+        phone: phone.present ? phone.value : this.phone,
+        email: email.present ? email.value : this.email,
+        note: note.present ? note.value : this.note,
+        icon: icon.present ? icon.value : this.icon,
+        isActive: isActive ?? this.isActive,
+      );
+  Counterparty copyWithCompanion(CounterpartiesCompanion data) {
+    return Counterparty(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      inn: data.inn.present ? data.inn.value : this.inn,
+      phone: data.phone.present ? data.phone.value : this.phone,
+      email: data.email.present ? data.email.value : this.email,
+      note: data.note.present ? data.note.value : this.note,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Counterparty(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('inn: $inn, ')
+          ..write('phone: $phone, ')
+          ..write('email: $email, ')
+          ..write('note: $note, ')
+          ..write('icon: $icon, ')
+          ..write('isActive: $isActive')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, name, inn, phone, email, note, icon, isActive);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Counterparty &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.inn == this.inn &&
+          other.phone == this.phone &&
+          other.email == this.email &&
+          other.note == this.note &&
+          other.icon == this.icon &&
+          other.isActive == this.isActive);
+}
+
+class CounterpartiesCompanion extends UpdateCompanion<Counterparty> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String?> inn;
+  final Value<String?> phone;
+  final Value<String?> email;
+  final Value<String?> note;
+  final Value<String?> icon;
+  final Value<bool> isActive;
+  const CounterpartiesCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.inn = const Value.absent(),
+    this.phone = const Value.absent(),
+    this.email = const Value.absent(),
+    this.note = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.isActive = const Value.absent(),
+  });
+  CounterpartiesCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.inn = const Value.absent(),
+    this.phone = const Value.absent(),
+    this.email = const Value.absent(),
+    this.note = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.isActive = const Value.absent(),
+  }) : name = Value(name);
+  static Insertable<Counterparty> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? inn,
+    Expression<String>? phone,
+    Expression<String>? email,
+    Expression<String>? note,
+    Expression<String>? icon,
+    Expression<bool>? isActive,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (inn != null) 'inn': inn,
+      if (phone != null) 'phone': phone,
+      if (email != null) 'email': email,
+      if (note != null) 'note': note,
+      if (icon != null) 'icon': icon,
+      if (isActive != null) 'is_active': isActive,
+    });
+  }
+
+  CounterpartiesCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<String?>? inn,
+      Value<String?>? phone,
+      Value<String?>? email,
+      Value<String?>? note,
+      Value<String?>? icon,
+      Value<bool>? isActive}) {
+    return CounterpartiesCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      inn: inn ?? this.inn,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      note: note ?? this.note,
+      icon: icon ?? this.icon,
+      isActive: isActive ?? this.isActive,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (inn.present) {
+      map['inn'] = Variable<String>(inn.value);
+    }
+    if (phone.present) {
+      map['phone'] = Variable<String>(phone.value);
+    }
+    if (email.present) {
+      map['email'] = Variable<String>(email.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CounterpartiesCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('inn: $inn, ')
+          ..write('phone: $phone, ')
+          ..write('email: $email, ')
+          ..write('note: $note, ')
+          ..write('icon: $icon, ')
+          ..write('isActive: $isActive')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CounterpartyGroupsTable extends CounterpartyGroups
+    with TableInfo<$CounterpartyGroupsTable, CounterpartyGroup> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CounterpartyGroupsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+      'icon', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  @override
+  List<GeneratedColumn> get $columns => [id, name, icon, isActive];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'counterparty_groups';
+  @override
+  VerificationContext validateIntegrity(Insertable<CounterpartyGroup> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CounterpartyGroup map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CounterpartyGroup(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      icon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon']),
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+    );
+  }
+
+  @override
+  $CounterpartyGroupsTable createAlias(String alias) {
+    return $CounterpartyGroupsTable(attachedDatabase, alias);
+  }
+}
+
+class CounterpartyGroup extends DataClass
+    implements Insertable<CounterpartyGroup> {
+  final int id;
+  final String name;
+  final String? icon;
+  final bool isActive;
+  const CounterpartyGroup(
+      {required this.id,
+      required this.name,
+      this.icon,
+      required this.isActive});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || icon != null) {
+      map['icon'] = Variable<String>(icon);
+    }
+    map['is_active'] = Variable<bool>(isActive);
+    return map;
+  }
+
+  CounterpartyGroupsCompanion toCompanion(bool nullToAbsent) {
+    return CounterpartyGroupsCompanion(
+      id: Value(id),
+      name: Value(name),
+      icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
+      isActive: Value(isActive),
+    );
+  }
+
+  factory CounterpartyGroup.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CounterpartyGroup(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      icon: serializer.fromJson<String?>(json['icon']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'icon': serializer.toJson<String?>(icon),
+      'isActive': serializer.toJson<bool>(isActive),
+    };
+  }
+
+  CounterpartyGroup copyWith(
+          {int? id,
+          String? name,
+          Value<String?> icon = const Value.absent(),
+          bool? isActive}) =>
+      CounterpartyGroup(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        icon: icon.present ? icon.value : this.icon,
+        isActive: isActive ?? this.isActive,
+      );
+  CounterpartyGroup copyWithCompanion(CounterpartyGroupsCompanion data) {
+    return CounterpartyGroup(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CounterpartyGroup(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('isActive: $isActive')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, icon, isActive);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CounterpartyGroup &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.icon == this.icon &&
+          other.isActive == this.isActive);
+}
+
+class CounterpartyGroupsCompanion extends UpdateCompanion<CounterpartyGroup> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String?> icon;
+  final Value<bool> isActive;
+  const CounterpartyGroupsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.isActive = const Value.absent(),
+  });
+  CounterpartyGroupsCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.icon = const Value.absent(),
+    this.isActive = const Value.absent(),
+  }) : name = Value(name);
+  static Insertable<CounterpartyGroup> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? icon,
+    Expression<bool>? isActive,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (icon != null) 'icon': icon,
+      if (isActive != null) 'is_active': isActive,
+    });
+  }
+
+  CounterpartyGroupsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<String?>? icon,
+      Value<bool>? isActive}) {
+    return CounterpartyGroupsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      isActive: isActive ?? this.isActive,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CounterpartyGroupsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('isActive: $isActive')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CounterpartyGroupParentsTable extends CounterpartyGroupParents
+    with TableInfo<$CounterpartyGroupParentsTable, CounterpartyGroupParent> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CounterpartyGroupParentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _childIdMeta =
+      const VerificationMeta('childId');
+  @override
+  late final GeneratedColumn<int> childId = GeneratedColumn<int>(
+      'child_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES counterparty_groups (id)'));
+  static const VerificationMeta _parentIdMeta =
+      const VerificationMeta('parentId');
+  @override
+  late final GeneratedColumn<int> parentId = GeneratedColumn<int>(
+      'parent_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES counterparty_groups (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [childId, parentId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'counterparty_group_parents';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<CounterpartyGroupParent> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('child_id')) {
+      context.handle(_childIdMeta,
+          childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta));
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('parent_id')) {
+      context.handle(_parentIdMeta,
+          parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta));
+    } else if (isInserting) {
+      context.missing(_parentIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {childId, parentId};
+  @override
+  CounterpartyGroupParent map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CounterpartyGroupParent(
+      childId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}child_id'])!,
+      parentId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}parent_id'])!,
+    );
+  }
+
+  @override
+  $CounterpartyGroupParentsTable createAlias(String alias) {
+    return $CounterpartyGroupParentsTable(attachedDatabase, alias);
+  }
+}
+
+class CounterpartyGroupParent extends DataClass
+    implements Insertable<CounterpartyGroupParent> {
+  final int childId;
+  final int parentId;
+  const CounterpartyGroupParent(
+      {required this.childId, required this.parentId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['child_id'] = Variable<int>(childId);
+    map['parent_id'] = Variable<int>(parentId);
+    return map;
+  }
+
+  CounterpartyGroupParentsCompanion toCompanion(bool nullToAbsent) {
+    return CounterpartyGroupParentsCompanion(
+      childId: Value(childId),
+      parentId: Value(parentId),
+    );
+  }
+
+  factory CounterpartyGroupParent.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CounterpartyGroupParent(
+      childId: serializer.fromJson<int>(json['childId']),
+      parentId: serializer.fromJson<int>(json['parentId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'childId': serializer.toJson<int>(childId),
+      'parentId': serializer.toJson<int>(parentId),
+    };
+  }
+
+  CounterpartyGroupParent copyWith({int? childId, int? parentId}) =>
+      CounterpartyGroupParent(
+        childId: childId ?? this.childId,
+        parentId: parentId ?? this.parentId,
+      );
+  CounterpartyGroupParent copyWithCompanion(
+      CounterpartyGroupParentsCompanion data) {
+    return CounterpartyGroupParent(
+      childId: data.childId.present ? data.childId.value : this.childId,
+      parentId: data.parentId.present ? data.parentId.value : this.parentId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CounterpartyGroupParent(')
+          ..write('childId: $childId, ')
+          ..write('parentId: $parentId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(childId, parentId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CounterpartyGroupParent &&
+          other.childId == this.childId &&
+          other.parentId == this.parentId);
+}
+
+class CounterpartyGroupParentsCompanion
+    extends UpdateCompanion<CounterpartyGroupParent> {
+  final Value<int> childId;
+  final Value<int> parentId;
+  final Value<int> rowid;
+  const CounterpartyGroupParentsCompanion({
+    this.childId = const Value.absent(),
+    this.parentId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CounterpartyGroupParentsCompanion.insert({
+    required int childId,
+    required int parentId,
+    this.rowid = const Value.absent(),
+  })  : childId = Value(childId),
+        parentId = Value(parentId);
+  static Insertable<CounterpartyGroupParent> custom({
+    Expression<int>? childId,
+    Expression<int>? parentId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (childId != null) 'child_id': childId,
+      if (parentId != null) 'parent_id': parentId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CounterpartyGroupParentsCompanion copyWith(
+      {Value<int>? childId, Value<int>? parentId, Value<int>? rowid}) {
+    return CounterpartyGroupParentsCompanion(
+      childId: childId ?? this.childId,
+      parentId: parentId ?? this.parentId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (childId.present) {
+      map['child_id'] = Variable<int>(childId.value);
+    }
+    if (parentId.present) {
+      map['parent_id'] = Variable<int>(parentId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CounterpartyGroupParentsCompanion(')
+          ..write('childId: $childId, ')
+          ..write('parentId: $parentId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CounterpartyGroupLinksTable extends CounterpartyGroupLinks
+    with TableInfo<$CounterpartyGroupLinksTable, CounterpartyGroupLink> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CounterpartyGroupLinksTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _counterpartyIdMeta =
+      const VerificationMeta('counterpartyId');
+  @override
+  late final GeneratedColumn<int> counterpartyId = GeneratedColumn<int>(
+      'counterparty_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES counterparties (id)'));
+  static const VerificationMeta _groupIdMeta =
+      const VerificationMeta('groupId');
+  @override
+  late final GeneratedColumn<int> groupId = GeneratedColumn<int>(
+      'group_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES counterparty_groups (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [counterpartyId, groupId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'counterparty_group_links';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<CounterpartyGroupLink> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('counterparty_id')) {
+      context.handle(
+          _counterpartyIdMeta,
+          counterpartyId.isAcceptableOrUnknown(
+              data['counterparty_id']!, _counterpartyIdMeta));
+    } else if (isInserting) {
+      context.missing(_counterpartyIdMeta);
+    }
+    if (data.containsKey('group_id')) {
+      context.handle(_groupIdMeta,
+          groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta));
+    } else if (isInserting) {
+      context.missing(_groupIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {counterpartyId, groupId};
+  @override
+  CounterpartyGroupLink map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CounterpartyGroupLink(
+      counterpartyId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}counterparty_id'])!,
+      groupId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}group_id'])!,
+    );
+  }
+
+  @override
+  $CounterpartyGroupLinksTable createAlias(String alias) {
+    return $CounterpartyGroupLinksTable(attachedDatabase, alias);
+  }
+}
+
+class CounterpartyGroupLink extends DataClass
+    implements Insertable<CounterpartyGroupLink> {
+  final int counterpartyId;
+  final int groupId;
+  const CounterpartyGroupLink(
+      {required this.counterpartyId, required this.groupId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['counterparty_id'] = Variable<int>(counterpartyId);
+    map['group_id'] = Variable<int>(groupId);
+    return map;
+  }
+
+  CounterpartyGroupLinksCompanion toCompanion(bool nullToAbsent) {
+    return CounterpartyGroupLinksCompanion(
+      counterpartyId: Value(counterpartyId),
+      groupId: Value(groupId),
+    );
+  }
+
+  factory CounterpartyGroupLink.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CounterpartyGroupLink(
+      counterpartyId: serializer.fromJson<int>(json['counterpartyId']),
+      groupId: serializer.fromJson<int>(json['groupId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'counterpartyId': serializer.toJson<int>(counterpartyId),
+      'groupId': serializer.toJson<int>(groupId),
+    };
+  }
+
+  CounterpartyGroupLink copyWith({int? counterpartyId, int? groupId}) =>
+      CounterpartyGroupLink(
+        counterpartyId: counterpartyId ?? this.counterpartyId,
+        groupId: groupId ?? this.groupId,
+      );
+  CounterpartyGroupLink copyWithCompanion(
+      CounterpartyGroupLinksCompanion data) {
+    return CounterpartyGroupLink(
+      counterpartyId: data.counterpartyId.present
+          ? data.counterpartyId.value
+          : this.counterpartyId,
+      groupId: data.groupId.present ? data.groupId.value : this.groupId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CounterpartyGroupLink(')
+          ..write('counterpartyId: $counterpartyId, ')
+          ..write('groupId: $groupId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(counterpartyId, groupId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CounterpartyGroupLink &&
+          other.counterpartyId == this.counterpartyId &&
+          other.groupId == this.groupId);
+}
+
+class CounterpartyGroupLinksCompanion
+    extends UpdateCompanion<CounterpartyGroupLink> {
+  final Value<int> counterpartyId;
+  final Value<int> groupId;
+  final Value<int> rowid;
+  const CounterpartyGroupLinksCompanion({
+    this.counterpartyId = const Value.absent(),
+    this.groupId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CounterpartyGroupLinksCompanion.insert({
+    required int counterpartyId,
+    required int groupId,
+    this.rowid = const Value.absent(),
+  })  : counterpartyId = Value(counterpartyId),
+        groupId = Value(groupId);
+  static Insertable<CounterpartyGroupLink> custom({
+    Expression<int>? counterpartyId,
+    Expression<int>? groupId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (counterpartyId != null) 'counterparty_id': counterpartyId,
+      if (groupId != null) 'group_id': groupId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CounterpartyGroupLinksCompanion copyWith(
+      {Value<int>? counterpartyId, Value<int>? groupId, Value<int>? rowid}) {
+    return CounterpartyGroupLinksCompanion(
+      counterpartyId: counterpartyId ?? this.counterpartyId,
+      groupId: groupId ?? this.groupId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (counterpartyId.present) {
+      map['counterparty_id'] = Variable<int>(counterpartyId.value);
+    }
+    if (groupId.present) {
+      map['group_id'] = Variable<int>(groupId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CounterpartyGroupLinksCompanion(')
+          ..write('counterpartyId: $counterpartyId, ')
+          ..write('groupId: $groupId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CounterpartyProjectsTable extends CounterpartyProjects
+    with TableInfo<$CounterpartyProjectsTable, CounterpartyProject> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CounterpartyProjectsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _counterpartyIdMeta =
+      const VerificationMeta('counterpartyId');
+  @override
+  late final GeneratedColumn<int> counterpartyId = GeneratedColumn<int>(
+      'counterparty_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES counterparties (id)'));
+  static const VerificationMeta _projectIdMeta =
+      const VerificationMeta('projectId');
+  @override
+  late final GeneratedColumn<int> projectId = GeneratedColumn<int>(
+      'project_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES projects (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [counterpartyId, projectId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'counterparty_projects';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<CounterpartyProject> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('counterparty_id')) {
+      context.handle(
+          _counterpartyIdMeta,
+          counterpartyId.isAcceptableOrUnknown(
+              data['counterparty_id']!, _counterpartyIdMeta));
+    } else if (isInserting) {
+      context.missing(_counterpartyIdMeta);
+    }
+    if (data.containsKey('project_id')) {
+      context.handle(_projectIdMeta,
+          projectId.isAcceptableOrUnknown(data['project_id']!, _projectIdMeta));
+    } else if (isInserting) {
+      context.missing(_projectIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {counterpartyId, projectId};
+  @override
+  CounterpartyProject map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CounterpartyProject(
+      counterpartyId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}counterparty_id'])!,
+      projectId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}project_id'])!,
+    );
+  }
+
+  @override
+  $CounterpartyProjectsTable createAlias(String alias) {
+    return $CounterpartyProjectsTable(attachedDatabase, alias);
+  }
+}
+
+class CounterpartyProject extends DataClass
+    implements Insertable<CounterpartyProject> {
+  final int counterpartyId;
+  final int projectId;
+  const CounterpartyProject(
+      {required this.counterpartyId, required this.projectId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['counterparty_id'] = Variable<int>(counterpartyId);
+    map['project_id'] = Variable<int>(projectId);
+    return map;
+  }
+
+  CounterpartyProjectsCompanion toCompanion(bool nullToAbsent) {
+    return CounterpartyProjectsCompanion(
+      counterpartyId: Value(counterpartyId),
+      projectId: Value(projectId),
+    );
+  }
+
+  factory CounterpartyProject.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CounterpartyProject(
+      counterpartyId: serializer.fromJson<int>(json['counterpartyId']),
+      projectId: serializer.fromJson<int>(json['projectId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'counterpartyId': serializer.toJson<int>(counterpartyId),
+      'projectId': serializer.toJson<int>(projectId),
+    };
+  }
+
+  CounterpartyProject copyWith({int? counterpartyId, int? projectId}) =>
+      CounterpartyProject(
+        counterpartyId: counterpartyId ?? this.counterpartyId,
+        projectId: projectId ?? this.projectId,
+      );
+  CounterpartyProject copyWithCompanion(CounterpartyProjectsCompanion data) {
+    return CounterpartyProject(
+      counterpartyId: data.counterpartyId.present
+          ? data.counterpartyId.value
+          : this.counterpartyId,
+      projectId: data.projectId.present ? data.projectId.value : this.projectId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CounterpartyProject(')
+          ..write('counterpartyId: $counterpartyId, ')
+          ..write('projectId: $projectId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(counterpartyId, projectId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CounterpartyProject &&
+          other.counterpartyId == this.counterpartyId &&
+          other.projectId == this.projectId);
+}
+
+class CounterpartyProjectsCompanion
+    extends UpdateCompanion<CounterpartyProject> {
+  final Value<int> counterpartyId;
+  final Value<int> projectId;
+  final Value<int> rowid;
+  const CounterpartyProjectsCompanion({
+    this.counterpartyId = const Value.absent(),
+    this.projectId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CounterpartyProjectsCompanion.insert({
+    required int counterpartyId,
+    required int projectId,
+    this.rowid = const Value.absent(),
+  })  : counterpartyId = Value(counterpartyId),
+        projectId = Value(projectId);
+  static Insertable<CounterpartyProject> custom({
+    Expression<int>? counterpartyId,
+    Expression<int>? projectId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (counterpartyId != null) 'counterparty_id': counterpartyId,
+      if (projectId != null) 'project_id': projectId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CounterpartyProjectsCompanion copyWith(
+      {Value<int>? counterpartyId, Value<int>? projectId, Value<int>? rowid}) {
+    return CounterpartyProjectsCompanion(
+      counterpartyId: counterpartyId ?? this.counterpartyId,
+      projectId: projectId ?? this.projectId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (counterpartyId.present) {
+      map['counterparty_id'] = Variable<int>(counterpartyId.value);
+    }
+    if (projectId.present) {
+      map['project_id'] = Variable<int>(projectId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CounterpartyProjectsCompanion(')
+          ..write('counterpartyId: $counterpartyId, ')
+          ..write('projectId: $projectId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2418,6 +3707,15 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $CategoryParentsTable categoryParents =
       $CategoryParentsTable(this);
+  late final $CounterpartiesTable counterparties = $CounterpartiesTable(this);
+  late final $CounterpartyGroupsTable counterpartyGroups =
+      $CounterpartyGroupsTable(this);
+  late final $CounterpartyGroupParentsTable counterpartyGroupParents =
+      $CounterpartyGroupParentsTable(this);
+  late final $CounterpartyGroupLinksTable counterpartyGroupLinks =
+      $CounterpartyGroupLinksTable(this);
+  late final $CounterpartyProjectsTable counterpartyProjects =
+      $CounterpartyProjectsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2429,7 +3727,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         accounts,
         accountProjects,
         categories,
-        categoryParents
+        categoryParents,
+        counterparties,
+        counterpartyGroups,
+        counterpartyGroupParents,
+        counterpartyGroupLinks,
+        counterpartyProjects
       ];
 }
 
@@ -2756,6 +4059,24 @@ final class $$ProjectsTableReferences
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
+
+  static MultiTypedResultKey<$CounterpartyProjectsTable,
+      List<CounterpartyProject>> _counterpartyProjectsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.counterpartyProjects,
+          aliasName: 'projects__id__counterparty_projects__project_id');
+
+  $$CounterpartyProjectsTableProcessedTableManager
+      get counterpartyProjectsRefs {
+    final manager =
+        $$CounterpartyProjectsTableTableManager($_db, $_db.counterpartyProjects)
+            .filter((f) => f.projectId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_counterpartyProjectsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$ProjectsTableFilterComposer
@@ -2792,6 +4113,28 @@ class $$ProjectsTableFilterComposer
             $$AccountProjectsTableFilterComposer(
               $db: $db,
               $table: $db.accountProjects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> counterpartyProjectsRefs(
+      Expression<bool> Function($$CounterpartyProjectsTableFilterComposer f)
+          f) {
+    final $$CounterpartyProjectsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.counterpartyProjects,
+        getReferencedColumn: (t) => t.projectId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartyProjectsTableFilterComposer(
+              $db: $db,
+              $table: $db.counterpartyProjects,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -2864,6 +4207,29 @@ class $$ProjectsTableAnnotationComposer
             ));
     return f(composer);
   }
+
+  Expression<T> counterpartyProjectsRefs<T extends Object>(
+      Expression<T> Function($$CounterpartyProjectsTableAnnotationComposer a)
+          f) {
+    final $$CounterpartyProjectsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.counterpartyProjects,
+            getReferencedColumn: (t) => t.projectId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyProjectsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.counterpartyProjects,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$ProjectsTableTableManager extends RootTableManager<
@@ -2877,7 +4243,8 @@ class $$ProjectsTableTableManager extends RootTableManager<
     $$ProjectsTableUpdateCompanionBuilder,
     (Project, $$ProjectsTableReferences),
     Project,
-    PrefetchHooks Function({bool accountProjectsRefs})> {
+    PrefetchHooks Function(
+        {bool accountProjectsRefs, bool counterpartyProjectsRefs})> {
   $$ProjectsTableTableManager(_$AppDatabase db, $ProjectsTable table)
       : super(TableManagerState(
           db: db,
@@ -2918,11 +4285,13 @@ class $$ProjectsTableTableManager extends RootTableManager<
                     $$ProjectsTableReferences(db, table, e)
                   ))
               .toList(),
-          prefetchHooksCallback: ({accountProjectsRefs = false}) {
+          prefetchHooksCallback: (
+              {accountProjectsRefs = false, counterpartyProjectsRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
-                if (accountProjectsRefs) db.accountProjects
+                if (accountProjectsRefs) db.accountProjects,
+                if (counterpartyProjectsRefs) db.counterpartyProjects
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
@@ -2936,6 +4305,19 @@ class $$ProjectsTableTableManager extends RootTableManager<
                         managerFromTypedResult: (p0) =>
                             $$ProjectsTableReferences(db, table, p0)
                                 .accountProjectsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.projectId == item.id),
+                        typedResults: items),
+                  if (counterpartyProjectsRefs)
+                    await $_getPrefetchedData<Project, $ProjectsTable,
+                            CounterpartyProject>(
+                        currentTable: table,
+                        referencedTable: $$ProjectsTableReferences
+                            ._counterpartyProjectsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ProjectsTableReferences(db, table, p0)
+                                .counterpartyProjectsRefs,
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.projectId == item.id),
@@ -2958,7 +4340,8 @@ typedef $$ProjectsTableProcessedTableManager = ProcessedTableManager<
     $$ProjectsTableUpdateCompanionBuilder,
     (Project, $$ProjectsTableReferences),
     Project,
-    PrefetchHooks Function({bool accountProjectsRefs})>;
+    PrefetchHooks Function(
+        {bool accountProjectsRefs, bool counterpartyProjectsRefs})>;
 typedef $$AccountGroupsTableCreateCompanionBuilder = AccountGroupsCompanion
     Function({
   Value<int> id,
@@ -4799,6 +6182,1752 @@ typedef $$CategoryParentsTableProcessedTableManager = ProcessedTableManager<
     (CategoryParent, $$CategoryParentsTableReferences),
     CategoryParent,
     PrefetchHooks Function({bool categoryId, bool parentId})>;
+typedef $$CounterpartiesTableCreateCompanionBuilder = CounterpartiesCompanion
+    Function({
+  Value<int> id,
+  required String name,
+  Value<String?> inn,
+  Value<String?> phone,
+  Value<String?> email,
+  Value<String?> note,
+  Value<String?> icon,
+  Value<bool> isActive,
+});
+typedef $$CounterpartiesTableUpdateCompanionBuilder = CounterpartiesCompanion
+    Function({
+  Value<int> id,
+  Value<String> name,
+  Value<String?> inn,
+  Value<String?> phone,
+  Value<String?> email,
+  Value<String?> note,
+  Value<String?> icon,
+  Value<bool> isActive,
+});
+
+final class $$CounterpartiesTableReferences
+    extends BaseReferences<_$AppDatabase, $CounterpartiesTable, Counterparty> {
+  $$CounterpartiesTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$CounterpartyGroupLinksTable,
+      List<CounterpartyGroupLink>> _counterpartyGroupLinksRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.counterpartyGroupLinks,
+          aliasName:
+              'counterparties__id__counterparty_group_links__counterparty_id');
+
+  $$CounterpartyGroupLinksTableProcessedTableManager
+      get counterpartyGroupLinksRefs {
+    final manager = $$CounterpartyGroupLinksTableTableManager(
+            $_db, $_db.counterpartyGroupLinks)
+        .filter((f) => f.counterpartyId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_counterpartyGroupLinksRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$CounterpartyProjectsTable,
+      List<CounterpartyProject>> _counterpartyProjectsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.counterpartyProjects,
+          aliasName:
+              'counterparties__id__counterparty_projects__counterparty_id');
+
+  $$CounterpartyProjectsTableProcessedTableManager
+      get counterpartyProjectsRefs {
+    final manager = $$CounterpartyProjectsTableTableManager(
+            $_db, $_db.counterpartyProjects)
+        .filter((f) => f.counterpartyId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_counterpartyProjectsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$CounterpartiesTableFilterComposer
+    extends Composer<_$AppDatabase, $CounterpartiesTable> {
+  $$CounterpartiesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get inn => $composableBuilder(
+      column: $table.inn, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get phone => $composableBuilder(
+      column: $table.phone, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> counterpartyGroupLinksRefs(
+      Expression<bool> Function($$CounterpartyGroupLinksTableFilterComposer f)
+          f) {
+    final $$CounterpartyGroupLinksTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.counterpartyGroupLinks,
+            getReferencedColumn: (t) => t.counterpartyId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupLinksTableFilterComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroupLinks,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<bool> counterpartyProjectsRefs(
+      Expression<bool> Function($$CounterpartyProjectsTableFilterComposer f)
+          f) {
+    final $$CounterpartyProjectsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.counterpartyProjects,
+        getReferencedColumn: (t) => t.counterpartyId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartyProjectsTableFilterComposer(
+              $db: $db,
+              $table: $db.counterpartyProjects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$CounterpartiesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CounterpartiesTable> {
+  $$CounterpartiesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get inn => $composableBuilder(
+      column: $table.inn, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get phone => $composableBuilder(
+      column: $table.phone, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CounterpartiesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CounterpartiesTable> {
+  $$CounterpartiesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get inn =>
+      $composableBuilder(column: $table.inn, builder: (column) => column);
+
+  GeneratedColumn<String> get phone =>
+      $composableBuilder(column: $table.phone, builder: (column) => column);
+
+  GeneratedColumn<String> get email =>
+      $composableBuilder(column: $table.email, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  Expression<T> counterpartyGroupLinksRefs<T extends Object>(
+      Expression<T> Function($$CounterpartyGroupLinksTableAnnotationComposer a)
+          f) {
+    final $$CounterpartyGroupLinksTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.counterpartyGroupLinks,
+            getReferencedColumn: (t) => t.counterpartyId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupLinksTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroupLinks,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> counterpartyProjectsRefs<T extends Object>(
+      Expression<T> Function($$CounterpartyProjectsTableAnnotationComposer a)
+          f) {
+    final $$CounterpartyProjectsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.counterpartyProjects,
+            getReferencedColumn: (t) => t.counterpartyId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyProjectsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.counterpartyProjects,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$CounterpartiesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CounterpartiesTable,
+    Counterparty,
+    $$CounterpartiesTableFilterComposer,
+    $$CounterpartiesTableOrderingComposer,
+    $$CounterpartiesTableAnnotationComposer,
+    $$CounterpartiesTableCreateCompanionBuilder,
+    $$CounterpartiesTableUpdateCompanionBuilder,
+    (Counterparty, $$CounterpartiesTableReferences),
+    Counterparty,
+    PrefetchHooks Function(
+        {bool counterpartyGroupLinksRefs, bool counterpartyProjectsRefs})> {
+  $$CounterpartiesTableTableManager(
+      _$AppDatabase db, $CounterpartiesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CounterpartiesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CounterpartiesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CounterpartiesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String?> inn = const Value.absent(),
+            Value<String?> phone = const Value.absent(),
+            Value<String?> email = const Value.absent(),
+            Value<String?> note = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+          }) =>
+              CounterpartiesCompanion(
+            id: id,
+            name: name,
+            inn: inn,
+            phone: phone,
+            email: email,
+            note: note,
+            icon: icon,
+            isActive: isActive,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+            Value<String?> inn = const Value.absent(),
+            Value<String?> phone = const Value.absent(),
+            Value<String?> email = const Value.absent(),
+            Value<String?> note = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+          }) =>
+              CounterpartiesCompanion.insert(
+            id: id,
+            name: name,
+            inn: inn,
+            phone: phone,
+            email: email,
+            note: note,
+            icon: icon,
+            isActive: isActive,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$CounterpartiesTable, Counterparty>(table),
+                    $$CounterpartiesTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {counterpartyGroupLinksRefs = false,
+              counterpartyProjectsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (counterpartyGroupLinksRefs) db.counterpartyGroupLinks,
+                if (counterpartyProjectsRefs) db.counterpartyProjects
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (counterpartyGroupLinksRefs)
+                    await $_getPrefetchedData<Counterparty,
+                            $CounterpartiesTable, CounterpartyGroupLink>(
+                        currentTable: table,
+                        referencedTable: $$CounterpartiesTableReferences
+                            ._counterpartyGroupLinksRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CounterpartiesTableReferences(db, table, p0)
+                                .counterpartyGroupLinksRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.counterpartyId == item.id),
+                        typedResults: items),
+                  if (counterpartyProjectsRefs)
+                    await $_getPrefetchedData<Counterparty,
+                            $CounterpartiesTable, CounterpartyProject>(
+                        currentTable: table,
+                        referencedTable: $$CounterpartiesTableReferences
+                            ._counterpartyProjectsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CounterpartiesTableReferences(db, table, p0)
+                                .counterpartyProjectsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.counterpartyId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$CounterpartiesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CounterpartiesTable,
+    Counterparty,
+    $$CounterpartiesTableFilterComposer,
+    $$CounterpartiesTableOrderingComposer,
+    $$CounterpartiesTableAnnotationComposer,
+    $$CounterpartiesTableCreateCompanionBuilder,
+    $$CounterpartiesTableUpdateCompanionBuilder,
+    (Counterparty, $$CounterpartiesTableReferences),
+    Counterparty,
+    PrefetchHooks Function(
+        {bool counterpartyGroupLinksRefs, bool counterpartyProjectsRefs})>;
+typedef $$CounterpartyGroupsTableCreateCompanionBuilder
+    = CounterpartyGroupsCompanion Function({
+  Value<int> id,
+  required String name,
+  Value<String?> icon,
+  Value<bool> isActive,
+});
+typedef $$CounterpartyGroupsTableUpdateCompanionBuilder
+    = CounterpartyGroupsCompanion Function({
+  Value<int> id,
+  Value<String> name,
+  Value<String?> icon,
+  Value<bool> isActive,
+});
+
+final class $$CounterpartyGroupsTableReferences extends BaseReferences<
+    _$AppDatabase, $CounterpartyGroupsTable, CounterpartyGroup> {
+  $$CounterpartyGroupsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$CounterpartyGroupParentsTable,
+      List<CounterpartyGroupParent>> _childLinksTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.counterpartyGroupParents,
+          aliasName:
+              'counterparty_groups__id__counterparty_group_parents__child_id');
+
+  $$CounterpartyGroupParentsTableProcessedTableManager get childLinks {
+    final manager = $$CounterpartyGroupParentsTableTableManager(
+            $_db, $_db.counterpartyGroupParents)
+        .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_childLinksTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$CounterpartyGroupParentsTable,
+      List<CounterpartyGroupParent>> _parentLinksTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.counterpartyGroupParents,
+          aliasName:
+              'counterparty_groups__id__counterparty_group_parents__parent_id');
+
+  $$CounterpartyGroupParentsTableProcessedTableManager get parentLinks {
+    final manager = $$CounterpartyGroupParentsTableTableManager(
+            $_db, $_db.counterpartyGroupParents)
+        .filter((f) => f.parentId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_parentLinksTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$CounterpartyGroupLinksTable,
+      List<CounterpartyGroupLink>> _counterpartyGroupLinksRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.counterpartyGroupLinks,
+          aliasName:
+              'counterparty_groups__id__counterparty_group_links__group_id');
+
+  $$CounterpartyGroupLinksTableProcessedTableManager
+      get counterpartyGroupLinksRefs {
+    final manager = $$CounterpartyGroupLinksTableTableManager(
+            $_db, $_db.counterpartyGroupLinks)
+        .filter((f) => f.groupId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_counterpartyGroupLinksRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$CounterpartyGroupsTableFilterComposer
+    extends Composer<_$AppDatabase, $CounterpartyGroupsTable> {
+  $$CounterpartyGroupsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> childLinks(
+      Expression<bool> Function($$CounterpartyGroupParentsTableFilterComposer f)
+          f) {
+    final $$CounterpartyGroupParentsTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.counterpartyGroupParents,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupParentsTableFilterComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroupParents,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<bool> parentLinks(
+      Expression<bool> Function($$CounterpartyGroupParentsTableFilterComposer f)
+          f) {
+    final $$CounterpartyGroupParentsTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.counterpartyGroupParents,
+            getReferencedColumn: (t) => t.parentId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupParentsTableFilterComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroupParents,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<bool> counterpartyGroupLinksRefs(
+      Expression<bool> Function($$CounterpartyGroupLinksTableFilterComposer f)
+          f) {
+    final $$CounterpartyGroupLinksTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.counterpartyGroupLinks,
+            getReferencedColumn: (t) => t.groupId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupLinksTableFilterComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroupLinks,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$CounterpartyGroupsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CounterpartyGroupsTable> {
+  $$CounterpartyGroupsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CounterpartyGroupsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CounterpartyGroupsTable> {
+  $$CounterpartyGroupsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  Expression<T> childLinks<T extends Object>(
+      Expression<T> Function(
+              $$CounterpartyGroupParentsTableAnnotationComposer a)
+          f) {
+    final $$CounterpartyGroupParentsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.counterpartyGroupParents,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupParentsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroupParents,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> parentLinks<T extends Object>(
+      Expression<T> Function(
+              $$CounterpartyGroupParentsTableAnnotationComposer a)
+          f) {
+    final $$CounterpartyGroupParentsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.counterpartyGroupParents,
+            getReferencedColumn: (t) => t.parentId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupParentsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroupParents,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> counterpartyGroupLinksRefs<T extends Object>(
+      Expression<T> Function($$CounterpartyGroupLinksTableAnnotationComposer a)
+          f) {
+    final $$CounterpartyGroupLinksTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.counterpartyGroupLinks,
+            getReferencedColumn: (t) => t.groupId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupLinksTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroupLinks,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$CounterpartyGroupsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CounterpartyGroupsTable,
+    CounterpartyGroup,
+    $$CounterpartyGroupsTableFilterComposer,
+    $$CounterpartyGroupsTableOrderingComposer,
+    $$CounterpartyGroupsTableAnnotationComposer,
+    $$CounterpartyGroupsTableCreateCompanionBuilder,
+    $$CounterpartyGroupsTableUpdateCompanionBuilder,
+    (CounterpartyGroup, $$CounterpartyGroupsTableReferences),
+    CounterpartyGroup,
+    PrefetchHooks Function(
+        {bool childLinks, bool parentLinks, bool counterpartyGroupLinksRefs})> {
+  $$CounterpartyGroupsTableTableManager(
+      _$AppDatabase db, $CounterpartyGroupsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CounterpartyGroupsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CounterpartyGroupsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CounterpartyGroupsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+          }) =>
+              CounterpartyGroupsCompanion(
+            id: id,
+            name: name,
+            icon: icon,
+            isActive: isActive,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+            Value<String?> icon = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+          }) =>
+              CounterpartyGroupsCompanion.insert(
+            id: id,
+            name: name,
+            icon: icon,
+            isActive: isActive,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$CounterpartyGroupsTable, CounterpartyGroup>(
+                        table),
+                    $$CounterpartyGroupsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {childLinks = false,
+              parentLinks = false,
+              counterpartyGroupLinksRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (childLinks) db.counterpartyGroupParents,
+                if (parentLinks) db.counterpartyGroupParents,
+                if (counterpartyGroupLinksRefs) db.counterpartyGroupLinks
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (childLinks)
+                    await $_getPrefetchedData<CounterpartyGroup,
+                            $CounterpartyGroupsTable, CounterpartyGroupParent>(
+                        currentTable: table,
+                        referencedTable: $$CounterpartyGroupsTableReferences
+                            ._childLinksTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CounterpartyGroupsTableReferences(db, table, p0)
+                                .childLinks,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.childId == item.id),
+                        typedResults: items),
+                  if (parentLinks)
+                    await $_getPrefetchedData<CounterpartyGroup,
+                            $CounterpartyGroupsTable, CounterpartyGroupParent>(
+                        currentTable: table,
+                        referencedTable: $$CounterpartyGroupsTableReferences
+                            ._parentLinksTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CounterpartyGroupsTableReferences(db, table, p0)
+                                .parentLinks,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.parentId == item.id),
+                        typedResults: items),
+                  if (counterpartyGroupLinksRefs)
+                    await $_getPrefetchedData<CounterpartyGroup,
+                            $CounterpartyGroupsTable, CounterpartyGroupLink>(
+                        currentTable: table,
+                        referencedTable: $$CounterpartyGroupsTableReferences
+                            ._counterpartyGroupLinksRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CounterpartyGroupsTableReferences(db, table, p0)
+                                .counterpartyGroupLinksRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.groupId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$CounterpartyGroupsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CounterpartyGroupsTable,
+    CounterpartyGroup,
+    $$CounterpartyGroupsTableFilterComposer,
+    $$CounterpartyGroupsTableOrderingComposer,
+    $$CounterpartyGroupsTableAnnotationComposer,
+    $$CounterpartyGroupsTableCreateCompanionBuilder,
+    $$CounterpartyGroupsTableUpdateCompanionBuilder,
+    (CounterpartyGroup, $$CounterpartyGroupsTableReferences),
+    CounterpartyGroup,
+    PrefetchHooks Function(
+        {bool childLinks, bool parentLinks, bool counterpartyGroupLinksRefs})>;
+typedef $$CounterpartyGroupParentsTableCreateCompanionBuilder
+    = CounterpartyGroupParentsCompanion Function({
+  required int childId,
+  required int parentId,
+  Value<int> rowid,
+});
+typedef $$CounterpartyGroupParentsTableUpdateCompanionBuilder
+    = CounterpartyGroupParentsCompanion Function({
+  Value<int> childId,
+  Value<int> parentId,
+  Value<int> rowid,
+});
+
+final class $$CounterpartyGroupParentsTableReferences extends BaseReferences<
+    _$AppDatabase, $CounterpartyGroupParentsTable, CounterpartyGroupParent> {
+  $$CounterpartyGroupParentsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $CounterpartyGroupsTable _childIdTable(_$AppDatabase db) =>
+      db.counterpartyGroups.createAlias(
+          'counterparty_group_parents__child_id__counterparty_groups__id');
+
+  $$CounterpartyGroupsTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
+    final manager =
+        $$CounterpartyGroupsTableTableManager($_db, $_db.counterpartyGroups)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $CounterpartyGroupsTable _parentIdTable(_$AppDatabase db) =>
+      db.counterpartyGroups.createAlias(
+          'counterparty_group_parents__parent_id__counterparty_groups__id');
+
+  $$CounterpartyGroupsTableProcessedTableManager get parentId {
+    final $_column = $_itemColumn<int>('parent_id')!;
+
+    final manager =
+        $$CounterpartyGroupsTableTableManager($_db, $_db.counterpartyGroups)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_parentIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$CounterpartyGroupParentsTableFilterComposer
+    extends Composer<_$AppDatabase, $CounterpartyGroupParentsTable> {
+  $$CounterpartyGroupParentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$CounterpartyGroupsTableFilterComposer get childId {
+    final $$CounterpartyGroupsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.counterpartyGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartyGroupsTableFilterComposer(
+              $db: $db,
+              $table: $db.counterpartyGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CounterpartyGroupsTableFilterComposer get parentId {
+    final $$CounterpartyGroupsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentId,
+        referencedTable: $db.counterpartyGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartyGroupsTableFilterComposer(
+              $db: $db,
+              $table: $db.counterpartyGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CounterpartyGroupParentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CounterpartyGroupParentsTable> {
+  $$CounterpartyGroupParentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$CounterpartyGroupsTableOrderingComposer get childId {
+    final $$CounterpartyGroupsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.counterpartyGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartyGroupsTableOrderingComposer(
+              $db: $db,
+              $table: $db.counterpartyGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CounterpartyGroupsTableOrderingComposer get parentId {
+    final $$CounterpartyGroupsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentId,
+        referencedTable: $db.counterpartyGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartyGroupsTableOrderingComposer(
+              $db: $db,
+              $table: $db.counterpartyGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CounterpartyGroupParentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CounterpartyGroupParentsTable> {
+  $$CounterpartyGroupParentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$CounterpartyGroupsTableAnnotationComposer get childId {
+    final $$CounterpartyGroupsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.childId,
+            referencedTable: $db.counterpartyGroups,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroups,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+
+  $$CounterpartyGroupsTableAnnotationComposer get parentId {
+    final $$CounterpartyGroupsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.parentId,
+            referencedTable: $db.counterpartyGroups,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroups,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$CounterpartyGroupParentsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CounterpartyGroupParentsTable,
+    CounterpartyGroupParent,
+    $$CounterpartyGroupParentsTableFilterComposer,
+    $$CounterpartyGroupParentsTableOrderingComposer,
+    $$CounterpartyGroupParentsTableAnnotationComposer,
+    $$CounterpartyGroupParentsTableCreateCompanionBuilder,
+    $$CounterpartyGroupParentsTableUpdateCompanionBuilder,
+    (CounterpartyGroupParent, $$CounterpartyGroupParentsTableReferences),
+    CounterpartyGroupParent,
+    PrefetchHooks Function({bool childId, bool parentId})> {
+  $$CounterpartyGroupParentsTableTableManager(
+      _$AppDatabase db, $CounterpartyGroupParentsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CounterpartyGroupParentsTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CounterpartyGroupParentsTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CounterpartyGroupParentsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> childId = const Value.absent(),
+            Value<int> parentId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CounterpartyGroupParentsCompanion(
+            childId: childId,
+            parentId: parentId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int childId,
+            required int parentId,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CounterpartyGroupParentsCompanion.insert(
+            childId: childId,
+            parentId: parentId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$CounterpartyGroupParentsTable,
+                        CounterpartyGroupParent>(table),
+                    $$CounterpartyGroupParentsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({childId = false, parentId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (childId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.childId,
+                    referencedTable: $$CounterpartyGroupParentsTableReferences
+                        ._childIdTable(db),
+                    referencedColumn: $$CounterpartyGroupParentsTableReferences
+                        ._childIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (parentId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.parentId,
+                    referencedTable: $$CounterpartyGroupParentsTableReferences
+                        ._parentIdTable(db),
+                    referencedColumn: $$CounterpartyGroupParentsTableReferences
+                        ._parentIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$CounterpartyGroupParentsTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $CounterpartyGroupParentsTable,
+        CounterpartyGroupParent,
+        $$CounterpartyGroupParentsTableFilterComposer,
+        $$CounterpartyGroupParentsTableOrderingComposer,
+        $$CounterpartyGroupParentsTableAnnotationComposer,
+        $$CounterpartyGroupParentsTableCreateCompanionBuilder,
+        $$CounterpartyGroupParentsTableUpdateCompanionBuilder,
+        (CounterpartyGroupParent, $$CounterpartyGroupParentsTableReferences),
+        CounterpartyGroupParent,
+        PrefetchHooks Function({bool childId, bool parentId})>;
+typedef $$CounterpartyGroupLinksTableCreateCompanionBuilder
+    = CounterpartyGroupLinksCompanion Function({
+  required int counterpartyId,
+  required int groupId,
+  Value<int> rowid,
+});
+typedef $$CounterpartyGroupLinksTableUpdateCompanionBuilder
+    = CounterpartyGroupLinksCompanion Function({
+  Value<int> counterpartyId,
+  Value<int> groupId,
+  Value<int> rowid,
+});
+
+final class $$CounterpartyGroupLinksTableReferences extends BaseReferences<
+    _$AppDatabase, $CounterpartyGroupLinksTable, CounterpartyGroupLink> {
+  $$CounterpartyGroupLinksTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $CounterpartiesTable _counterpartyIdTable(_$AppDatabase db) =>
+      db.counterparties.createAlias(
+          'counterparty_group_links__counterparty_id__counterparties__id');
+
+  $$CounterpartiesTableProcessedTableManager get counterpartyId {
+    final $_column = $_itemColumn<int>('counterparty_id')!;
+
+    final manager = $$CounterpartiesTableTableManager($_db, $_db.counterparties)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_counterpartyIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $CounterpartyGroupsTable _groupIdTable(_$AppDatabase db) =>
+      db.counterpartyGroups.createAlias(
+          'counterparty_group_links__group_id__counterparty_groups__id');
+
+  $$CounterpartyGroupsTableProcessedTableManager get groupId {
+    final $_column = $_itemColumn<int>('group_id')!;
+
+    final manager =
+        $$CounterpartyGroupsTableTableManager($_db, $_db.counterpartyGroups)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_groupIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$CounterpartyGroupLinksTableFilterComposer
+    extends Composer<_$AppDatabase, $CounterpartyGroupLinksTable> {
+  $$CounterpartyGroupLinksTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$CounterpartiesTableFilterComposer get counterpartyId {
+    final $$CounterpartiesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.counterpartyId,
+        referencedTable: $db.counterparties,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartiesTableFilterComposer(
+              $db: $db,
+              $table: $db.counterparties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CounterpartyGroupsTableFilterComposer get groupId {
+    final $$CounterpartyGroupsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.groupId,
+        referencedTable: $db.counterpartyGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartyGroupsTableFilterComposer(
+              $db: $db,
+              $table: $db.counterpartyGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CounterpartyGroupLinksTableOrderingComposer
+    extends Composer<_$AppDatabase, $CounterpartyGroupLinksTable> {
+  $$CounterpartyGroupLinksTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$CounterpartiesTableOrderingComposer get counterpartyId {
+    final $$CounterpartiesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.counterpartyId,
+        referencedTable: $db.counterparties,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartiesTableOrderingComposer(
+              $db: $db,
+              $table: $db.counterparties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CounterpartyGroupsTableOrderingComposer get groupId {
+    final $$CounterpartyGroupsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.groupId,
+        referencedTable: $db.counterpartyGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartyGroupsTableOrderingComposer(
+              $db: $db,
+              $table: $db.counterpartyGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CounterpartyGroupLinksTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CounterpartyGroupLinksTable> {
+  $$CounterpartyGroupLinksTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$CounterpartiesTableAnnotationComposer get counterpartyId {
+    final $$CounterpartiesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.counterpartyId,
+        referencedTable: $db.counterparties,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartiesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.counterparties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CounterpartyGroupsTableAnnotationComposer get groupId {
+    final $$CounterpartyGroupsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.groupId,
+            referencedTable: $db.counterpartyGroups,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CounterpartyGroupsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.counterpartyGroups,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$CounterpartyGroupLinksTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CounterpartyGroupLinksTable,
+    CounterpartyGroupLink,
+    $$CounterpartyGroupLinksTableFilterComposer,
+    $$CounterpartyGroupLinksTableOrderingComposer,
+    $$CounterpartyGroupLinksTableAnnotationComposer,
+    $$CounterpartyGroupLinksTableCreateCompanionBuilder,
+    $$CounterpartyGroupLinksTableUpdateCompanionBuilder,
+    (CounterpartyGroupLink, $$CounterpartyGroupLinksTableReferences),
+    CounterpartyGroupLink,
+    PrefetchHooks Function({bool counterpartyId, bool groupId})> {
+  $$CounterpartyGroupLinksTableTableManager(
+      _$AppDatabase db, $CounterpartyGroupLinksTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CounterpartyGroupLinksTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CounterpartyGroupLinksTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CounterpartyGroupLinksTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> counterpartyId = const Value.absent(),
+            Value<int> groupId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CounterpartyGroupLinksCompanion(
+            counterpartyId: counterpartyId,
+            groupId: groupId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int counterpartyId,
+            required int groupId,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CounterpartyGroupLinksCompanion.insert(
+            counterpartyId: counterpartyId,
+            groupId: groupId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$CounterpartyGroupLinksTable,
+                        CounterpartyGroupLink>(table),
+                    $$CounterpartyGroupLinksTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({counterpartyId = false, groupId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (counterpartyId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.counterpartyId,
+                    referencedTable: $$CounterpartyGroupLinksTableReferences
+                        ._counterpartyIdTable(db),
+                    referencedColumn: $$CounterpartyGroupLinksTableReferences
+                        ._counterpartyIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (groupId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.groupId,
+                    referencedTable: $$CounterpartyGroupLinksTableReferences
+                        ._groupIdTable(db),
+                    referencedColumn: $$CounterpartyGroupLinksTableReferences
+                        ._groupIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$CounterpartyGroupLinksTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $CounterpartyGroupLinksTable,
+        CounterpartyGroupLink,
+        $$CounterpartyGroupLinksTableFilterComposer,
+        $$CounterpartyGroupLinksTableOrderingComposer,
+        $$CounterpartyGroupLinksTableAnnotationComposer,
+        $$CounterpartyGroupLinksTableCreateCompanionBuilder,
+        $$CounterpartyGroupLinksTableUpdateCompanionBuilder,
+        (CounterpartyGroupLink, $$CounterpartyGroupLinksTableReferences),
+        CounterpartyGroupLink,
+        PrefetchHooks Function({bool counterpartyId, bool groupId})>;
+typedef $$CounterpartyProjectsTableCreateCompanionBuilder
+    = CounterpartyProjectsCompanion Function({
+  required int counterpartyId,
+  required int projectId,
+  Value<int> rowid,
+});
+typedef $$CounterpartyProjectsTableUpdateCompanionBuilder
+    = CounterpartyProjectsCompanion Function({
+  Value<int> counterpartyId,
+  Value<int> projectId,
+  Value<int> rowid,
+});
+
+final class $$CounterpartyProjectsTableReferences extends BaseReferences<
+    _$AppDatabase, $CounterpartyProjectsTable, CounterpartyProject> {
+  $$CounterpartyProjectsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $CounterpartiesTable _counterpartyIdTable(_$AppDatabase db) =>
+      db.counterparties.createAlias(
+          'counterparty_projects__counterparty_id__counterparties__id');
+
+  $$CounterpartiesTableProcessedTableManager get counterpartyId {
+    final $_column = $_itemColumn<int>('counterparty_id')!;
+
+    final manager = $$CounterpartiesTableTableManager($_db, $_db.counterparties)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_counterpartyIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $ProjectsTable _projectIdTable(_$AppDatabase db) => db.projects
+      .createAlias('counterparty_projects__project_id__projects__id');
+
+  $$ProjectsTableProcessedTableManager get projectId {
+    final $_column = $_itemColumn<int>('project_id')!;
+
+    final manager = $$ProjectsTableTableManager($_db, $_db.projects)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_projectIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$CounterpartyProjectsTableFilterComposer
+    extends Composer<_$AppDatabase, $CounterpartyProjectsTable> {
+  $$CounterpartyProjectsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$CounterpartiesTableFilterComposer get counterpartyId {
+    final $$CounterpartiesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.counterpartyId,
+        referencedTable: $db.counterparties,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartiesTableFilterComposer(
+              $db: $db,
+              $table: $db.counterparties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ProjectsTableFilterComposer get projectId {
+    final $$ProjectsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.projectId,
+        referencedTable: $db.projects,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ProjectsTableFilterComposer(
+              $db: $db,
+              $table: $db.projects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CounterpartyProjectsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CounterpartyProjectsTable> {
+  $$CounterpartyProjectsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$CounterpartiesTableOrderingComposer get counterpartyId {
+    final $$CounterpartiesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.counterpartyId,
+        referencedTable: $db.counterparties,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartiesTableOrderingComposer(
+              $db: $db,
+              $table: $db.counterparties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ProjectsTableOrderingComposer get projectId {
+    final $$ProjectsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.projectId,
+        referencedTable: $db.projects,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ProjectsTableOrderingComposer(
+              $db: $db,
+              $table: $db.projects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CounterpartyProjectsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CounterpartyProjectsTable> {
+  $$CounterpartyProjectsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$CounterpartiesTableAnnotationComposer get counterpartyId {
+    final $$CounterpartiesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.counterpartyId,
+        referencedTable: $db.counterparties,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CounterpartiesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.counterparties,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ProjectsTableAnnotationComposer get projectId {
+    final $$ProjectsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.projectId,
+        referencedTable: $db.projects,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ProjectsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.projects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CounterpartyProjectsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CounterpartyProjectsTable,
+    CounterpartyProject,
+    $$CounterpartyProjectsTableFilterComposer,
+    $$CounterpartyProjectsTableOrderingComposer,
+    $$CounterpartyProjectsTableAnnotationComposer,
+    $$CounterpartyProjectsTableCreateCompanionBuilder,
+    $$CounterpartyProjectsTableUpdateCompanionBuilder,
+    (CounterpartyProject, $$CounterpartyProjectsTableReferences),
+    CounterpartyProject,
+    PrefetchHooks Function({bool counterpartyId, bool projectId})> {
+  $$CounterpartyProjectsTableTableManager(
+      _$AppDatabase db, $CounterpartyProjectsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CounterpartyProjectsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CounterpartyProjectsTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CounterpartyProjectsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> counterpartyId = const Value.absent(),
+            Value<int> projectId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CounterpartyProjectsCompanion(
+            counterpartyId: counterpartyId,
+            projectId: projectId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int counterpartyId,
+            required int projectId,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CounterpartyProjectsCompanion.insert(
+            counterpartyId: counterpartyId,
+            projectId: projectId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$CounterpartyProjectsTable,
+                        CounterpartyProject>(table),
+                    $$CounterpartyProjectsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({counterpartyId = false, projectId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (counterpartyId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.counterpartyId,
+                    referencedTable: $$CounterpartyProjectsTableReferences
+                        ._counterpartyIdTable(db),
+                    referencedColumn: $$CounterpartyProjectsTableReferences
+                        ._counterpartyIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (projectId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.projectId,
+                    referencedTable: $$CounterpartyProjectsTableReferences
+                        ._projectIdTable(db),
+                    referencedColumn: $$CounterpartyProjectsTableReferences
+                        ._projectIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$CounterpartyProjectsTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $CounterpartyProjectsTable,
+        CounterpartyProject,
+        $$CounterpartyProjectsTableFilterComposer,
+        $$CounterpartyProjectsTableOrderingComposer,
+        $$CounterpartyProjectsTableAnnotationComposer,
+        $$CounterpartyProjectsTableCreateCompanionBuilder,
+        $$CounterpartyProjectsTableUpdateCompanionBuilder,
+        (CounterpartyProject, $$CounterpartyProjectsTableReferences),
+        CounterpartyProject,
+        PrefetchHooks Function({bool counterpartyId, bool projectId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4817,4 +7946,16 @@ class $AppDatabaseManager {
       $$CategoriesTableTableManager(_db, _db.categories);
   $$CategoryParentsTableTableManager get categoryParents =>
       $$CategoryParentsTableTableManager(_db, _db.categoryParents);
+  $$CounterpartiesTableTableManager get counterparties =>
+      $$CounterpartiesTableTableManager(_db, _db.counterparties);
+  $$CounterpartyGroupsTableTableManager get counterpartyGroups =>
+      $$CounterpartyGroupsTableTableManager(_db, _db.counterpartyGroups);
+  $$CounterpartyGroupParentsTableTableManager get counterpartyGroupParents =>
+      $$CounterpartyGroupParentsTableTableManager(
+          _db, _db.counterpartyGroupParents);
+  $$CounterpartyGroupLinksTableTableManager get counterpartyGroupLinks =>
+      $$CounterpartyGroupLinksTableTableManager(
+          _db, _db.counterpartyGroupLinks);
+  $$CounterpartyProjectsTableTableManager get counterpartyProjects =>
+      $$CounterpartyProjectsTableTableManager(_db, _db.counterpartyProjects);
 }

@@ -4,6 +4,11 @@ import '../../features/accounts/data/account_projects_table.dart';
 import '../../features/accounts/data/accounts_table.dart';
 import '../../features/categories/data/categories_table.dart';
 import '../../features/categories/data/category_parents_table.dart';
+import '../../features/counterparties/data/counterparties_table.dart';
+import '../../features/counterparties/data/counterparty_group_links_table.dart';
+import '../../features/counterparties/data/counterparty_group_parents_table.dart';
+import '../../features/counterparties/data/counterparty_groups_table.dart';
+import '../../features/counterparties/data/counterparty_projects_table.dart';
 import '../../features/currencies/data/currencies_table.dart';
 import '../../features/projects/data/projects_table.dart';
 
@@ -17,12 +22,17 @@ part 'app_database.g.dart';
   AccountProjects,
   Categories,
   CategoryParents,
+  Counterparties,
+  CounterpartyGroups,
+  CounterpartyGroupParents,
+  CounterpartyGroupLinks,
+  CounterpartyProjects,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -30,10 +40,16 @@ class AppDatabase extends _$AppDatabase {
           await m.createAll();
         },
         onUpgrade: (m, from, to) async {
-          // Добавляем только новые таблицы, существующие данные сохраняем.
           if (from < 4) {
             await m.createTable(categories);
             await m.createTable(categoryParents);
+          }
+          if (from < 5) {
+            await m.createTable(counterparties);
+            await m.createTable(counterpartyGroups);
+            await m.createTable(counterpartyGroupParents);
+            await m.createTable(counterpartyGroupLinks);
+            await m.createTable(counterpartyProjects);
           }
         },
       );

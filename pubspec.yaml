@@ -23,6 +23,7 @@ dependencies:
   dio: ^5.3.0
   logger: ^1.4.0
   uuid: ^4.0.0
+  url_launcher: ^6.2.0
 
 dev_dependencies:
   flutter_test:
@@ -36,3 +37,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/currencies.json
+
