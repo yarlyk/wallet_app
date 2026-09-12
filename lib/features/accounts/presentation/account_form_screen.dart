@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' hide Column;
 import '../../../core/database/app_database.dart';
+import '../../../core/utils/amount_utils.dart';
 import '../../../core/widgets/entity_form_screen.dart';
 import '../../../core/widgets/group_picker_dialog.dart';
 import '../../../core/widgets/project_multi_select_dialog.dart';
@@ -55,6 +56,9 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
   final _accountLast4Controller = TextEditingController();
   final _smsSenderNameController = TextEditingController();
 
+  final _initialBalanceFocus = FocusNode();
+  final _creditLimitFocus = FocusNode();
+
   String _selectedType = 'cash';
   int? _selectedCurrencyId;
   int? _selectedGroupId;
@@ -66,9 +70,9 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
     super.initState();
     final a = widget.account;
     _nameController.text = a?.name ?? '';
-    _initialBalanceController.text =
-        a != null ? a.initialBalance.toStringAsFixed(2) : '';
-    _creditLimitController.text = a?.creditLimit?.toStringAsFixed(2) ?? '';
+    _initialBalanceController.text = a != null ? formatAmount(a.initialBalance) : '';
+    _creditLimitController.text =
+        (a != null && a.creditLimit != null) ? formatAmount(a.creditLimit!) : '';
     _gracePeriodDaysController.text = a?.gracePeriodDays?.toString() ?? '';
     _paymentDueDayController.text = a?.paymentDueDate ?? '';
     _cardLast4Controller.text = a?.cardLast4Digits ?? '';
@@ -78,6 +82,19 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
     _selectedCurrencyId = a?.currencyId;
     _selectedGroupId = a?.groupId;
     _isCreditCard = a?.isCreditCard ?? false;
+
+    _initialBalanceFocus.addListener(() {
+      if (_initialBalanceFocus.hasFocus) {
+        final v = parseAmount(_initialBalanceController.text);
+        if (v == 0) _initialBalanceController.clear();
+      }
+    });
+    _creditLimitFocus.addListener(() {
+      if (_creditLimitFocus.hasFocus) {
+        final v = parseAmount(_creditLimitController.text);
+        if (v == 0) _creditLimitController.clear();
+      }
+    });
 
     if (a != null) {
       Future.microtask(() async {
@@ -99,6 +116,8 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
     _cardLast4Controller.dispose();
     _accountLast4Controller.dispose();
     _smsSenderNameController.dispose();
+    _initialBalanceFocus.dispose();
+    _creditLimitFocus.dispose();
     super.dispose();
   }
 
@@ -120,7 +139,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
       context: context,
       builder: (_) => const GroupPickerDialog(),
     );
-    if (result == null) return; // отмена
+    if (result == null) return;
     setState(() => _selectedGroupId = result.value);
   }
 
@@ -203,10 +222,10 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
       icon: Value(iconName),
       type: Value(_selectedType),
       currencyId: Value(_selectedCurrencyId!),
-      initialBalance: Value(double.tryParse(_initialBalanceController.text) ?? 0),
+      initialBalance: Value(parseAmount(_initialBalanceController.text)),
       isCreditCard: Value(_selectedType == 'card' && _isCreditCard),
       creditLimit: Value(_selectedType == 'card' && _isCreditCard
-          ? double.tryParse(_creditLimitController.text)
+          ? parseAmount(_creditLimitController.text)
           : null),
       paymentDueDate: Value(_selectedType == 'card' && _isCreditCard
           ? _paymentDueDayController.text
@@ -308,15 +327,14 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
           const SizedBox(height: 16),
           TextFormField(
             controller: _initialBalanceController,
+            focusNode: _initialBalanceFocus,
             decoration: InputDecoration(
               labelText: 'Начальный баланс',
               suffixText: symbol,
               border: const OutlineInputBorder(),
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-            ],
+            inputFormatters: [AmountInputFormatter()],
           ),
           const SizedBox(height: 16),
           if (_selectedType == 'bank') ...[
@@ -389,6 +407,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
             if (_isCreditCard) ...[
               TextFormField(
                 controller: _creditLimitController,
+                focusNode: _creditLimitFocus,
                 decoration: InputDecoration(
                   labelText: 'Кредитный лимит',
                   suffixText: symbol,
@@ -396,9 +415,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
                 ),
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-                ],
+                inputFormatters: [AmountInputFormatter()],
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -429,5 +446,4 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
     );
   }
 }
-
 

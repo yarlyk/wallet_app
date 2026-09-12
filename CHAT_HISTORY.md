@@ -131,3 +131,9 @@
 - Исправлен GroupPickerDialog: "Без группы" возвращает SelectOption<int?>(value: null) вместо null, что позволяло отличать выбор "без группы" от отмены.
 - account_form_screen._pickGroup принимает SelectOption<int?> и корректно сбрасывает _selectedGroupId в null.
 - flutter analyze: No issues found!
+
+## 2026-09-13 (продолжение 2)
+- Добавлен lib/core/utils/amount_utils.dart: formatAmount, parseAmount, AmountInputFormatter (разделители разрядов, запятая как десятичный разделитель, до 2 знаков после).
+- account_form_screen: поля "Начальный баланс" и "Кредитный лимит" используют AmountInputFormatter; при фокусе нулевое значение очищается, чтобы не мешало вводу.
+- accounts_screen: баланс счёта и суммарный баланс группы отображаются с разделителями разрядов; под названием группы — "Группа · X ₽" (если валюта одна), "Группа · N счётов" (если валют несколько) или "Группа · пусто".
+- flutter analyze: No issues found!

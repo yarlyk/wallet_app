@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/database/app_database.dart';
+import '../../../core/utils/amount_utils.dart';
 import '../../../core/widgets/entity_form_screen.dart';
 import '../../../core/widgets/icon_picker.dart';
 import '../data/account_repository.dart';
@@ -75,16 +76,17 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
     super.dispose();
   }
 
-  int _countDescendantAccounts(
+  List<AccountWithCurrency> _descendantAccounts(
     int groupId,
     List<AccountGroup> groups,
     List<AccountWithCurrency> accounts,
   ) {
-    int total = accounts.where((a) => a.account.groupId == groupId).length;
+    final result = <AccountWithCurrency>[];
+    result.addAll(accounts.where((a) => a.account.groupId == groupId));
     for (final g in groups.where((g) => g.parentId == groupId)) {
-      total += _countDescendantAccounts(g.id, groups, accounts);
+      result.addAll(_descendantAccounts(g.id, groups, accounts));
     }
-    return total;
+    return result;
   }
 
   String _pluralAccounts(int n) {
@@ -97,12 +99,28 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
     return '$n вложенных счетов';
   }
 
+  String _groupBalanceLabel(
+    AccountGroup group,
+    List<AccountGroup> groups,
+    List<AccountWithCurrency> accounts,
+  ) {
+    final list = _descendantAccounts(group.id, groups, accounts);
+    if (list.isEmpty) return 'Группа · пусто';
+    final currencyIds = list.map((a) => a.currency.id).toSet();
+    if (currencyIds.length > 1) {
+      return 'Группа · ${list.length} счётов';
+    }
+    final total = list.fold<double>(0, (s, a) => s + a.account.initialBalance);
+    final symbol = list.first.currency.symbol ?? list.first.currency.code;
+    return 'Группа · ${formatAmount(total)} $symbol';
+  }
+
   Future<bool> _tryDeleteGroup(
     AccountGroup group,
     List<AccountGroup> groups,
     List<AccountWithCurrency> accounts,
   ) async {
-    final count = _countDescendantAccounts(group.id, groups, accounts);
+    final count = _descendantAccounts(group.id, groups, accounts).length;
     if (count > 0) {
       if (!mounted) return false;
       await showDialog<void>(
@@ -239,7 +257,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
     final a = awc.account;
     final c = awc.currency;
     final balance =
-        '${a.initialBalance.toStringAsFixed(2)} ${c.symbol ?? c.code}';
+        '${formatAmount(a.initialBalance)} ${c.symbol ?? c.code}';
     return ListTile(
       leading: Icon(iconFromName(a.icon), color: Colors.indigo),
       title: Text(a.name),
@@ -268,6 +286,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
       child: ExpansionTile(
         leading: Icon(iconFromName(group.icon)),
         title: Text(group.name),
+        subtitle: Text(_groupBalanceLabel(group, groups, accounts)),
         trailing: IconButton(
           icon: const Icon(Icons.more_vert),
           tooltip: 'Редактировать группу',
