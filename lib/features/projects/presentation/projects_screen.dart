@@ -2,16 +2,91 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' as drift;
 import '../../../core/database/app_database.dart';
-import '../../../core/widgets/entity_form.dart';
+import '../../../core/widgets/entity_form_screen.dart';
 import '../../../core/widgets/entity_list_screen.dart';
+import '../../../core/widgets/icon_picker.dart';
 import 'projects_provider.dart';
 
-class ProjectsScreen extends ConsumerWidget {
+class ProjectsScreen extends ConsumerStatefulWidget {
   final VoidCallback onBack;
   const ProjectsScreen({super.key, required this.onBack});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProjectsScreen> createState() => _ProjectsScreenState();
+}
+
+class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
+  bool _showForm = false;
+  Project? _editingProject;
+  final _nameController = TextEditingController();
+
+  void _openCreate() {
+    _nameController.text = '';
+    setState(() {
+      _editingProject = null;
+      _showForm = true;
+    });
+  }
+
+  void _openEdit(Project project) {
+    _nameController.text = project.name;
+    setState(() {
+      _editingProject = project;
+      _showForm = true;
+    });
+  }
+
+  void _closeForm() {
+    setState(() {
+      _showForm = false;
+      _editingProject = null;
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_showForm) {
+      final isEditing = _editingProject != null;
+      return EntityFormScreen(
+        title: isEditing ? 'Редактирование проекта' : 'Новый проект',
+        nameController: _nameController,
+        initialIconName: _editingProject?.icon,
+        isEditing: isEditing,
+        showDelete: isEditing,
+        onCancel: _closeForm,
+        onSave: (iconName) async {
+          if (isEditing) {
+            await ref.read(projectsProvider.notifier).updateProject(
+              _editingProject!.copyWith(
+                name: _nameController.text.trim(),
+                icon: iconName != null
+                    ? drift.Value(iconName)
+                    : const drift.Value.absent(),
+              ),
+            );
+          } else {
+            await ref.read(projectsProvider.notifier).addProject(
+              _nameController.text.trim(),
+              icon: iconName,
+            );
+          }
+        },
+        onDelete: isEditing
+            ? () async {
+                await ref
+                    .read(projectsProvider.notifier)
+                    .deleteProject(_editingProject!.id);
+              }
+            : null,
+      );
+    }
+
     final projectsAsync = ref.watch(projectsProvider);
 
     return projectsAsync.when(
@@ -24,85 +99,19 @@ class ProjectsScreen extends ConsumerWidget {
           itemBuilder: (context, index) {
             final project = projects[index];
             return ListTile(
-              leading: Icon(
-                project.icon != null
-                    ? _iconFromName(project.icon!)
-                    : Icons.folder,
-              ),
+              leading: Icon(iconFromName(project.icon)),
               title: Text(project.name),
               trailing: IconButton(
                 icon: const Icon(Icons.edit),
-                onPressed: () => _showProjectForm(context, ref, project: project),
+                onPressed: () => _openEdit(project),
               ),
-              onTap: () => _showProjectForm(context, ref, project: project),
+              onTap: () => _openEdit(project),
             );
           },
-          onBack: onBack,
+          onBack: widget.onBack,
           showAddItem: true,
           addItemLabel: 'Проект',
-          onAddItem: () => _showProjectForm(context, ref),
-        );
-      },
-    );
-  }
-
-  IconData _iconFromName(String name) {
-    const icons = {
-      'folder': Icons.folder,
-      'home': Icons.home,
-      'star': Icons.star,
-      'work': Icons.work,
-      'shopping_cart': Icons.shopping_cart,
-      'account_balance_wallet': Icons.account_balance_wallet,
-      'credit_card': Icons.credit_card,
-      'account_balance': Icons.account_balance,
-      'receipt': Icons.receipt,
-      'category': Icons.category,
-      'person': Icons.person,
-      'group': Icons.group,
-      'settings': Icons.settings,
-      'favorite': Icons.favorite,
-      'flag': Icons.flag,
-      'attach_money': Icons.attach_money,
-    };
-    return icons[name] ?? Icons.folder;
-  }
-
-  void _showProjectForm(BuildContext context, WidgetRef ref, {Project? project}) {
-    final nameController = TextEditingController(text: project?.name ?? '');
-    final isEditing = project != null;
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return EntityForm(
-          title: isEditing ? 'Редактирование проекта' : 'Новый проект',
-          nameController: nameController,
-          initialIconName: project?.icon,
-          onSave: (iconName) {
-            if (isEditing) {
-              ref.read(projectsProvider.notifier).updateProject(
-                project.copyWith(
-                  name: nameController.text.trim(),
-                  icon: iconName != null ? drift.Value(iconName) : const drift.Value.absent(),
-                ),
-              );
-            } else {
-              ref.read(projectsProvider.notifier).addProject(
-                nameController.text.trim(),
-                icon: iconName,
-              );
-            }
-          },
-          onDelete: isEditing
-              ? () {
-                  ref.read(projectsProvider.notifier).deleteProject(project.id);
-                  Navigator.pop(context);
-                }
-              : null,
-          showDelete: isEditing,
-          isEditing: isEditing,
+          onAddItem: _openCreate,
         );
       },
     );

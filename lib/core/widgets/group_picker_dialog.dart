@@ -1,12 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/accounts/presentation/accounts_provider.dart';
-import 'entity_form.dart';
-
-IconData _iconFromName(String? name) {
-  // Заглушка: позже заменить на реальную карту иконок.
-  return Icons.folder;
-}
+import 'entity_form_body.dart';
+import 'icon_picker.dart';
 
 class GroupPickerDialog extends ConsumerWidget {
   const GroupPickerDialog({super.key});
@@ -49,7 +45,7 @@ class GroupPickerDialog extends ConsumerWidget {
                   onTap: () => Navigator.pop(context, null),
                 ),
                 ...groups.map((group) => ListTile(
-                      leading: Icon(_iconFromName(group.icon)),
+                      leading: Icon(iconFromName(group.icon)),
                       title: Text(group.name),
                       onTap: () => Navigator.pop(context, group.id),
                     )),
@@ -89,8 +85,9 @@ class _FirstGroupForm extends ConsumerStatefulWidget {
 }
 
 class _FirstGroupFormState extends ConsumerState<_FirstGroupForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _bodyKey = GlobalKey<EntityFormBodyState>();
   final _nameController = TextEditingController();
-  String? _selectedIcon;
 
   @override
   void dispose() {
@@ -98,21 +95,39 @@ class _FirstGroupFormState extends ConsumerState<_FirstGroupForm> {
     super.dispose();
   }
 
+  Future<void> _save() async {
+    if (!_formKey.currentState!.validate()) return;
+    final icon = _bodyKey.currentState?.selectedIconName;
+    final id = await ref
+        .read(accountsProvider.notifier)
+        .addGroup(_nameController.text.trim(), icon, null);
+    if (mounted) Navigator.pop(context, id);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return EntityForm(
-      title: 'Создайте первую группу',
-      nameController: _nameController,
-      initialIconName: _selectedIcon,
-      onIconSelected: (icon) => _selectedIcon = icon,
-      onSave: (icon) async {
-        final id = await ref
-            .read(accountsProvider.notifier)
-            .addGroup(_nameController.text.trim(), icon, null);
-        if (mounted) Navigator.pop(context, id);
-      },
-      showDelete: false,
-      isEditing: false,
+    return AlertDialog(
+      title: const Text('Создайте первую группу'),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Form(
+          key: _formKey,
+          child: EntityFormBody(
+            key: _bodyKey,
+            nameController: _nameController,
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Отмена'),
+        ),
+        ElevatedButton(
+          onPressed: _save,
+          child: const Text('Создать'),
+        ),
+      ],
     );
   }
 }

@@ -109,3 +109,12 @@
 - Создан ProjectMultiSelectDialog (мультивыбор проектов).
 - flutter analyze: ошибок и warning нет, остались 12 info (стилистика).
 - Следующий шаг: переписать account_form_screen.dart на базе EntityForm с extraFields.
+
+## 2026-09-12 (вечер)
+- Рефактор EntityForm: разделён на EntityFormBody (поля) и EntityFormScreen (каркас с заголовком и нижней панелью кнопок).
+- Проекты переведены на EntityFormScreen (форма встраивается в body AppScaffold, верхний бар и нижняя навигация сохраняются).
+- Иконки централизованы: kAppIcons, kAppIconLabels, iconFromName в icon_picker.dart.
+- GroupPickerDialog переведён на EntityFormBody внутри AlertDialog.
+- Старый entity_form.dart удалён.
+- flutter analyze: 0 ошибок, 9 info в app_scaffold.dart (исправим при рефакторе AppScaffold).
+- Следующий шаг: SelectDialog<T> для выбора типа счёта и валюты, затем форма счёта.

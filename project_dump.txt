@@ -1,0 +1,5260 @@
+﻿
+
+===== FILE: lib\core\constants\app_constants.dart =====
+
+class AppConstants {
+  static const appName = 'Кошелёк';
+  static const defaultCurrencyCode = 'RUB';
+  static const defaultProjectName = 'Личный';
+}
+
+===== FILE: lib\core\database\app_database.dart =====
+
+import 'package:drift/drift.dart';
+import '../../features/accounts/data/account_groups_table.dart';
+import '../../features/accounts/data/account_projects_table.dart';
+import '../../features/accounts/data/accounts_table.dart';
+import '../../features/currencies/data/currencies_table.dart';
+import '../../features/projects/data/projects_table.dart';
+
+part 'app_database.g.dart';
+
+@DriftDatabase(tables: [Currencies, Projects, AccountGroups, Accounts, AccountProjects])
+class AppDatabase extends _$AppDatabase {
+  AppDatabase(super.e);
+
+  @override
+  int get schemaVersion => 3;
+}
+
+===== FILE: lib\core\database\app_database.g.dart =====
+
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'app_database.dart';
+
+// ignore_for_file: type=lint
+class $CurrenciesTable extends Currencies
+    with TableInfo<$CurrenciesTable, Currency> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CurrenciesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _codeMeta = const VerificationMeta('code');
+  @override
+  late final GeneratedColumn<String> code = GeneratedColumn<String>(
+      'code', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 8),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _symbolMeta = const VerificationMeta('symbol');
+  @override
+  late final GeneratedColumn<String> symbol = GeneratedColumn<String>(
+      'symbol', aliasedName, true,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 0, maxTextLength: 10),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _numCodeMeta =
+      const VerificationMeta('numCode');
+  @override
+  late final GeneratedColumn<int> numCode = GeneratedColumn<int>(
+      'num_code', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  static const VerificationMeta _nominalMeta =
+      const VerificationMeta('nominal');
+  @override
+  late final GeneratedColumn<int> nominal = GeneratedColumn<int>(
+      'nominal', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _countryMeta =
+      const VerificationMeta('country');
+  @override
+  late final GeneratedColumn<String> country = GeneratedColumn<String>(
+      'country', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, code, name, symbol, isActive, numCode, nominal, country];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'currencies';
+  @override
+  VerificationContext validateIntegrity(Insertable<Currency> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('code')) {
+      context.handle(
+          _codeMeta, code.isAcceptableOrUnknown(data['code']!, _codeMeta));
+    } else if (isInserting) {
+      context.missing(_codeMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('symbol')) {
+      context.handle(_symbolMeta,
+          symbol.isAcceptableOrUnknown(data['symbol']!, _symbolMeta));
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    if (data.containsKey('num_code')) {
+      context.handle(_numCodeMeta,
+          numCode.isAcceptableOrUnknown(data['num_code']!, _numCodeMeta));
+    } else if (isInserting) {
+      context.missing(_numCodeMeta);
+    }
+    if (data.containsKey('nominal')) {
+      context.handle(_nominalMeta,
+          nominal.isAcceptableOrUnknown(data['nominal']!, _nominalMeta));
+    }
+    if (data.containsKey('country')) {
+      context.handle(_countryMeta,
+          country.isAcceptableOrUnknown(data['country']!, _countryMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Currency map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Currency(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      code: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}code'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      symbol: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}symbol']),
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+      numCode: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}num_code'])!,
+      nominal: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}nominal'])!,
+      country: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}country']),
+    );
+  }
+
+  @override
+  $CurrenciesTable createAlias(String alias) {
+    return $CurrenciesTable(attachedDatabase, alias);
+  }
+}
+
+class Currency extends DataClass implements Insertable<Currency> {
+  final int id;
+  final String code;
+  final String name;
+  final String? symbol;
+  final bool isActive;
+  final int numCode;
+  final int nominal;
+  final String? country;
+  const Currency(
+      {required this.id,
+      required this.code,
+      required this.name,
+      this.symbol,
+      required this.isActive,
+      required this.numCode,
+      required this.nominal,
+      this.country});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['code'] = Variable<String>(code);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || symbol != null) {
+      map['symbol'] = Variable<String>(symbol);
+    }
+    map['is_active'] = Variable<bool>(isActive);
+    map['num_code'] = Variable<int>(numCode);
+    map['nominal'] = Variable<int>(nominal);
+    if (!nullToAbsent || country != null) {
+      map['country'] = Variable<String>(country);
+    }
+    return map;
+  }
+
+  CurrenciesCompanion toCompanion(bool nullToAbsent) {
+    return CurrenciesCompanion(
+      id: Value(id),
+      code: Value(code),
+      name: Value(name),
+      symbol:
+          symbol == null && nullToAbsent ? const Value.absent() : Value(symbol),
+      isActive: Value(isActive),
+      numCode: Value(numCode),
+      nominal: Value(nominal),
+      country: country == null && nullToAbsent
+          ? const Value.absent()
+          : Value(country),
+    );
+  }
+
+  factory Currency.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Currency(
+      id: serializer.fromJson<int>(json['id']),
+      code: serializer.fromJson<String>(json['code']),
+      name: serializer.fromJson<String>(json['name']),
+      symbol: serializer.fromJson<String?>(json['symbol']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+      numCode: serializer.fromJson<int>(json['numCode']),
+      nominal: serializer.fromJson<int>(json['nominal']),
+      country: serializer.fromJson<String?>(json['country']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'code': serializer.toJson<String>(code),
+      'name': serializer.toJson<String>(name),
+      'symbol': serializer.toJson<String?>(symbol),
+      'isActive': serializer.toJson<bool>(isActive),
+      'numCode': serializer.toJson<int>(numCode),
+      'nominal': serializer.toJson<int>(nominal),
+      'country': serializer.toJson<String?>(country),
+    };
+  }
+
+  Currency copyWith(
+          {int? id,
+          String? code,
+          String? name,
+          Value<String?> symbol = const Value.absent(),
+          bool? isActive,
+          int? numCode,
+          int? nominal,
+          Value<String?> country = const Value.absent()}) =>
+      Currency(
+        id: id ?? this.id,
+        code: code ?? this.code,
+        name: name ?? this.name,
+        symbol: symbol.present ? symbol.value : this.symbol,
+        isActive: isActive ?? this.isActive,
+        numCode: numCode ?? this.numCode,
+        nominal: nominal ?? this.nominal,
+        country: country.present ? country.value : this.country,
+      );
+  Currency copyWithCompanion(CurrenciesCompanion data) {
+    return Currency(
+      id: data.id.present ? data.id.value : this.id,
+      code: data.code.present ? data.code.value : this.code,
+      name: data.name.present ? data.name.value : this.name,
+      symbol: data.symbol.present ? data.symbol.value : this.symbol,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+      numCode: data.numCode.present ? data.numCode.value : this.numCode,
+      nominal: data.nominal.present ? data.nominal.value : this.nominal,
+      country: data.country.present ? data.country.value : this.country,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Currency(')
+          ..write('id: $id, ')
+          ..write('code: $code, ')
+          ..write('name: $name, ')
+          ..write('symbol: $symbol, ')
+          ..write('isActive: $isActive, ')
+          ..write('numCode: $numCode, ')
+          ..write('nominal: $nominal, ')
+          ..write('country: $country')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, code, name, symbol, isActive, numCode, nominal, country);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Currency &&
+          other.id == this.id &&
+          other.code == this.code &&
+          other.name == this.name &&
+          other.symbol == this.symbol &&
+          other.isActive == this.isActive &&
+          other.numCode == this.numCode &&
+          other.nominal == this.nominal &&
+          other.country == this.country);
+}
+
+class CurrenciesCompanion extends UpdateCompanion<Currency> {
+  final Value<int> id;
+  final Value<String> code;
+  final Value<String> name;
+  final Value<String?> symbol;
+  final Value<bool> isActive;
+  final Value<int> numCode;
+  final Value<int> nominal;
+  final Value<String?> country;
+  const CurrenciesCompanion({
+    this.id = const Value.absent(),
+    this.code = const Value.absent(),
+    this.name = const Value.absent(),
+    this.symbol = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.numCode = const Value.absent(),
+    this.nominal = const Value.absent(),
+    this.country = const Value.absent(),
+  });
+  CurrenciesCompanion.insert({
+    this.id = const Value.absent(),
+    required String code,
+    required String name,
+    this.symbol = const Value.absent(),
+    this.isActive = const Value.absent(),
+    required int numCode,
+    this.nominal = const Value.absent(),
+    this.country = const Value.absent(),
+  })  : code = Value(code),
+        name = Value(name),
+        numCode = Value(numCode);
+  static Insertable<Currency> custom({
+    Expression<int>? id,
+    Expression<String>? code,
+    Expression<String>? name,
+    Expression<String>? symbol,
+    Expression<bool>? isActive,
+    Expression<int>? numCode,
+    Expression<int>? nominal,
+    Expression<String>? country,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (name != null) 'name': name,
+      if (symbol != null) 'symbol': symbol,
+      if (isActive != null) 'is_active': isActive,
+      if (numCode != null) 'num_code': numCode,
+      if (nominal != null) 'nominal': nominal,
+      if (country != null) 'country': country,
+    });
+  }
+
+  CurrenciesCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? code,
+      Value<String>? name,
+      Value<String?>? symbol,
+      Value<bool>? isActive,
+      Value<int>? numCode,
+      Value<int>? nominal,
+      Value<String?>? country}) {
+    return CurrenciesCompanion(
+      id: id ?? this.id,
+      code: code ?? this.code,
+      name: name ?? this.name,
+      symbol: symbol ?? this.symbol,
+      isActive: isActive ?? this.isActive,
+      numCode: numCode ?? this.numCode,
+      nominal: nominal ?? this.nominal,
+      country: country ?? this.country,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (code.present) {
+      map['code'] = Variable<String>(code.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (symbol.present) {
+      map['symbol'] = Variable<String>(symbol.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    if (numCode.present) {
+      map['num_code'] = Variable<int>(numCode.value);
+    }
+    if (nominal.present) {
+      map['nominal'] = Variable<int>(nominal.value);
+    }
+    if (country.present) {
+      map['country'] = Variable<String>(country.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CurrenciesCompanion(')
+          ..write('id: $id, ')
+          ..write('code: $code, ')
+          ..write('name: $name, ')
+          ..write('symbol: $symbol, ')
+          ..write('isActive: $isActive, ')
+          ..write('numCode: $numCode, ')
+          ..write('nominal: $nominal, ')
+          ..write('country: $country')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ProjectsTable extends Projects with TableInfo<$ProjectsTable, Project> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ProjectsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+      'icon', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [id, name, isActive, icon];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'projects';
+  @override
+  VerificationContext validateIntegrity(Insertable<Project> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Project map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Project(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+      icon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon']),
+    );
+  }
+
+  @override
+  $ProjectsTable createAlias(String alias) {
+    return $ProjectsTable(attachedDatabase, alias);
+  }
+}
+
+class Project extends DataClass implements Insertable<Project> {
+  final int id;
+  final String name;
+  final bool isActive;
+  final String? icon;
+  const Project(
+      {required this.id,
+      required this.name,
+      required this.isActive,
+      this.icon});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['is_active'] = Variable<bool>(isActive);
+    if (!nullToAbsent || icon != null) {
+      map['icon'] = Variable<String>(icon);
+    }
+    return map;
+  }
+
+  ProjectsCompanion toCompanion(bool nullToAbsent) {
+    return ProjectsCompanion(
+      id: Value(id),
+      name: Value(name),
+      isActive: Value(isActive),
+      icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
+    );
+  }
+
+  factory Project.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Project(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+      icon: serializer.fromJson<String?>(json['icon']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'isActive': serializer.toJson<bool>(isActive),
+      'icon': serializer.toJson<String?>(icon),
+    };
+  }
+
+  Project copyWith(
+          {int? id,
+          String? name,
+          bool? isActive,
+          Value<String?> icon = const Value.absent()}) =>
+      Project(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        isActive: isActive ?? this.isActive,
+        icon: icon.present ? icon.value : this.icon,
+      );
+  Project copyWithCompanion(ProjectsCompanion data) {
+    return Project(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+      icon: data.icon.present ? data.icon.value : this.icon,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Project(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('isActive: $isActive, ')
+          ..write('icon: $icon')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, isActive, icon);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Project &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.isActive == this.isActive &&
+          other.icon == this.icon);
+}
+
+class ProjectsCompanion extends UpdateCompanion<Project> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<bool> isActive;
+  final Value<String?> icon;
+  const ProjectsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.icon = const Value.absent(),
+  });
+  ProjectsCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.isActive = const Value.absent(),
+    this.icon = const Value.absent(),
+  }) : name = Value(name);
+  static Insertable<Project> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<bool>? isActive,
+    Expression<String>? icon,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (isActive != null) 'is_active': isActive,
+      if (icon != null) 'icon': icon,
+    });
+  }
+
+  ProjectsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<bool>? isActive,
+      Value<String?>? icon}) {
+    return ProjectsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      isActive: isActive ?? this.isActive,
+      icon: icon ?? this.icon,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProjectsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('isActive: $isActive, ')
+          ..write('icon: $icon')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AccountGroupsTable extends AccountGroups
+    with TableInfo<$AccountGroupsTable, AccountGroup> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AccountGroupsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+      'icon', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _parentIdMeta =
+      const VerificationMeta('parentId');
+  @override
+  late final GeneratedColumn<int> parentId = GeneratedColumn<int>(
+      'parent_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES account_groups (id)'));
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  @override
+  List<GeneratedColumn> get $columns => [id, name, icon, parentId, isActive];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'account_groups';
+  @override
+  VerificationContext validateIntegrity(Insertable<AccountGroup> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    }
+    if (data.containsKey('parent_id')) {
+      context.handle(_parentIdMeta,
+          parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta));
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AccountGroup map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AccountGroup(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      icon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon']),
+      parentId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}parent_id']),
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+    );
+  }
+
+  @override
+  $AccountGroupsTable createAlias(String alias) {
+    return $AccountGroupsTable(attachedDatabase, alias);
+  }
+}
+
+class AccountGroup extends DataClass implements Insertable<AccountGroup> {
+  final int id;
+  final String name;
+  final String? icon;
+  final int? parentId;
+  final bool isActive;
+  const AccountGroup(
+      {required this.id,
+      required this.name,
+      this.icon,
+      this.parentId,
+      required this.isActive});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || icon != null) {
+      map['icon'] = Variable<String>(icon);
+    }
+    if (!nullToAbsent || parentId != null) {
+      map['parent_id'] = Variable<int>(parentId);
+    }
+    map['is_active'] = Variable<bool>(isActive);
+    return map;
+  }
+
+  AccountGroupsCompanion toCompanion(bool nullToAbsent) {
+    return AccountGroupsCompanion(
+      id: Value(id),
+      name: Value(name),
+      icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
+      parentId: parentId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(parentId),
+      isActive: Value(isActive),
+    );
+  }
+
+  factory AccountGroup.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AccountGroup(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      icon: serializer.fromJson<String?>(json['icon']),
+      parentId: serializer.fromJson<int?>(json['parentId']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'icon': serializer.toJson<String?>(icon),
+      'parentId': serializer.toJson<int?>(parentId),
+      'isActive': serializer.toJson<bool>(isActive),
+    };
+  }
+
+  AccountGroup copyWith(
+          {int? id,
+          String? name,
+          Value<String?> icon = const Value.absent(),
+          Value<int?> parentId = const Value.absent(),
+          bool? isActive}) =>
+      AccountGroup(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        icon: icon.present ? icon.value : this.icon,
+        parentId: parentId.present ? parentId.value : this.parentId,
+        isActive: isActive ?? this.isActive,
+      );
+  AccountGroup copyWithCompanion(AccountGroupsCompanion data) {
+    return AccountGroup(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      parentId: data.parentId.present ? data.parentId.value : this.parentId,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AccountGroup(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('parentId: $parentId, ')
+          ..write('isActive: $isActive')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, icon, parentId, isActive);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AccountGroup &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.icon == this.icon &&
+          other.parentId == this.parentId &&
+          other.isActive == this.isActive);
+}
+
+class AccountGroupsCompanion extends UpdateCompanion<AccountGroup> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String?> icon;
+  final Value<int?> parentId;
+  final Value<bool> isActive;
+  const AccountGroupsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.parentId = const Value.absent(),
+    this.isActive = const Value.absent(),
+  });
+  AccountGroupsCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.icon = const Value.absent(),
+    this.parentId = const Value.absent(),
+    this.isActive = const Value.absent(),
+  }) : name = Value(name);
+  static Insertable<AccountGroup> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? icon,
+    Expression<int>? parentId,
+    Expression<bool>? isActive,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (icon != null) 'icon': icon,
+      if (parentId != null) 'parent_id': parentId,
+      if (isActive != null) 'is_active': isActive,
+    });
+  }
+
+  AccountGroupsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<String?>? icon,
+      Value<int?>? parentId,
+      Value<bool>? isActive}) {
+    return AccountGroupsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      parentId: parentId ?? this.parentId,
+      isActive: isActive ?? this.isActive,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (parentId.present) {
+      map['parent_id'] = Variable<int>(parentId.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AccountGroupsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('parentId: $parentId, ')
+          ..write('isActive: $isActive')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AccountsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _groupIdMeta =
+      const VerificationMeta('groupId');
+  @override
+  late final GeneratedColumn<int> groupId = GeneratedColumn<int>(
+      'group_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES account_groups (id)'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+      'icon', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 20),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _currencyIdMeta =
+      const VerificationMeta('currencyId');
+  @override
+  late final GeneratedColumn<int> currencyId = GeneratedColumn<int>(
+      'currency_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES currencies (id)'));
+  static const VerificationMeta _initialBalanceMeta =
+      const VerificationMeta('initialBalance');
+  @override
+  late final GeneratedColumn<double> initialBalance = GeneratedColumn<double>(
+      'initial_balance', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _isCreditCardMeta =
+      const VerificationMeta('isCreditCard');
+  @override
+  late final GeneratedColumn<bool> isCreditCard = GeneratedColumn<bool>(
+      'is_credit_card', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_credit_card" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _creditLimitMeta =
+      const VerificationMeta('creditLimit');
+  @override
+  late final GeneratedColumn<double> creditLimit = GeneratedColumn<double>(
+      'credit_limit', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _paymentDueDateMeta =
+      const VerificationMeta('paymentDueDate');
+  @override
+  late final GeneratedColumn<String> paymentDueDate = GeneratedColumn<String>(
+      'payment_due_date', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _gracePeriodDaysMeta =
+      const VerificationMeta('gracePeriodDays');
+  @override
+  late final GeneratedColumn<int> gracePeriodDays = GeneratedColumn<int>(
+      'grace_period_days', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _cardLast4DigitsMeta =
+      const VerificationMeta('cardLast4Digits');
+  @override
+  late final GeneratedColumn<String> cardLast4Digits = GeneratedColumn<String>(
+      'card_last4_digits', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _accountLast4DigitsMeta =
+      const VerificationMeta('accountLast4Digits');
+  @override
+  late final GeneratedColumn<String> accountLast4Digits =
+      GeneratedColumn<String>('account_last4_digits', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _smsSenderNameMeta =
+      const VerificationMeta('smsSenderName');
+  @override
+  late final GeneratedColumn<String> smsSenderName = GeneratedColumn<String>(
+      'sms_sender_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        groupId,
+        name,
+        icon,
+        type,
+        currencyId,
+        initialBalance,
+        isActive,
+        isCreditCard,
+        creditLimit,
+        paymentDueDate,
+        gracePeriodDays,
+        cardLast4Digits,
+        accountLast4Digits,
+        smsSenderName
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'accounts';
+  @override
+  VerificationContext validateIntegrity(Insertable<Account> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('group_id')) {
+      context.handle(_groupIdMeta,
+          groupId.isAcceptableOrUnknown(data['group_id']!, _groupIdMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('currency_id')) {
+      context.handle(
+          _currencyIdMeta,
+          currencyId.isAcceptableOrUnknown(
+              data['currency_id']!, _currencyIdMeta));
+    } else if (isInserting) {
+      context.missing(_currencyIdMeta);
+    }
+    if (data.containsKey('initial_balance')) {
+      context.handle(
+          _initialBalanceMeta,
+          initialBalance.isAcceptableOrUnknown(
+              data['initial_balance']!, _initialBalanceMeta));
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    if (data.containsKey('is_credit_card')) {
+      context.handle(
+          _isCreditCardMeta,
+          isCreditCard.isAcceptableOrUnknown(
+              data['is_credit_card']!, _isCreditCardMeta));
+    }
+    if (data.containsKey('credit_limit')) {
+      context.handle(
+          _creditLimitMeta,
+          creditLimit.isAcceptableOrUnknown(
+              data['credit_limit']!, _creditLimitMeta));
+    }
+    if (data.containsKey('payment_due_date')) {
+      context.handle(
+          _paymentDueDateMeta,
+          paymentDueDate.isAcceptableOrUnknown(
+              data['payment_due_date']!, _paymentDueDateMeta));
+    }
+    if (data.containsKey('grace_period_days')) {
+      context.handle(
+          _gracePeriodDaysMeta,
+          gracePeriodDays.isAcceptableOrUnknown(
+              data['grace_period_days']!, _gracePeriodDaysMeta));
+    }
+    if (data.containsKey('card_last4_digits')) {
+      context.handle(
+          _cardLast4DigitsMeta,
+          cardLast4Digits.isAcceptableOrUnknown(
+              data['card_last4_digits']!, _cardLast4DigitsMeta));
+    }
+    if (data.containsKey('account_last4_digits')) {
+      context.handle(
+          _accountLast4DigitsMeta,
+          accountLast4Digits.isAcceptableOrUnknown(
+              data['account_last4_digits']!, _accountLast4DigitsMeta));
+    }
+    if (data.containsKey('sms_sender_name')) {
+      context.handle(
+          _smsSenderNameMeta,
+          smsSenderName.isAcceptableOrUnknown(
+              data['sms_sender_name']!, _smsSenderNameMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Account map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Account(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      groupId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}group_id']),
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      icon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon']),
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      currencyId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}currency_id'])!,
+      initialBalance: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}initial_balance'])!,
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+      isCreditCard: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_credit_card'])!,
+      creditLimit: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}credit_limit']),
+      paymentDueDate: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}payment_due_date']),
+      gracePeriodDays: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}grace_period_days']),
+      cardLast4Digits: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}card_last4_digits']),
+      accountLast4Digits: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}account_last4_digits']),
+      smsSenderName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}sms_sender_name']),
+    );
+  }
+
+  @override
+  $AccountsTable createAlias(String alias) {
+    return $AccountsTable(attachedDatabase, alias);
+  }
+}
+
+class Account extends DataClass implements Insertable<Account> {
+  final int id;
+  final int? groupId;
+  final String name;
+  final String? icon;
+  final String type;
+  final int currencyId;
+  final double initialBalance;
+  final bool isActive;
+  final bool isCreditCard;
+  final double? creditLimit;
+  final String? paymentDueDate;
+  final int? gracePeriodDays;
+  final String? cardLast4Digits;
+  final String? accountLast4Digits;
+  final String? smsSenderName;
+  const Account(
+      {required this.id,
+      this.groupId,
+      required this.name,
+      this.icon,
+      required this.type,
+      required this.currencyId,
+      required this.initialBalance,
+      required this.isActive,
+      required this.isCreditCard,
+      this.creditLimit,
+      this.paymentDueDate,
+      this.gracePeriodDays,
+      this.cardLast4Digits,
+      this.accountLast4Digits,
+      this.smsSenderName});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || groupId != null) {
+      map['group_id'] = Variable<int>(groupId);
+    }
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || icon != null) {
+      map['icon'] = Variable<String>(icon);
+    }
+    map['type'] = Variable<String>(type);
+    map['currency_id'] = Variable<int>(currencyId);
+    map['initial_balance'] = Variable<double>(initialBalance);
+    map['is_active'] = Variable<bool>(isActive);
+    map['is_credit_card'] = Variable<bool>(isCreditCard);
+    if (!nullToAbsent || creditLimit != null) {
+      map['credit_limit'] = Variable<double>(creditLimit);
+    }
+    if (!nullToAbsent || paymentDueDate != null) {
+      map['payment_due_date'] = Variable<String>(paymentDueDate);
+    }
+    if (!nullToAbsent || gracePeriodDays != null) {
+      map['grace_period_days'] = Variable<int>(gracePeriodDays);
+    }
+    if (!nullToAbsent || cardLast4Digits != null) {
+      map['card_last4_digits'] = Variable<String>(cardLast4Digits);
+    }
+    if (!nullToAbsent || accountLast4Digits != null) {
+      map['account_last4_digits'] = Variable<String>(accountLast4Digits);
+    }
+    if (!nullToAbsent || smsSenderName != null) {
+      map['sms_sender_name'] = Variable<String>(smsSenderName);
+    }
+    return map;
+  }
+
+  AccountsCompanion toCompanion(bool nullToAbsent) {
+    return AccountsCompanion(
+      id: Value(id),
+      groupId: groupId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(groupId),
+      name: Value(name),
+      icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
+      type: Value(type),
+      currencyId: Value(currencyId),
+      initialBalance: Value(initialBalance),
+      isActive: Value(isActive),
+      isCreditCard: Value(isCreditCard),
+      creditLimit: creditLimit == null && nullToAbsent
+          ? const Value.absent()
+          : Value(creditLimit),
+      paymentDueDate: paymentDueDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(paymentDueDate),
+      gracePeriodDays: gracePeriodDays == null && nullToAbsent
+          ? const Value.absent()
+          : Value(gracePeriodDays),
+      cardLast4Digits: cardLast4Digits == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cardLast4Digits),
+      accountLast4Digits: accountLast4Digits == null && nullToAbsent
+          ? const Value.absent()
+          : Value(accountLast4Digits),
+      smsSenderName: smsSenderName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(smsSenderName),
+    );
+  }
+
+  factory Account.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Account(
+      id: serializer.fromJson<int>(json['id']),
+      groupId: serializer.fromJson<int?>(json['groupId']),
+      name: serializer.fromJson<String>(json['name']),
+      icon: serializer.fromJson<String?>(json['icon']),
+      type: serializer.fromJson<String>(json['type']),
+      currencyId: serializer.fromJson<int>(json['currencyId']),
+      initialBalance: serializer.fromJson<double>(json['initialBalance']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+      isCreditCard: serializer.fromJson<bool>(json['isCreditCard']),
+      creditLimit: serializer.fromJson<double?>(json['creditLimit']),
+      paymentDueDate: serializer.fromJson<String?>(json['paymentDueDate']),
+      gracePeriodDays: serializer.fromJson<int?>(json['gracePeriodDays']),
+      cardLast4Digits: serializer.fromJson<String?>(json['cardLast4Digits']),
+      accountLast4Digits:
+          serializer.fromJson<String?>(json['accountLast4Digits']),
+      smsSenderName: serializer.fromJson<String?>(json['smsSenderName']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'groupId': serializer.toJson<int?>(groupId),
+      'name': serializer.toJson<String>(name),
+      'icon': serializer.toJson<String?>(icon),
+      'type': serializer.toJson<String>(type),
+      'currencyId': serializer.toJson<int>(currencyId),
+      'initialBalance': serializer.toJson<double>(initialBalance),
+      'isActive': serializer.toJson<bool>(isActive),
+      'isCreditCard': serializer.toJson<bool>(isCreditCard),
+      'creditLimit': serializer.toJson<double?>(creditLimit),
+      'paymentDueDate': serializer.toJson<String?>(paymentDueDate),
+      'gracePeriodDays': serializer.toJson<int?>(gracePeriodDays),
+      'cardLast4Digits': serializer.toJson<String?>(cardLast4Digits),
+      'accountLast4Digits': serializer.toJson<String?>(accountLast4Digits),
+      'smsSenderName': serializer.toJson<String?>(smsSenderName),
+    };
+  }
+
+  Account copyWith(
+          {int? id,
+          Value<int?> groupId = const Value.absent(),
+          String? name,
+          Value<String?> icon = const Value.absent(),
+          String? type,
+          int? currencyId,
+          double? initialBalance,
+          bool? isActive,
+          bool? isCreditCard,
+          Value<double?> creditLimit = const Value.absent(),
+          Value<String?> paymentDueDate = const Value.absent(),
+          Value<int?> gracePeriodDays = const Value.absent(),
+          Value<String?> cardLast4Digits = const Value.absent(),
+          Value<String?> accountLast4Digits = const Value.absent(),
+          Value<String?> smsSenderName = const Value.absent()}) =>
+      Account(
+        id: id ?? this.id,
+        groupId: groupId.present ? groupId.value : this.groupId,
+        name: name ?? this.name,
+        icon: icon.present ? icon.value : this.icon,
+        type: type ?? this.type,
+        currencyId: currencyId ?? this.currencyId,
+        initialBalance: initialBalance ?? this.initialBalance,
+        isActive: isActive ?? this.isActive,
+        isCreditCard: isCreditCard ?? this.isCreditCard,
+        creditLimit: creditLimit.present ? creditLimit.value : this.creditLimit,
+        paymentDueDate:
+            paymentDueDate.present ? paymentDueDate.value : this.paymentDueDate,
+        gracePeriodDays: gracePeriodDays.present
+            ? gracePeriodDays.value
+            : this.gracePeriodDays,
+        cardLast4Digits: cardLast4Digits.present
+            ? cardLast4Digits.value
+            : this.cardLast4Digits,
+        accountLast4Digits: accountLast4Digits.present
+            ? accountLast4Digits.value
+            : this.accountLast4Digits,
+        smsSenderName:
+            smsSenderName.present ? smsSenderName.value : this.smsSenderName,
+      );
+  Account copyWithCompanion(AccountsCompanion data) {
+    return Account(
+      id: data.id.present ? data.id.value : this.id,
+      groupId: data.groupId.present ? data.groupId.value : this.groupId,
+      name: data.name.present ? data.name.value : this.name,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      type: data.type.present ? data.type.value : this.type,
+      currencyId:
+          data.currencyId.present ? data.currencyId.value : this.currencyId,
+      initialBalance: data.initialBalance.present
+          ? data.initialBalance.value
+          : this.initialBalance,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+      isCreditCard: data.isCreditCard.present
+          ? data.isCreditCard.value
+          : this.isCreditCard,
+      creditLimit:
+          data.creditLimit.present ? data.creditLimit.value : this.creditLimit,
+      paymentDueDate: data.paymentDueDate.present
+          ? data.paymentDueDate.value
+          : this.paymentDueDate,
+      gracePeriodDays: data.gracePeriodDays.present
+          ? data.gracePeriodDays.value
+          : this.gracePeriodDays,
+      cardLast4Digits: data.cardLast4Digits.present
+          ? data.cardLast4Digits.value
+          : this.cardLast4Digits,
+      accountLast4Digits: data.accountLast4Digits.present
+          ? data.accountLast4Digits.value
+          : this.accountLast4Digits,
+      smsSenderName: data.smsSenderName.present
+          ? data.smsSenderName.value
+          : this.smsSenderName,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Account(')
+          ..write('id: $id, ')
+          ..write('groupId: $groupId, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('type: $type, ')
+          ..write('currencyId: $currencyId, ')
+          ..write('initialBalance: $initialBalance, ')
+          ..write('isActive: $isActive, ')
+          ..write('isCreditCard: $isCreditCard, ')
+          ..write('creditLimit: $creditLimit, ')
+          ..write('paymentDueDate: $paymentDueDate, ')
+          ..write('gracePeriodDays: $gracePeriodDays, ')
+          ..write('cardLast4Digits: $cardLast4Digits, ')
+          ..write('accountLast4Digits: $accountLast4Digits, ')
+          ..write('smsSenderName: $smsSenderName')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      groupId,
+      name,
+      icon,
+      type,
+      currencyId,
+      initialBalance,
+      isActive,
+      isCreditCard,
+      creditLimit,
+      paymentDueDate,
+      gracePeriodDays,
+      cardLast4Digits,
+      accountLast4Digits,
+      smsSenderName);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Account &&
+          other.id == this.id &&
+          other.groupId == this.groupId &&
+          other.name == this.name &&
+          other.icon == this.icon &&
+          other.type == this.type &&
+          other.currencyId == this.currencyId &&
+          other.initialBalance == this.initialBalance &&
+          other.isActive == this.isActive &&
+          other.isCreditCard == this.isCreditCard &&
+          other.creditLimit == this.creditLimit &&
+          other.paymentDueDate == this.paymentDueDate &&
+          other.gracePeriodDays == this.gracePeriodDays &&
+          other.cardLast4Digits == this.cardLast4Digits &&
+          other.accountLast4Digits == this.accountLast4Digits &&
+          other.smsSenderName == this.smsSenderName);
+}
+
+class AccountsCompanion extends UpdateCompanion<Account> {
+  final Value<int> id;
+  final Value<int?> groupId;
+  final Value<String> name;
+  final Value<String?> icon;
+  final Value<String> type;
+  final Value<int> currencyId;
+  final Value<double> initialBalance;
+  final Value<bool> isActive;
+  final Value<bool> isCreditCard;
+  final Value<double?> creditLimit;
+  final Value<String?> paymentDueDate;
+  final Value<int?> gracePeriodDays;
+  final Value<String?> cardLast4Digits;
+  final Value<String?> accountLast4Digits;
+  final Value<String?> smsSenderName;
+  const AccountsCompanion({
+    this.id = const Value.absent(),
+    this.groupId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.type = const Value.absent(),
+    this.currencyId = const Value.absent(),
+    this.initialBalance = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.isCreditCard = const Value.absent(),
+    this.creditLimit = const Value.absent(),
+    this.paymentDueDate = const Value.absent(),
+    this.gracePeriodDays = const Value.absent(),
+    this.cardLast4Digits = const Value.absent(),
+    this.accountLast4Digits = const Value.absent(),
+    this.smsSenderName = const Value.absent(),
+  });
+  AccountsCompanion.insert({
+    this.id = const Value.absent(),
+    this.groupId = const Value.absent(),
+    required String name,
+    this.icon = const Value.absent(),
+    required String type,
+    required int currencyId,
+    this.initialBalance = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.isCreditCard = const Value.absent(),
+    this.creditLimit = const Value.absent(),
+    this.paymentDueDate = const Value.absent(),
+    this.gracePeriodDays = const Value.absent(),
+    this.cardLast4Digits = const Value.absent(),
+    this.accountLast4Digits = const Value.absent(),
+    this.smsSenderName = const Value.absent(),
+  })  : name = Value(name),
+        type = Value(type),
+        currencyId = Value(currencyId);
+  static Insertable<Account> custom({
+    Expression<int>? id,
+    Expression<int>? groupId,
+    Expression<String>? name,
+    Expression<String>? icon,
+    Expression<String>? type,
+    Expression<int>? currencyId,
+    Expression<double>? initialBalance,
+    Expression<bool>? isActive,
+    Expression<bool>? isCreditCard,
+    Expression<double>? creditLimit,
+    Expression<String>? paymentDueDate,
+    Expression<int>? gracePeriodDays,
+    Expression<String>? cardLast4Digits,
+    Expression<String>? accountLast4Digits,
+    Expression<String>? smsSenderName,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (groupId != null) 'group_id': groupId,
+      if (name != null) 'name': name,
+      if (icon != null) 'icon': icon,
+      if (type != null) 'type': type,
+      if (currencyId != null) 'currency_id': currencyId,
+      if (initialBalance != null) 'initial_balance': initialBalance,
+      if (isActive != null) 'is_active': isActive,
+      if (isCreditCard != null) 'is_credit_card': isCreditCard,
+      if (creditLimit != null) 'credit_limit': creditLimit,
+      if (paymentDueDate != null) 'payment_due_date': paymentDueDate,
+      if (gracePeriodDays != null) 'grace_period_days': gracePeriodDays,
+      if (cardLast4Digits != null) 'card_last4_digits': cardLast4Digits,
+      if (accountLast4Digits != null)
+        'account_last4_digits': accountLast4Digits,
+      if (smsSenderName != null) 'sms_sender_name': smsSenderName,
+    });
+  }
+
+  AccountsCompanion copyWith(
+      {Value<int>? id,
+      Value<int?>? groupId,
+      Value<String>? name,
+      Value<String?>? icon,
+      Value<String>? type,
+      Value<int>? currencyId,
+      Value<double>? initialBalance,
+      Value<bool>? isActive,
+      Value<bool>? isCreditCard,
+      Value<double?>? creditLimit,
+      Value<String?>? paymentDueDate,
+      Value<int?>? gracePeriodDays,
+      Value<String?>? cardLast4Digits,
+      Value<String?>? accountLast4Digits,
+      Value<String?>? smsSenderName}) {
+    return AccountsCompanion(
+      id: id ?? this.id,
+      groupId: groupId ?? this.groupId,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      type: type ?? this.type,
+      currencyId: currencyId ?? this.currencyId,
+      initialBalance: initialBalance ?? this.initialBalance,
+      isActive: isActive ?? this.isActive,
+      isCreditCard: isCreditCard ?? this.isCreditCard,
+      creditLimit: creditLimit ?? this.creditLimit,
+      paymentDueDate: paymentDueDate ?? this.paymentDueDate,
+      gracePeriodDays: gracePeriodDays ?? this.gracePeriodDays,
+      cardLast4Digits: cardLast4Digits ?? this.cardLast4Digits,
+      accountLast4Digits: accountLast4Digits ?? this.accountLast4Digits,
+      smsSenderName: smsSenderName ?? this.smsSenderName,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (groupId.present) {
+      map['group_id'] = Variable<int>(groupId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (currencyId.present) {
+      map['currency_id'] = Variable<int>(currencyId.value);
+    }
+    if (initialBalance.present) {
+      map['initial_balance'] = Variable<double>(initialBalance.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    if (isCreditCard.present) {
+      map['is_credit_card'] = Variable<bool>(isCreditCard.value);
+    }
+    if (creditLimit.present) {
+      map['credit_limit'] = Variable<double>(creditLimit.value);
+    }
+    if (paymentDueDate.present) {
+      map['payment_due_date'] = Variable<String>(paymentDueDate.value);
+    }
+    if (gracePeriodDays.present) {
+      map['grace_period_days'] = Variable<int>(gracePeriodDays.value);
+    }
+    if (cardLast4Digits.present) {
+      map['card_last4_digits'] = Variable<String>(cardLast4Digits.value);
+    }
+    if (accountLast4Digits.present) {
+      map['account_last4_digits'] = Variable<String>(accountLast4Digits.value);
+    }
+    if (smsSenderName.present) {
+      map['sms_sender_name'] = Variable<String>(smsSenderName.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AccountsCompanion(')
+          ..write('id: $id, ')
+          ..write('groupId: $groupId, ')
+          ..write('name: $name, ')
+          ..write('icon: $icon, ')
+          ..write('type: $type, ')
+          ..write('currencyId: $currencyId, ')
+          ..write('initialBalance: $initialBalance, ')
+          ..write('isActive: $isActive, ')
+          ..write('isCreditCard: $isCreditCard, ')
+          ..write('creditLimit: $creditLimit, ')
+          ..write('paymentDueDate: $paymentDueDate, ')
+          ..write('gracePeriodDays: $gracePeriodDays, ')
+          ..write('cardLast4Digits: $cardLast4Digits, ')
+          ..write('accountLast4Digits: $accountLast4Digits, ')
+          ..write('smsSenderName: $smsSenderName')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AccountProjectsTable extends AccountProjects
+    with TableInfo<$AccountProjectsTable, AccountProject> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AccountProjectsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _accountIdMeta =
+      const VerificationMeta('accountId');
+  @override
+  late final GeneratedColumn<int> accountId = GeneratedColumn<int>(
+      'account_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES accounts (id)'));
+  static const VerificationMeta _projectIdMeta =
+      const VerificationMeta('projectId');
+  @override
+  late final GeneratedColumn<int> projectId = GeneratedColumn<int>(
+      'project_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES projects (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [accountId, projectId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'account_projects';
+  @override
+  VerificationContext validateIntegrity(Insertable<AccountProject> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('account_id')) {
+      context.handle(_accountIdMeta,
+          accountId.isAcceptableOrUnknown(data['account_id']!, _accountIdMeta));
+    } else if (isInserting) {
+      context.missing(_accountIdMeta);
+    }
+    if (data.containsKey('project_id')) {
+      context.handle(_projectIdMeta,
+          projectId.isAcceptableOrUnknown(data['project_id']!, _projectIdMeta));
+    } else if (isInserting) {
+      context.missing(_projectIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {accountId, projectId};
+  @override
+  AccountProject map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AccountProject(
+      accountId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}account_id'])!,
+      projectId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}project_id'])!,
+    );
+  }
+
+  @override
+  $AccountProjectsTable createAlias(String alias) {
+    return $AccountProjectsTable(attachedDatabase, alias);
+  }
+}
+
+class AccountProject extends DataClass implements Insertable<AccountProject> {
+  final int accountId;
+  final int projectId;
+  const AccountProject({required this.accountId, required this.projectId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['account_id'] = Variable<int>(accountId);
+    map['project_id'] = Variable<int>(projectId);
+    return map;
+  }
+
+  AccountProjectsCompanion toCompanion(bool nullToAbsent) {
+    return AccountProjectsCompanion(
+      accountId: Value(accountId),
+      projectId: Value(projectId),
+    );
+  }
+
+  factory AccountProject.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AccountProject(
+      accountId: serializer.fromJson<int>(json['accountId']),
+      projectId: serializer.fromJson<int>(json['projectId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'accountId': serializer.toJson<int>(accountId),
+      'projectId': serializer.toJson<int>(projectId),
+    };
+  }
+
+  AccountProject copyWith({int? accountId, int? projectId}) => AccountProject(
+        accountId: accountId ?? this.accountId,
+        projectId: projectId ?? this.projectId,
+      );
+  AccountProject copyWithCompanion(AccountProjectsCompanion data) {
+    return AccountProject(
+      accountId: data.accountId.present ? data.accountId.value : this.accountId,
+      projectId: data.projectId.present ? data.projectId.value : this.projectId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AccountProject(')
+          ..write('accountId: $accountId, ')
+          ..write('projectId: $projectId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(accountId, projectId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AccountProject &&
+          other.accountId == this.accountId &&
+          other.projectId == this.projectId);
+}
+
+class AccountProjectsCompanion extends UpdateCompanion<AccountProject> {
+  final Value<int> accountId;
+  final Value<int> projectId;
+  final Value<int> rowid;
+  const AccountProjectsCompanion({
+    this.accountId = const Value.absent(),
+    this.projectId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AccountProjectsCompanion.insert({
+    required int accountId,
+    required int projectId,
+    this.rowid = const Value.absent(),
+  })  : accountId = Value(accountId),
+        projectId = Value(projectId);
+  static Insertable<AccountProject> custom({
+    Expression<int>? accountId,
+    Expression<int>? projectId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (accountId != null) 'account_id': accountId,
+      if (projectId != null) 'project_id': projectId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AccountProjectsCompanion copyWith(
+      {Value<int>? accountId, Value<int>? projectId, Value<int>? rowid}) {
+    return AccountProjectsCompanion(
+      accountId: accountId ?? this.accountId,
+      projectId: projectId ?? this.projectId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (accountId.present) {
+      map['account_id'] = Variable<int>(accountId.value);
+    }
+    if (projectId.present) {
+      map['project_id'] = Variable<int>(projectId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AccountProjectsCompanion(')
+          ..write('accountId: $accountId, ')
+          ..write('projectId: $projectId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+abstract class _$AppDatabase extends GeneratedDatabase {
+  _$AppDatabase(QueryExecutor e) : super(e);
+  $AppDatabaseManager get managers => $AppDatabaseManager(this);
+  late final $CurrenciesTable currencies = $CurrenciesTable(this);
+  late final $ProjectsTable projects = $ProjectsTable(this);
+  late final $AccountGroupsTable accountGroups = $AccountGroupsTable(this);
+  late final $AccountsTable accounts = $AccountsTable(this);
+  late final $AccountProjectsTable accountProjects =
+      $AccountProjectsTable(this);
+  @override
+  Iterable<TableInfo<Table, Object?>> get allTables =>
+      allSchemaEntities.whereType<TableInfo<Table, Object?>>();
+  @override
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [currencies, projects, accountGroups, accounts, accountProjects];
+}
+
+typedef $$CurrenciesTableCreateCompanionBuilder = CurrenciesCompanion Function({
+  Value<int> id,
+  required String code,
+  required String name,
+  Value<String?> symbol,
+  Value<bool> isActive,
+  required int numCode,
+  Value<int> nominal,
+  Value<String?> country,
+});
+typedef $$CurrenciesTableUpdateCompanionBuilder = CurrenciesCompanion Function({
+  Value<int> id,
+  Value<String> code,
+  Value<String> name,
+  Value<String?> symbol,
+  Value<bool> isActive,
+  Value<int> numCode,
+  Value<int> nominal,
+  Value<String?> country,
+});
+
+final class $$CurrenciesTableReferences
+    extends BaseReferences<_$AppDatabase, $CurrenciesTable, Currency> {
+  $$CurrenciesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$AccountsTable, List<Account>> _accountsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.accounts,
+          aliasName: 'currencies__id__accounts__currency_id');
+
+  $$AccountsTableProcessedTableManager get accountsRefs {
+    final manager = $$AccountsTableTableManager($_db, $_db.accounts)
+        .filter((f) => f.currencyId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_accountsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$CurrenciesTableFilterComposer
+    extends Composer<_$AppDatabase, $CurrenciesTable> {
+  $$CurrenciesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get code => $composableBuilder(
+      column: $table.code, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get symbol => $composableBuilder(
+      column: $table.symbol, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get numCode => $composableBuilder(
+      column: $table.numCode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get nominal => $composableBuilder(
+      column: $table.nominal, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get country => $composableBuilder(
+      column: $table.country, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> accountsRefs(
+      Expression<bool> Function($$AccountsTableFilterComposer f) f) {
+    final $$AccountsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.accounts,
+        getReferencedColumn: (t) => t.currencyId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountsTableFilterComposer(
+              $db: $db,
+              $table: $db.accounts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$CurrenciesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CurrenciesTable> {
+  $$CurrenciesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get code => $composableBuilder(
+      column: $table.code, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get symbol => $composableBuilder(
+      column: $table.symbol, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get numCode => $composableBuilder(
+      column: $table.numCode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get nominal => $composableBuilder(
+      column: $table.nominal, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get country => $composableBuilder(
+      column: $table.country, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CurrenciesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CurrenciesTable> {
+  $$CurrenciesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get code =>
+      $composableBuilder(column: $table.code, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get symbol =>
+      $composableBuilder(column: $table.symbol, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<int> get numCode =>
+      $composableBuilder(column: $table.numCode, builder: (column) => column);
+
+  GeneratedColumn<int> get nominal =>
+      $composableBuilder(column: $table.nominal, builder: (column) => column);
+
+  GeneratedColumn<String> get country =>
+      $composableBuilder(column: $table.country, builder: (column) => column);
+
+  Expression<T> accountsRefs<T extends Object>(
+      Expression<T> Function($$AccountsTableAnnotationComposer a) f) {
+    final $$AccountsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.accounts,
+        getReferencedColumn: (t) => t.currencyId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.accounts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$CurrenciesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CurrenciesTable,
+    Currency,
+    $$CurrenciesTableFilterComposer,
+    $$CurrenciesTableOrderingComposer,
+    $$CurrenciesTableAnnotationComposer,
+    $$CurrenciesTableCreateCompanionBuilder,
+    $$CurrenciesTableUpdateCompanionBuilder,
+    (Currency, $$CurrenciesTableReferences),
+    Currency,
+    PrefetchHooks Function({bool accountsRefs})> {
+  $$CurrenciesTableTableManager(_$AppDatabase db, $CurrenciesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CurrenciesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CurrenciesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CurrenciesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> code = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String?> symbol = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<int> numCode = const Value.absent(),
+            Value<int> nominal = const Value.absent(),
+            Value<String?> country = const Value.absent(),
+          }) =>
+              CurrenciesCompanion(
+            id: id,
+            code: code,
+            name: name,
+            symbol: symbol,
+            isActive: isActive,
+            numCode: numCode,
+            nominal: nominal,
+            country: country,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String code,
+            required String name,
+            Value<String?> symbol = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            required int numCode,
+            Value<int> nominal = const Value.absent(),
+            Value<String?> country = const Value.absent(),
+          }) =>
+              CurrenciesCompanion.insert(
+            id: id,
+            code: code,
+            name: name,
+            symbol: symbol,
+            isActive: isActive,
+            numCode: numCode,
+            nominal: nominal,
+            country: country,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$CurrenciesTable, Currency>(table),
+                    $$CurrenciesTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({accountsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (accountsRefs) db.accounts],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (accountsRefs)
+                    await $_getPrefetchedData<Currency, $CurrenciesTable,
+                            Account>(
+                        currentTable: table,
+                        referencedTable:
+                            $$CurrenciesTableReferences._accountsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CurrenciesTableReferences(db, table, p0)
+                                .accountsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.currencyId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$CurrenciesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CurrenciesTable,
+    Currency,
+    $$CurrenciesTableFilterComposer,
+    $$CurrenciesTableOrderingComposer,
+    $$CurrenciesTableAnnotationComposer,
+    $$CurrenciesTableCreateCompanionBuilder,
+    $$CurrenciesTableUpdateCompanionBuilder,
+    (Currency, $$CurrenciesTableReferences),
+    Currency,
+    PrefetchHooks Function({bool accountsRefs})>;
+typedef $$ProjectsTableCreateCompanionBuilder = ProjectsCompanion Function({
+  Value<int> id,
+  required String name,
+  Value<bool> isActive,
+  Value<String?> icon,
+});
+typedef $$ProjectsTableUpdateCompanionBuilder = ProjectsCompanion Function({
+  Value<int> id,
+  Value<String> name,
+  Value<bool> isActive,
+  Value<String?> icon,
+});
+
+final class $$ProjectsTableReferences
+    extends BaseReferences<_$AppDatabase, $ProjectsTable, Project> {
+  $$ProjectsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$AccountProjectsTable, List<AccountProject>>
+      _accountProjectsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.accountProjects,
+              aliasName: 'projects__id__account_projects__project_id');
+
+  $$AccountProjectsTableProcessedTableManager get accountProjectsRefs {
+    final manager =
+        $$AccountProjectsTableTableManager($_db, $_db.accountProjects)
+            .filter((f) => f.projectId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_accountProjectsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$ProjectsTableFilterComposer
+    extends Composer<_$AppDatabase, $ProjectsTable> {
+  $$ProjectsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> accountProjectsRefs(
+      Expression<bool> Function($$AccountProjectsTableFilterComposer f) f) {
+    final $$AccountProjectsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.accountProjects,
+        getReferencedColumn: (t) => t.projectId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountProjectsTableFilterComposer(
+              $db: $db,
+              $table: $db.accountProjects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$ProjectsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ProjectsTable> {
+  $$ProjectsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ProjectsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ProjectsTable> {
+  $$ProjectsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  Expression<T> accountProjectsRefs<T extends Object>(
+      Expression<T> Function($$AccountProjectsTableAnnotationComposer a) f) {
+    final $$AccountProjectsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.accountProjects,
+        getReferencedColumn: (t) => t.projectId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountProjectsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.accountProjects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$ProjectsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ProjectsTable,
+    Project,
+    $$ProjectsTableFilterComposer,
+    $$ProjectsTableOrderingComposer,
+    $$ProjectsTableAnnotationComposer,
+    $$ProjectsTableCreateCompanionBuilder,
+    $$ProjectsTableUpdateCompanionBuilder,
+    (Project, $$ProjectsTableReferences),
+    Project,
+    PrefetchHooks Function({bool accountProjectsRefs})> {
+  $$ProjectsTableTableManager(_$AppDatabase db, $ProjectsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ProjectsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ProjectsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ProjectsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
+          }) =>
+              ProjectsCompanion(
+            id: id,
+            name: name,
+            isActive: isActive,
+            icon: icon,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+            Value<bool> isActive = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
+          }) =>
+              ProjectsCompanion.insert(
+            id: id,
+            name: name,
+            isActive: isActive,
+            icon: icon,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$ProjectsTable, Project>(table),
+                    $$ProjectsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({accountProjectsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (accountProjectsRefs) db.accountProjects
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (accountProjectsRefs)
+                    await $_getPrefetchedData<Project, $ProjectsTable,
+                            AccountProject>(
+                        currentTable: table,
+                        referencedTable: $$ProjectsTableReferences
+                            ._accountProjectsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ProjectsTableReferences(db, table, p0)
+                                .accountProjectsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.projectId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$ProjectsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ProjectsTable,
+    Project,
+    $$ProjectsTableFilterComposer,
+    $$ProjectsTableOrderingComposer,
+    $$ProjectsTableAnnotationComposer,
+    $$ProjectsTableCreateCompanionBuilder,
+    $$ProjectsTableUpdateCompanionBuilder,
+    (Project, $$ProjectsTableReferences),
+    Project,
+    PrefetchHooks Function({bool accountProjectsRefs})>;
+typedef $$AccountGroupsTableCreateCompanionBuilder = AccountGroupsCompanion
+    Function({
+  Value<int> id,
+  required String name,
+  Value<String?> icon,
+  Value<int?> parentId,
+  Value<bool> isActive,
+});
+typedef $$AccountGroupsTableUpdateCompanionBuilder = AccountGroupsCompanion
+    Function({
+  Value<int> id,
+  Value<String> name,
+  Value<String?> icon,
+  Value<int?> parentId,
+  Value<bool> isActive,
+});
+
+final class $$AccountGroupsTableReferences
+    extends BaseReferences<_$AppDatabase, $AccountGroupsTable, AccountGroup> {
+  $$AccountGroupsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $AccountGroupsTable _parentIdTable(_$AppDatabase db) =>
+      db.accountGroups
+          .createAlias('account_groups__parent_id__account_groups__id');
+
+  $$AccountGroupsTableProcessedTableManager? get parentId {
+    final $_column = $_itemColumn<int>('parent_id');
+    if ($_column == null) return null;
+    final manager = $$AccountGroupsTableTableManager($_db, $_db.accountGroups)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_parentIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$AccountsTable, List<Account>> _accountsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.accounts,
+          aliasName: 'account_groups__id__accounts__group_id');
+
+  $$AccountsTableProcessedTableManager get accountsRefs {
+    final manager = $$AccountsTableTableManager($_db, $_db.accounts)
+        .filter((f) => f.groupId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_accountsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$AccountGroupsTableFilterComposer
+    extends Composer<_$AppDatabase, $AccountGroupsTable> {
+  $$AccountGroupsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  $$AccountGroupsTableFilterComposer get parentId {
+    final $$AccountGroupsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentId,
+        referencedTable: $db.accountGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountGroupsTableFilterComposer(
+              $db: $db,
+              $table: $db.accountGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> accountsRefs(
+      Expression<bool> Function($$AccountsTableFilterComposer f) f) {
+    final $$AccountsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.accounts,
+        getReferencedColumn: (t) => t.groupId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountsTableFilterComposer(
+              $db: $db,
+              $table: $db.accounts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$AccountGroupsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AccountGroupsTable> {
+  $$AccountGroupsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+
+  $$AccountGroupsTableOrderingComposer get parentId {
+    final $$AccountGroupsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentId,
+        referencedTable: $db.accountGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountGroupsTableOrderingComposer(
+              $db: $db,
+              $table: $db.accountGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$AccountGroupsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AccountGroupsTable> {
+  $$AccountGroupsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  $$AccountGroupsTableAnnotationComposer get parentId {
+    final $$AccountGroupsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.parentId,
+        referencedTable: $db.accountGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountGroupsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.accountGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> accountsRefs<T extends Object>(
+      Expression<T> Function($$AccountsTableAnnotationComposer a) f) {
+    final $$AccountsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.accounts,
+        getReferencedColumn: (t) => t.groupId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.accounts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$AccountGroupsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $AccountGroupsTable,
+    AccountGroup,
+    $$AccountGroupsTableFilterComposer,
+    $$AccountGroupsTableOrderingComposer,
+    $$AccountGroupsTableAnnotationComposer,
+    $$AccountGroupsTableCreateCompanionBuilder,
+    $$AccountGroupsTableUpdateCompanionBuilder,
+    (AccountGroup, $$AccountGroupsTableReferences),
+    AccountGroup,
+    PrefetchHooks Function({bool parentId, bool accountsRefs})> {
+  $$AccountGroupsTableTableManager(_$AppDatabase db, $AccountGroupsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AccountGroupsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AccountGroupsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AccountGroupsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
+            Value<int?> parentId = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+          }) =>
+              AccountGroupsCompanion(
+            id: id,
+            name: name,
+            icon: icon,
+            parentId: parentId,
+            isActive: isActive,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+            Value<String?> icon = const Value.absent(),
+            Value<int?> parentId = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+          }) =>
+              AccountGroupsCompanion.insert(
+            id: id,
+            name: name,
+            icon: icon,
+            parentId: parentId,
+            isActive: isActive,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$AccountGroupsTable, AccountGroup>(table),
+                    $$AccountGroupsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({parentId = false, accountsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (accountsRefs) db.accounts],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (parentId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.parentId,
+                    referencedTable:
+                        $$AccountGroupsTableReferences._parentIdTable(db),
+                    referencedColumn:
+                        $$AccountGroupsTableReferences._parentIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (accountsRefs)
+                    await $_getPrefetchedData<AccountGroup, $AccountGroupsTable,
+                            Account>(
+                        currentTable: table,
+                        referencedTable: $$AccountGroupsTableReferences
+                            ._accountsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$AccountGroupsTableReferences(db, table, p0)
+                                .accountsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.groupId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$AccountGroupsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $AccountGroupsTable,
+    AccountGroup,
+    $$AccountGroupsTableFilterComposer,
+    $$AccountGroupsTableOrderingComposer,
+    $$AccountGroupsTableAnnotationComposer,
+    $$AccountGroupsTableCreateCompanionBuilder,
+    $$AccountGroupsTableUpdateCompanionBuilder,
+    (AccountGroup, $$AccountGroupsTableReferences),
+    AccountGroup,
+    PrefetchHooks Function({bool parentId, bool accountsRefs})>;
+typedef $$AccountsTableCreateCompanionBuilder = AccountsCompanion Function({
+  Value<int> id,
+  Value<int?> groupId,
+  required String name,
+  Value<String?> icon,
+  required String type,
+  required int currencyId,
+  Value<double> initialBalance,
+  Value<bool> isActive,
+  Value<bool> isCreditCard,
+  Value<double?> creditLimit,
+  Value<String?> paymentDueDate,
+  Value<int?> gracePeriodDays,
+  Value<String?> cardLast4Digits,
+  Value<String?> accountLast4Digits,
+  Value<String?> smsSenderName,
+});
+typedef $$AccountsTableUpdateCompanionBuilder = AccountsCompanion Function({
+  Value<int> id,
+  Value<int?> groupId,
+  Value<String> name,
+  Value<String?> icon,
+  Value<String> type,
+  Value<int> currencyId,
+  Value<double> initialBalance,
+  Value<bool> isActive,
+  Value<bool> isCreditCard,
+  Value<double?> creditLimit,
+  Value<String?> paymentDueDate,
+  Value<int?> gracePeriodDays,
+  Value<String?> cardLast4Digits,
+  Value<String?> accountLast4Digits,
+  Value<String?> smsSenderName,
+});
+
+final class $$AccountsTableReferences
+    extends BaseReferences<_$AppDatabase, $AccountsTable, Account> {
+  $$AccountsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $AccountGroupsTable _groupIdTable(_$AppDatabase db) =>
+      db.accountGroups.createAlias('accounts__group_id__account_groups__id');
+
+  $$AccountGroupsTableProcessedTableManager? get groupId {
+    final $_column = $_itemColumn<int>('group_id');
+    if ($_column == null) return null;
+    final manager = $$AccountGroupsTableTableManager($_db, $_db.accountGroups)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_groupIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $CurrenciesTable _currencyIdTable(_$AppDatabase db) =>
+      db.currencies.createAlias('accounts__currency_id__currencies__id');
+
+  $$CurrenciesTableProcessedTableManager get currencyId {
+    final $_column = $_itemColumn<int>('currency_id')!;
+
+    final manager = $$CurrenciesTableTableManager($_db, $_db.currencies)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_currencyIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$AccountProjectsTable, List<AccountProject>>
+      _accountProjectsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.accountProjects,
+              aliasName: 'accounts__id__account_projects__account_id');
+
+  $$AccountProjectsTableProcessedTableManager get accountProjectsRefs {
+    final manager =
+        $$AccountProjectsTableTableManager($_db, $_db.accountProjects)
+            .filter((f) => f.accountId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_accountProjectsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$AccountsTableFilterComposer
+    extends Composer<_$AppDatabase, $AccountsTable> {
+  $$AccountsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get initialBalance => $composableBuilder(
+      column: $table.initialBalance,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isCreditCard => $composableBuilder(
+      column: $table.isCreditCard, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get creditLimit => $composableBuilder(
+      column: $table.creditLimit, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get paymentDueDate => $composableBuilder(
+      column: $table.paymentDueDate,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get gracePeriodDays => $composableBuilder(
+      column: $table.gracePeriodDays,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get cardLast4Digits => $composableBuilder(
+      column: $table.cardLast4Digits,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get accountLast4Digits => $composableBuilder(
+      column: $table.accountLast4Digits,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get smsSenderName => $composableBuilder(
+      column: $table.smsSenderName, builder: (column) => ColumnFilters(column));
+
+  $$AccountGroupsTableFilterComposer get groupId {
+    final $$AccountGroupsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.groupId,
+        referencedTable: $db.accountGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountGroupsTableFilterComposer(
+              $db: $db,
+              $table: $db.accountGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CurrenciesTableFilterComposer get currencyId {
+    final $$CurrenciesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.currencyId,
+        referencedTable: $db.currencies,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CurrenciesTableFilterComposer(
+              $db: $db,
+              $table: $db.currencies,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> accountProjectsRefs(
+      Expression<bool> Function($$AccountProjectsTableFilterComposer f) f) {
+    final $$AccountProjectsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.accountProjects,
+        getReferencedColumn: (t) => t.accountId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountProjectsTableFilterComposer(
+              $db: $db,
+              $table: $db.accountProjects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$AccountsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AccountsTable> {
+  $$AccountsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get initialBalance => $composableBuilder(
+      column: $table.initialBalance,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isCreditCard => $composableBuilder(
+      column: $table.isCreditCard,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get creditLimit => $composableBuilder(
+      column: $table.creditLimit, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get paymentDueDate => $composableBuilder(
+      column: $table.paymentDueDate,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get gracePeriodDays => $composableBuilder(
+      column: $table.gracePeriodDays,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get cardLast4Digits => $composableBuilder(
+      column: $table.cardLast4Digits,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get accountLast4Digits => $composableBuilder(
+      column: $table.accountLast4Digits,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get smsSenderName => $composableBuilder(
+      column: $table.smsSenderName,
+      builder: (column) => ColumnOrderings(column));
+
+  $$AccountGroupsTableOrderingComposer get groupId {
+    final $$AccountGroupsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.groupId,
+        referencedTable: $db.accountGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountGroupsTableOrderingComposer(
+              $db: $db,
+              $table: $db.accountGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CurrenciesTableOrderingComposer get currencyId {
+    final $$CurrenciesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.currencyId,
+        referencedTable: $db.currencies,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CurrenciesTableOrderingComposer(
+              $db: $db,
+              $table: $db.currencies,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$AccountsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AccountsTable> {
+  $$AccountsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<double> get initialBalance => $composableBuilder(
+      column: $table.initialBalance, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<bool> get isCreditCard => $composableBuilder(
+      column: $table.isCreditCard, builder: (column) => column);
+
+  GeneratedColumn<double> get creditLimit => $composableBuilder(
+      column: $table.creditLimit, builder: (column) => column);
+
+  GeneratedColumn<String> get paymentDueDate => $composableBuilder(
+      column: $table.paymentDueDate, builder: (column) => column);
+
+  GeneratedColumn<int> get gracePeriodDays => $composableBuilder(
+      column: $table.gracePeriodDays, builder: (column) => column);
+
+  GeneratedColumn<String> get cardLast4Digits => $composableBuilder(
+      column: $table.cardLast4Digits, builder: (column) => column);
+
+  GeneratedColumn<String> get accountLast4Digits => $composableBuilder(
+      column: $table.accountLast4Digits, builder: (column) => column);
+
+  GeneratedColumn<String> get smsSenderName => $composableBuilder(
+      column: $table.smsSenderName, builder: (column) => column);
+
+  $$AccountGroupsTableAnnotationComposer get groupId {
+    final $$AccountGroupsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.groupId,
+        referencedTable: $db.accountGroups,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountGroupsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.accountGroups,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CurrenciesTableAnnotationComposer get currencyId {
+    final $$CurrenciesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.currencyId,
+        referencedTable: $db.currencies,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CurrenciesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.currencies,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> accountProjectsRefs<T extends Object>(
+      Expression<T> Function($$AccountProjectsTableAnnotationComposer a) f) {
+    final $$AccountProjectsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.accountProjects,
+        getReferencedColumn: (t) => t.accountId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountProjectsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.accountProjects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$AccountsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $AccountsTable,
+    Account,
+    $$AccountsTableFilterComposer,
+    $$AccountsTableOrderingComposer,
+    $$AccountsTableAnnotationComposer,
+    $$AccountsTableCreateCompanionBuilder,
+    $$AccountsTableUpdateCompanionBuilder,
+    (Account, $$AccountsTableReferences),
+    Account,
+    PrefetchHooks Function(
+        {bool groupId, bool currencyId, bool accountProjectsRefs})> {
+  $$AccountsTableTableManager(_$AppDatabase db, $AccountsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AccountsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AccountsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AccountsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int?> groupId = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
+            Value<String> type = const Value.absent(),
+            Value<int> currencyId = const Value.absent(),
+            Value<double> initialBalance = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<bool> isCreditCard = const Value.absent(),
+            Value<double?> creditLimit = const Value.absent(),
+            Value<String?> paymentDueDate = const Value.absent(),
+            Value<int?> gracePeriodDays = const Value.absent(),
+            Value<String?> cardLast4Digits = const Value.absent(),
+            Value<String?> accountLast4Digits = const Value.absent(),
+            Value<String?> smsSenderName = const Value.absent(),
+          }) =>
+              AccountsCompanion(
+            id: id,
+            groupId: groupId,
+            name: name,
+            icon: icon,
+            type: type,
+            currencyId: currencyId,
+            initialBalance: initialBalance,
+            isActive: isActive,
+            isCreditCard: isCreditCard,
+            creditLimit: creditLimit,
+            paymentDueDate: paymentDueDate,
+            gracePeriodDays: gracePeriodDays,
+            cardLast4Digits: cardLast4Digits,
+            accountLast4Digits: accountLast4Digits,
+            smsSenderName: smsSenderName,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int?> groupId = const Value.absent(),
+            required String name,
+            Value<String?> icon = const Value.absent(),
+            required String type,
+            required int currencyId,
+            Value<double> initialBalance = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<bool> isCreditCard = const Value.absent(),
+            Value<double?> creditLimit = const Value.absent(),
+            Value<String?> paymentDueDate = const Value.absent(),
+            Value<int?> gracePeriodDays = const Value.absent(),
+            Value<String?> cardLast4Digits = const Value.absent(),
+            Value<String?> accountLast4Digits = const Value.absent(),
+            Value<String?> smsSenderName = const Value.absent(),
+          }) =>
+              AccountsCompanion.insert(
+            id: id,
+            groupId: groupId,
+            name: name,
+            icon: icon,
+            type: type,
+            currencyId: currencyId,
+            initialBalance: initialBalance,
+            isActive: isActive,
+            isCreditCard: isCreditCard,
+            creditLimit: creditLimit,
+            paymentDueDate: paymentDueDate,
+            gracePeriodDays: gracePeriodDays,
+            cardLast4Digits: cardLast4Digits,
+            accountLast4Digits: accountLast4Digits,
+            smsSenderName: smsSenderName,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$AccountsTable, Account>(table),
+                    $$AccountsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {groupId = false,
+              currencyId = false,
+              accountProjectsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (accountProjectsRefs) db.accountProjects
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (groupId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.groupId,
+                    referencedTable:
+                        $$AccountsTableReferences._groupIdTable(db),
+                    referencedColumn:
+                        $$AccountsTableReferences._groupIdTable(db).id,
+                  ) as T;
+                }
+                if (currencyId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.currencyId,
+                    referencedTable:
+                        $$AccountsTableReferences._currencyIdTable(db),
+                    referencedColumn:
+                        $$AccountsTableReferences._currencyIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (accountProjectsRefs)
+                    await $_getPrefetchedData<Account, $AccountsTable,
+                            AccountProject>(
+                        currentTable: table,
+                        referencedTable: $$AccountsTableReferences
+                            ._accountProjectsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$AccountsTableReferences(db, table, p0)
+                                .accountProjectsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.accountId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$AccountsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $AccountsTable,
+    Account,
+    $$AccountsTableFilterComposer,
+    $$AccountsTableOrderingComposer,
+    $$AccountsTableAnnotationComposer,
+    $$AccountsTableCreateCompanionBuilder,
+    $$AccountsTableUpdateCompanionBuilder,
+    (Account, $$AccountsTableReferences),
+    Account,
+    PrefetchHooks Function(
+        {bool groupId, bool currencyId, bool accountProjectsRefs})>;
+typedef $$AccountProjectsTableCreateCompanionBuilder = AccountProjectsCompanion
+    Function({
+  required int accountId,
+  required int projectId,
+  Value<int> rowid,
+});
+typedef $$AccountProjectsTableUpdateCompanionBuilder = AccountProjectsCompanion
+    Function({
+  Value<int> accountId,
+  Value<int> projectId,
+  Value<int> rowid,
+});
+
+final class $$AccountProjectsTableReferences extends BaseReferences<
+    _$AppDatabase, $AccountProjectsTable, AccountProject> {
+  $$AccountProjectsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $AccountsTable _accountIdTable(_$AppDatabase db) =>
+      db.accounts.createAlias('account_projects__account_id__accounts__id');
+
+  $$AccountsTableProcessedTableManager get accountId {
+    final $_column = $_itemColumn<int>('account_id')!;
+
+    final manager = $$AccountsTableTableManager($_db, $_db.accounts)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_accountIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $ProjectsTable _projectIdTable(_$AppDatabase db) =>
+      db.projects.createAlias('account_projects__project_id__projects__id');
+
+  $$ProjectsTableProcessedTableManager get projectId {
+    final $_column = $_itemColumn<int>('project_id')!;
+
+    final manager = $$ProjectsTableTableManager($_db, $_db.projects)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_projectIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$AccountProjectsTableFilterComposer
+    extends Composer<_$AppDatabase, $AccountProjectsTable> {
+  $$AccountProjectsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$AccountsTableFilterComposer get accountId {
+    final $$AccountsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.accountId,
+        referencedTable: $db.accounts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountsTableFilterComposer(
+              $db: $db,
+              $table: $db.accounts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ProjectsTableFilterComposer get projectId {
+    final $$ProjectsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.projectId,
+        referencedTable: $db.projects,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ProjectsTableFilterComposer(
+              $db: $db,
+              $table: $db.projects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$AccountProjectsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AccountProjectsTable> {
+  $$AccountProjectsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$AccountsTableOrderingComposer get accountId {
+    final $$AccountsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.accountId,
+        referencedTable: $db.accounts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountsTableOrderingComposer(
+              $db: $db,
+              $table: $db.accounts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ProjectsTableOrderingComposer get projectId {
+    final $$ProjectsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.projectId,
+        referencedTable: $db.projects,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ProjectsTableOrderingComposer(
+              $db: $db,
+              $table: $db.projects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$AccountProjectsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AccountProjectsTable> {
+  $$AccountProjectsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$AccountsTableAnnotationComposer get accountId {
+    final $$AccountsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.accountId,
+        referencedTable: $db.accounts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AccountsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.accounts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$ProjectsTableAnnotationComposer get projectId {
+    final $$ProjectsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.projectId,
+        referencedTable: $db.projects,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ProjectsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.projects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$AccountProjectsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $AccountProjectsTable,
+    AccountProject,
+    $$AccountProjectsTableFilterComposer,
+    $$AccountProjectsTableOrderingComposer,
+    $$AccountProjectsTableAnnotationComposer,
+    $$AccountProjectsTableCreateCompanionBuilder,
+    $$AccountProjectsTableUpdateCompanionBuilder,
+    (AccountProject, $$AccountProjectsTableReferences),
+    AccountProject,
+    PrefetchHooks Function({bool accountId, bool projectId})> {
+  $$AccountProjectsTableTableManager(
+      _$AppDatabase db, $AccountProjectsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AccountProjectsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AccountProjectsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AccountProjectsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> accountId = const Value.absent(),
+            Value<int> projectId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              AccountProjectsCompanion(
+            accountId: accountId,
+            projectId: projectId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int accountId,
+            required int projectId,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              AccountProjectsCompanion.insert(
+            accountId: accountId,
+            projectId: projectId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable<$AccountProjectsTable, AccountProject>(table),
+                    $$AccountProjectsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({accountId = false, projectId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (accountId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.accountId,
+                    referencedTable:
+                        $$AccountProjectsTableReferences._accountIdTable(db),
+                    referencedColumn:
+                        $$AccountProjectsTableReferences._accountIdTable(db).id,
+                  ) as T;
+                }
+                if (projectId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.projectId,
+                    referencedTable:
+                        $$AccountProjectsTableReferences._projectIdTable(db),
+                    referencedColumn:
+                        $$AccountProjectsTableReferences._projectIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$AccountProjectsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $AccountProjectsTable,
+    AccountProject,
+    $$AccountProjectsTableFilterComposer,
+    $$AccountProjectsTableOrderingComposer,
+    $$AccountProjectsTableAnnotationComposer,
+    $$AccountProjectsTableCreateCompanionBuilder,
+    $$AccountProjectsTableUpdateCompanionBuilder,
+    (AccountProject, $$AccountProjectsTableReferences),
+    AccountProject,
+    PrefetchHooks Function({bool accountId, bool projectId})>;
+
+class $AppDatabaseManager {
+  final _$AppDatabase _db;
+  $AppDatabaseManager(this._db);
+  $$CurrenciesTableTableManager get currencies =>
+      $$CurrenciesTableTableManager(_db, _db.currencies);
+  $$ProjectsTableTableManager get projects =>
+      $$ProjectsTableTableManager(_db, _db.projects);
+  $$AccountGroupsTableTableManager get accountGroups =>
+      $$AccountGroupsTableTableManager(_db, _db.accountGroups);
+  $$AccountsTableTableManager get accounts =>
+      $$AccountsTableTableManager(_db, _db.accounts);
+  $$AccountProjectsTableTableManager get accountProjects =>
+      $$AccountProjectsTableTableManager(_db, _db.accountProjects);
+}
+
+===== FILE: lib\core\database\database_provider.dart =====
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'app_database.dart';
+
+final appDatabaseProvider = Provider<AppDatabase>((ref) {
+  throw UnimplementedError('AppDatabase must be overridden in main');
+});
+
+===== FILE: lib\core\database\initial_data.dart =====
+
+import 'package:drift/drift.dart';
+import 'app_database.dart';
+
+Future<void> seedInitialData(AppDatabase db) async {
+  // Проверяем, есть ли уже валюты
+  final currencyCount = await db.currencies.count().getSingle();
+  if (currencyCount == 0) {
+    final currencies = [
+      CurrenciesCompanion.insert(code: 'RUB', name: 'Российский рубль', symbol: const Value('₽'), numCode: 643),
+      CurrenciesCompanion.insert(code: 'USD', name: 'Доллар США', symbol: const Value('\$'), numCode: 840),
+      CurrenciesCompanion.insert(code: 'EUR', name: 'Евро', symbol: const Value('€'), numCode: 978),
+      CurrenciesCompanion.insert(code: 'CNY', name: 'Китайский юань', symbol: const Value('¥'), numCode: 156),
+      CurrenciesCompanion.insert(code: 'THB', name: 'Таиландский бат', symbol: const Value('฿'), numCode: 764, nominal: const Value(10)),
+      CurrenciesCompanion.insert(code: 'GBP', name: 'Британский фунт', symbol: const Value('£'), numCode: 826),
+      CurrenciesCompanion.insert(code: 'JPY', name: 'Японская иена', symbol: const Value('¥'), numCode: 392, nominal: const Value(100)),
+      CurrenciesCompanion.insert(code: 'KZT', name: 'Казахстанский тенге', symbol: const Value('₸'), numCode: 398, nominal: const Value(100)),
+      CurrenciesCompanion.insert(code: 'BYN', name: 'Белорусский рубль', symbol: const Value('Br'), numCode: 933),
+      CurrenciesCompanion.insert(code: 'UAH', name: 'Украинская гривна', symbol: const Value('₴'), numCode: 980, nominal: const Value(10)),
+      CurrenciesCompanion.insert(code: 'AED', name: 'Дирхам ОАЭ', symbol: const Value('د.إ'), numCode: 784),
+      CurrenciesCompanion.insert(code: 'TRY', name: 'Турецкая лира', symbol: const Value('₺'), numCode: 949, nominal: const Value(10)),
+      CurrenciesCompanion.insert(code: 'INR', name: 'Индийская рупия', symbol: const Value('₹'), numCode: 356, nominal: const Value(100)),
+      CurrenciesCompanion.insert(code: 'CHF', name: 'Швейцарский франк', symbol: const Value('Fr'), numCode: 756),
+      CurrenciesCompanion.insert(code: 'CAD', name: 'Канадский доллар', symbol: const Value('C\$'), numCode: 124),
+      CurrenciesCompanion.insert(code: 'AUD', name: 'Австралийский доллар', symbol: const Value('A\$'), numCode: 36),
+      CurrenciesCompanion.insert(code: 'SEK', name: 'Шведская крона', symbol: const Value('kr'), numCode: 752, nominal: const Value(10)),
+      CurrenciesCompanion.insert(code: 'PLN', name: 'Польский злотый', symbol: const Value('zł'), numCode: 985),
+      CurrenciesCompanion.insert(code: 'CZK', name: 'Чешская крона', symbol: const Value('Kč'), numCode: 203, nominal: const Value(10)),
+      CurrenciesCompanion.insert(code: 'GEL', name: 'Грузинский лари', symbol: const Value('₾'), numCode: 981),
+    ];
+    await db.batch((batch) {
+      batch.insertAll(db.currencies, currencies);
+    });
+  }
+
+  // Проверяем проект «Личный»
+  final projectCount = await db.projects.count().getSingle();
+  if (projectCount == 0) {
+    await db.into(db.projects).insert(
+      ProjectsCompanion.insert(name: 'Личный'),
+    );
+  }
+}
+
+===== FILE: lib\core\theme\app_theme.dart =====
+
+import 'package:flutter/material.dart';
+
+class AppTheme {
+  static ThemeData get lightTheme {
+    return ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+      useMaterial3: true,
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+      ),
+    );
+  }
+}
+
+===== FILE: lib\core\widgets\app_scaffold.dart =====
+
+import 'package:flutter/material.dart';
+import '../../features/currencies/presentation/currencies_screen.dart';
+import '../../features/projects/presentation/projects_screen.dart';
+
+class AppScaffold extends StatefulWidget {
+  const AppScaffold({super.key});
+
+  @override
+  State<AppScaffold> createState() => _AppScaffoldState();
+}
+
+class _AppScaffoldState extends State<AppScaffold> {
+  int _currentIndex = 0;
+  String _selectedBalanceOption = 'Доступно: 0 ₽';
+  bool _showProjects = false;
+  bool _showCurrencies = false;
+
+  static const List<String> _titles = [
+    'Сводка',
+    'Лента',
+    'Отчёт',
+    'Заём',
+    'Увед',
+  ];
+
+  static const List<IconData> _icons = [
+    Icons.home,
+    Icons.list,
+    Icons.bar_chart,
+    Icons.handshake,
+    Icons.notifications,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+        centerTitle: true,
+        title: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: _selectedBalanceOption,
+              isExpanded: true,
+              alignment: Alignment.center,
+              items: [
+                DropdownMenuItem(
+                  value: 'Доступно: 0 ₽',
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Center(child: Text('Доступно: 0 ₽')),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 'Займы: 0 ₽',
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Center(child: Text('Займы: 0 ₽')),
+                  ),
+                ),
+              ],
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() {
+                    _selectedBalanceOption = value;
+                  });
+                }
+              },
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              // TODO: logout
+            },
+          ),
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 8.0, 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Меню',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      TextButton.icon(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.arrow_back),
+                        label: const Text('Закрыть'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'user@gmail.com',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+            const ListTile(
+              leading: Icon(Icons.account_balance_wallet),
+              title: Text('Счета'),
+            ),
+            const ListTile(
+              leading: Icon(Icons.category),
+              title: Text('Категории'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.folder),
+              title: const Text('Проекты'),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  _showProjects = true;
+                  _showCurrencies = false;
+                });
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.currency_exchange),
+              title: const Text('Валюты'),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  _showCurrencies = true;
+                  _showProjects = false;
+                });
+              },
+            ),
+            const ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Контрагенты'),
+            ),
+            const ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Настройки'),
+            ),
+          ],
+        ),
+      ),
+      body: _showProjects
+          ? ProjectsScreen(onBack: () {
+              setState(() {
+                _showProjects = false;
+              });
+            })
+          : _showCurrencies
+              ? CurrenciesScreen(onBack: () {
+                  setState(() {
+                    _showCurrencies = false;
+                  });
+                })
+              : IndexedStack(
+                  index: _currentIndex,
+                  children: const [
+                    Center(child: Text('Сводка')),
+                    Center(child: Text('Лента')),
+                    Center(child: Text('Отчёт')),
+                    Center(child: Text('Заём')),
+                    Center(child: Text('Увед')),
+                  ],
+                ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        type: BottomNavigationBarType.fixed,
+        items: List.generate(5, (index) {
+          return BottomNavigationBarItem(
+            icon: Icon(_icons[index]),
+            label: _titles[index],
+          );
+        }),
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+            _showProjects = false;
+            _showCurrencies = false;
+          });
+        },
+      ),
+      floatingActionButton: (_currentIndex == 0 || _currentIndex == 1) && !_showProjects && !_showCurrencies
+          ? FloatingActionButton(
+              onPressed: () {
+                // TODO: add new transaction
+              },
+              child: const Icon(Icons.add),
+            )
+          : null,
+    );
+  }
+}
+
+===== FILE: lib\core\widgets\entity_form.dart =====
+
+import 'package:flutter/material.dart';
+import 'icon_picker.dart';
+
+class EntityForm extends StatefulWidget {
+  final String title;
+  final TextEditingController nameController;
+  final String? initialIconName;
+  final ValueChanged<String>? onIconSelected;
+  final List<Widget>? extraFields;
+  final void Function(String? iconName) onSave;
+  final VoidCallback? onDelete;
+  final bool showDelete;
+  final bool isEditing;
+  final TextCapitalization textCapitalization;
+
+  const EntityForm({
+    Key? key,
+    required this.title,
+    required this.nameController,
+    this.initialIconName,
+    this.onIconSelected,
+    this.extraFields,
+    required this.onSave,
+    this.onDelete,
+    this.showDelete = false,
+    this.isEditing = false,
+    this.textCapitalization = TextCapitalization.words,
+  }) : super(key: key);
+
+  @override
+  State<EntityForm> createState() => _EntityFormState();
+}
+
+class _EntityFormState extends State<EntityForm> {
+  final _formKey = GlobalKey<FormState>();
+  late String? _selectedIconName;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIconName = widget.initialIconName;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+      ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.title,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: widget.nameController,
+              textCapitalization: widget.textCapitalization,
+              decoration: const InputDecoration(
+                labelText: 'Название',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Введите название';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            IconPicker(
+              selectedIconName: _selectedIconName,
+              onIconSelected: (icon) {
+                setState(() {
+                  _selectedIconName = icon;
+                });
+                widget.onIconSelected?.call(icon);
+              },
+            ),
+            if (widget.extraFields != null) ...widget.extraFields!,
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                if (widget.showDelete)
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    color: Colors.red,
+                    onPressed: widget.onDelete,
+                  ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Отмена'),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      widget.onSave(_selectedIconName);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Text(widget.isEditing ? 'Сохранить' : 'Создать'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+===== FILE: lib\core\widgets\entity_list_screen.dart =====
+
+import 'package:flutter/material.dart';
+
+class EntityListScreen extends StatelessWidget {
+  final String title;
+  final int itemCount;
+  final IndexedWidgetBuilder itemBuilder;
+  final VoidCallback onBack;
+  final bool showAddGroup;
+  final bool showAddItem;
+  final String addGroupLabel;
+  final String addItemLabel;
+  final VoidCallback? onAddGroup;
+  final VoidCallback? onAddItem;
+
+  const EntityListScreen({
+    super.key,
+    required this.title,
+    required this.itemCount,
+    required this.itemBuilder,
+    required this.onBack,
+    this.showAddGroup = false,
+    this.showAddItem = false,
+    this.addGroupLabel = 'Группа',
+    this.addItemLabel = 'Элемент',
+    this.onAddGroup,
+    this.onAddItem,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: itemCount,
+            itemBuilder: itemBuilder,
+          ),
+        ),
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                TextButton.icon(
+                  onPressed: onBack,
+                  icon: const Icon(Icons.arrow_back),
+                  label: const Text('Назад'),
+                ),
+                const Spacer(),
+                if (showAddGroup)
+                  TextButton.icon(
+                    onPressed: onAddGroup,
+                    icon: const Icon(Icons.create_new_folder),
+                    label: Text(addGroupLabel),
+                  ),
+                const SizedBox(width: 8),
+                if (showAddItem)
+                  ElevatedButton.icon(
+                    onPressed: onAddItem,
+                    icon: const Icon(Icons.add),
+                    label: Text(addItemLabel),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+===== FILE: lib\core\widgets\group_picker_dialog.dart =====
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../features/accounts/presentation/accounts_provider.dart';
+import 'entity_form.dart';
+
+IconData _iconFromName(String? name) {
+  // Заглушка: позже заменить на реальную карту иконок.
+  return Icons.folder;
+}
+
+class GroupPickerDialog extends ConsumerWidget {
+  const GroupPickerDialog({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final groupsAsync = ref.watch(accountsProvider);
+
+    return groupsAsync.when(
+      loading: () => const AlertDialog(
+        content: SizedBox(
+          height: 100,
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      ),
+      error: (e, st) => AlertDialog(
+        title: const Text('Ошибка'),
+        content: Text('$e'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Закрыть'),
+          ),
+        ],
+      ),
+      data: (state) {
+        final groups = state.groups;
+        if (groups.isEmpty) {
+          return const _FirstGroupForm();
+        }
+        return AlertDialog(
+          title: const Text('Выберите группу'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                ListTile(
+                  title: const Text('Без группы'),
+                  onTap: () => Navigator.pop(context, null),
+                ),
+                ...groups.map((group) => ListTile(
+                      leading: Icon(_iconFromName(group.icon)),
+                      title: Text(group.name),
+                      onTap: () => Navigator.pop(context, group.id),
+                    )),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Отмена'),
+            ),
+            TextButton.icon(
+              onPressed: () async {
+                final newId = await showDialog<int>(
+                  context: context,
+                  builder: (_) => const _FirstGroupForm(),
+                );
+                if (newId != null && context.mounted) {
+                  Navigator.pop(context, newId);
+                }
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Группа'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _FirstGroupForm extends ConsumerStatefulWidget {
+  const _FirstGroupForm();
+
+  @override
+  ConsumerState<_FirstGroupForm> createState() => _FirstGroupFormState();
+}
+
+class _FirstGroupFormState extends ConsumerState<_FirstGroupForm> {
+  final _nameController = TextEditingController();
+  String? _selectedIcon;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return EntityForm(
+      title: 'Создайте первую группу',
+      nameController: _nameController,
+      initialIconName: _selectedIcon,
+      onIconSelected: (icon) => _selectedIcon = icon,
+      onSave: (icon) async {
+        final id = await ref
+            .read(accountsProvider.notifier)
+            .addGroup(_nameController.text.trim(), icon, null);
+        if (mounted) Navigator.pop(context, id);
+      },
+      showDelete: false,
+      isEditing: false,
+    );
+  }
+}
+
+===== FILE: lib\core\widgets\icon_picker.dart =====
+
+import 'package:flutter/material.dart';
+
+class IconPicker extends StatefulWidget {
+  final String? selectedIconName;
+  final ValueChanged<String> onIconSelected;
+
+  const IconPicker({
+    Key? key,
+    this.selectedIconName,
+    required this.onIconSelected,
+  }) : super(key: key);
+
+  @override
+  State<IconPicker> createState() => _IconPickerState();
+}
+
+class _IconPickerState extends State<IconPicker> {
+  static const Map<String, IconData> availableIcons = {
+    'folder': Icons.folder,
+    'home': Icons.home,
+    'star': Icons.star,
+    'work': Icons.work,
+    'shopping_cart': Icons.shopping_cart,
+    'account_balance_wallet': Icons.account_balance_wallet,
+    'credit_card': Icons.credit_card,
+    'account_balance': Icons.account_balance,
+    'receipt': Icons.receipt,
+    'category': Icons.category,
+    'person': Icons.person,
+    'group': Icons.group,
+    'settings': Icons.settings,
+    'favorite': Icons.favorite,
+    'flag': Icons.flag,
+    'attach_money': Icons.attach_money,
+  };
+
+  static const Map<String, String> iconLabels = {
+    'folder': 'Папка',
+    'home': 'Дом',
+    'star': 'Звезда',
+    'work': 'Работа',
+    'shopping_cart': 'Корзина',
+    'account_balance_wallet': 'Кошелёк',
+    'credit_card': 'Карта',
+    'account_balance': 'Банк',
+    'receipt': 'Чек',
+    'category': 'Категория',
+    'person': 'Человек',
+    'group': 'Группа',
+    'settings': 'Настройки',
+    'favorite': 'Избранное',
+    'flag': 'Флаг',
+    'attach_money': 'Деньги',
+  };
+
+  Future<void> _selectIcon() async {
+    final selected = await showModalBottomSheet<String>(
+      context: context,
+      builder: (context) {
+        return GridView.count(
+          crossAxisCount: 4,
+          children: availableIcons.entries.map((entry) {
+            return InkWell(
+              onTap: () => Navigator.pop(context, entry.key),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(entry.value, size: 32),
+                  const SizedBox(height: 4),
+                  Text(
+                    iconLabels[entry.key] ?? entry.key,
+                    style: const TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+    if (selected != null) {
+      widget.onIconSelected(selected);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: _selectIcon,
+      child: InputDecorator(
+        decoration: const InputDecoration(
+          labelText: 'Иконка',
+          border: OutlineInputBorder(),
+          suffixIcon: Icon(Icons.arrow_drop_down),
+        ),
+        child: widget.selectedIconName == null
+            ? const Text('Не выбрана')
+            : Row(
+                children: [
+                  Icon(availableIcons[widget.selectedIconName] ?? Icons.help),
+                  const SizedBox(width: 8),
+                  Text(iconLabels[widget.selectedIconName] ?? widget.selectedIconName!),
+                ],
+              ),
+      ),
+    );
+  }
+}
+
+===== FILE: lib\core\widgets\project_multi_select_dialog.dart =====
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../features/projects/presentation/projects_provider.dart';
+
+class ProjectMultiSelectDialog extends ConsumerStatefulWidget {
+  final List<int> initiallySelectedIds;
+  const ProjectMultiSelectDialog({super.key, this.initiallySelectedIds = const []});
+
+  @override
+  ConsumerState<ProjectMultiSelectDialog> createState() => _ProjectMultiSelectDialogState();
+}
+
+class _ProjectMultiSelectDialogState extends ConsumerState<ProjectMultiSelectDialog> {
+  late Set<int> _selectedIds;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIds = Set<int>.from(widget.initiallySelectedIds);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final projectsAsync = ref.watch(projectsProvider);
+
+    return AlertDialog(
+      title: const Text('Выберите проекты'),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: projectsAsync.when(
+          data: (projects) {
+            if (projects.isEmpty) {
+              return const Text('Нет доступных проектов');
+            }
+            return ListView(
+              shrinkWrap: true,
+              children: [
+                for (final project in projects)
+                  CheckboxListTile(
+                    title: Text(project.name),
+                    value: _selectedIds.contains(project.id),
+                    onChanged: (checked) {
+                      setState(() {
+                        if (checked == true) {
+                          _selectedIds.add(project.id);
+                        } else {
+                          _selectedIds.remove(project.id);
+                        }
+                      });
+                    },
+                  ),
+              ],
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, st) => Text('Ошибка: $e'),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, null),
+          child: const Text('Отмена'),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context, _selectedIds.toList()),
+          child: const Text('Готово'),
+        ),
+      ],
+    );
+  }
+}
+
+===== FILE: lib\features\accounts\data\accounts_table.dart =====
+
+import 'package:drift/drift.dart';
+import '../../currencies/data/currencies_table.dart';
+import 'account_groups_table.dart';
+
+class Accounts extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get groupId => integer().nullable().references(AccountGroups, #id)();
+  TextColumn get name => text().withLength(min: 1, max: 255)();
+  TextColumn get icon => text().nullable()();
+  TextColumn get type => text().withLength(min: 1, max: 20)(); // cash, card, bank, crypto, stocks
+  IntColumn get currencyId => integer().references(Currencies, #id)();
+  RealColumn get initialBalance => real().withDefault(const Constant(0))();
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+  BoolColumn get isCreditCard => boolean().withDefault(const Constant(false))();
+  RealColumn get creditLimit => real().nullable()();
+  TextColumn get paymentDueDate => text().nullable()(); // ISO-8601
+  IntColumn get gracePeriodDays => integer().nullable()();
+  TextColumn get cardLast4Digits => text().nullable()();
+  TextColumn get accountLast4Digits => text().nullable()();
+  TextColumn get smsSenderName => text().nullable()();
+}
+
+===== FILE: lib\features\accounts\data\account_groups_table.dart =====
+
+import 'package:drift/drift.dart';
+
+class AccountGroups extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().withLength(min: 1, max: 255)();
+  TextColumn get icon => text().nullable()();
+  IntColumn get parentId => integer().nullable().references(AccountGroups, #id)();
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+}
+
+===== FILE: lib\features\accounts\data\account_group_repository.dart =====
+
+import 'package:drift/drift.dart';
+import '../../../core/database/app_database.dart';
+
+class AccountGroupRepository {
+  AccountGroupRepository(this._db);
+  final AppDatabase _db;
+
+  Stream<List<AccountGroup>> watchAllGroups() {
+    return (_db.select(_db.accountGroups)
+          ..where((t) => t.isActive.equals(true))
+          ..orderBy([(t) => OrderingTerm.asc(t.name)]))
+        .watch();
+  }
+
+  Future<int> addGroup(AccountGroupsCompanion entry) {
+    return _db.into(_db.accountGroups).insert(entry);
+  }
+
+  Future<void> updateGroup(int id, AccountGroupsCompanion entry) {
+    return (_db.update(_db.accountGroups)..where((t) => t.id.equals(id))).write(entry);
+  }
+
+  Future<void> deleteGroup(int id) async {
+    await (_db.update(_db.accountGroups)..where((t) => t.id.equals(id)))
+        .write(const AccountGroupsCompanion(isActive: Value(false)));
+  }
+}
+
+===== FILE: lib\features\accounts\data\account_projects_table.dart =====
+
+import 'package:drift/drift.dart';
+import '../../projects/data/projects_table.dart';
+import 'accounts_table.dart';
+
+class AccountProjects extends Table {
+  IntColumn get accountId => integer().references(Accounts, #id)();
+  IntColumn get projectId => integer().references(Projects, #id)();
+
+  @override
+  Set<Column> get primaryKey => {accountId, projectId};
+}
+
+===== FILE: lib\features\accounts\data\account_repository.dart =====
+
+import 'package:drift/drift.dart';
+import '../../../core/database/app_database.dart';
+
+class AccountWithCurrency {
+  final Account account;
+  final Currency currency;
+  AccountWithCurrency(this.account, this.currency);
+}
+
+class AccountRepository {
+  AccountRepository(this._db);
+  final AppDatabase _db;
+
+  // Группы
+  Stream<List<AccountGroup>> watchActiveGroups() {
+    return (_db.select(_db.accountGroups)
+          ..where((t) => t.isActive.equals(true))
+          ..orderBy([(t) => OrderingTerm.asc(t.name)]))
+        .watch();
+  }
+
+  Future<int> addGroup(AccountGroupsCompanion entry) =>
+      _db.into(_db.accountGroups).insert(entry);
+
+  Future<void> updateGroup(int id, AccountGroupsCompanion entry) =>
+      (_db.update(_db.accountGroups)..where((t) => t.id.equals(id))).write(entry);
+
+  Future<void> deleteGroup(int id) =>
+      (_db.update(_db.accountGroups)..where((t) => t.id.equals(id)))
+          .write(const AccountGroupsCompanion(isActive: Value(false)));
+
+  // Счета с валютой
+  Stream<List<AccountWithCurrency>> watchActiveAccounts() {
+    final query = _db.select(_db.accounts)
+      ..where((t) => t.isActive.equals(true))
+      ..orderBy([(t) => OrderingTerm.asc(t.name)]);
+
+    return query
+        .join([
+          innerJoin(_db.currencies, _db.currencies.id.equalsExp(_db.accounts.currencyId)),
+        ])
+        .watch()
+        .map((rows) => rows.map((row) {
+              return AccountWithCurrency(
+                row.readTable(_db.accounts),
+                row.readTable(_db.currencies),
+              );
+            }).toList());
+  }
+
+  Future<int> addAccount(AccountsCompanion entry) =>
+      _db.into(_db.accounts).insert(entry);
+
+  Future<void> updateAccount(int id, AccountsCompanion entry) =>
+      (_db.update(_db.accounts)..where((t) => t.id.equals(id))).write(entry);
+
+  Future<void> deleteAccount(int id) =>
+      (_db.update(_db.accounts)..where((t) => t.id.equals(id)))
+          .write(const AccountsCompanion(isActive: Value(false)));
+
+  // Связь с проектами
+  Future<List<int>> getProjectIdsForAccount(int accountId) async {
+    final rows = await (_db.select(_db.accountProjects)
+          ..where((t) => t.accountId.equals(accountId)))
+        .get();
+    return rows.map((r) => r.projectId).toList();
+  }
+
+  Future<void> setProjectIdsForAccount(int accountId, List<int> projectIds) async {
+    await _db.transaction(() async {
+      await (_db.delete(_db.accountProjects)
+            ..where((t) => t.accountId.equals(accountId)))
+          .go();
+      for (final projectId in projectIds) {
+        await _db.into(_db.accountProjects).insert(
+              AccountProjectsCompanion.insert(
+                accountId: accountId,
+                projectId: projectId,
+              ),
+            );
+      }
+    });
+  }
+}
+
+===== FILE: lib\features\accounts\presentation\accounts_provider.dart =====
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:drift/drift.dart' hide Column;
+import '../../../core/database/app_database.dart';
+import '../../../core/database/database_provider.dart';
+import '../data/account_repository.dart';
+
+final accountRepositoryProvider = Provider<AccountRepository>((ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return AccountRepository(db);
+});
+
+class AccountsState {
+  final List<AccountGroup> groups;
+  final List<AccountWithCurrency> accounts;
+  AccountsState({required this.groups, required this.accounts});
+}
+
+class AccountsNotifier extends AsyncNotifier<AccountsState> {
+  @override
+  Future<AccountsState> build() async {
+    final repo = ref.watch(accountRepositoryProvider);
+    final groupsFuture = repo.watchActiveGroups().first;
+    final accountsFuture = repo.watchActiveAccounts().first;
+    final results = await Future.wait([groupsFuture, accountsFuture]);
+    return AccountsState(
+      groups: results[0] as List<AccountGroup>,
+      accounts: results[1] as List<AccountWithCurrency>,
+    );
+  }
+
+  Future<int> addGroup(String name, String? icon, int? parentId) async {
+    final repo = ref.read(accountRepositoryProvider);
+    final id = await repo.addGroup(AccountGroupsCompanion.insert(
+      name: name,
+      icon: Value(icon),
+      parentId: Value(parentId),
+    ));
+    ref.invalidateSelf();
+    return id;
+  }
+
+  Future<void> updateGroup(int id, String name, String? icon, int? parentId) async {
+    final repo = ref.read(accountRepositoryProvider);
+    await repo.updateGroup(id, AccountGroupsCompanion(
+      name: Value(name),
+      icon: Value(icon),
+      parentId: Value(parentId),
+    ));
+    ref.invalidateSelf();
+  }
+
+  Future<void> deleteGroup(int id) async {
+    final repo = ref.read(accountRepositoryProvider);
+    await repo.deleteGroup(id);
+    ref.invalidateSelf();
+  }
+
+  Future<int> addAccount(AccountsCompanion entry) async {
+    final repo = ref.read(accountRepositoryProvider);
+    final id = await repo.addAccount(entry);
+    ref.invalidateSelf();
+    return id;
+  }
+
+  Future<void> updateAccount(int id, AccountsCompanion entry) async {
+    final repo = ref.read(accountRepositoryProvider);
+    await repo.updateAccount(id, entry);
+    ref.invalidateSelf();
+  }
+
+  Future<void> deleteAccount(int id) async {
+    final repo = ref.read(accountRepositoryProvider);
+    await repo.deleteAccount(id);
+    ref.invalidateSelf();
+  }
+
+  Future<List<int>> getProjectIdsForAccount(int accountId) async {
+    final repo = ref.read(accountRepositoryProvider);
+    return repo.getProjectIdsForAccount(accountId);
+  }
+
+  Future<void> setProjectIdsForAccount(int accountId, List<int> projectIds) async {
+    final repo = ref.read(accountRepositoryProvider);
+    await repo.setProjectIdsForAccount(accountId, projectIds);
+    ref.invalidateSelf();
+  }
+}
+
+final accountsProvider = AsyncNotifierProvider<AccountsNotifier, AccountsState>(AccountsNotifier.new);
+
+===== FILE: lib\features\currencies\data\currencies_table.dart =====
+
+import 'package:drift/drift.dart';
+
+class Currencies extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get code => text().withLength(min: 1, max: 8)();
+  TextColumn get name => text().withLength(min: 1, max: 100)();
+  TextColumn get symbol => text().withLength(min: 0, max: 10).nullable()();
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+  IntColumn get numCode => integer().unique()();
+  IntColumn get nominal => integer().withDefault(const Constant(1))();
+  TextColumn get country => text().nullable()();
+}
+
+===== FILE: lib\features\currencies\data\currency_repository.dart =====
+
+import '../../../core/database/app_database.dart';
+
+class CurrencyRepository {
+  final AppDatabase _db;
+  CurrencyRepository(this._db);
+
+  Future<List<Currency>> getAll() => _db.select(_db.currencies).get();
+  Future<Currency?> getById(int id) => (_db.select(_db.currencies)..where((t) => t.id.equals(id))).getSingleOrNull();
+  Future<int> insert(CurrenciesCompanion entry) => _db.into(_db.currencies).insert(entry);
+  Future<bool> update(Currency currency) => _db.update(_db.currencies).replace(currency);
+  Future<int> delete(int id) => (_db.delete(_db.currencies)..where((t) => t.id.equals(id))).go();
+}
+
+===== FILE: lib\features\currencies\presentation\currencies_provider.dart =====
+
+import 'package:drift/drift.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/database/app_database.dart';
+import '../../../core/database/database_provider.dart';
+import '../../../services/currency_json_service.dart';
+import '../data/currency_repository.dart';
+
+final currencyRepositoryProvider = Provider<CurrencyRepository>((ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return CurrencyRepository(db);
+});
+
+final currenciesProvider = AsyncNotifierProvider<CurrenciesNotifier, List<Currency>>(CurrenciesNotifier.new);
+
+class CurrenciesNotifier extends AsyncNotifier<List<Currency>> {
+  @override
+  Future<List<Currency>> build() async {
+    final repo = ref.watch(currencyRepositoryProvider);
+    return repo.getAll();
+  }
+
+  Future<void> addCurrencyFromJson(CurrencyJsonItem item) async {
+    final repo = ref.watch(currencyRepositoryProvider);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final entry = CurrenciesCompanion.insert(
+        code: item.code,
+        name: item.name,
+        symbol: Value(item.symbol),
+        numCode: item.numCode,
+        nominal: Value(item.nominal),
+        country: Value(item.countries.isNotEmpty ? item.countries.first : null),
+      );
+      final id = await repo.insert(entry);
+      final newCurrency = await repo.getById(id);
+      return [...state.value ?? [], if (newCurrency != null) newCurrency];
+    });
+  }
+
+  Future<void> setCurrencyActive(Currency currency, bool isActive) async {
+    final repo = ref.watch(currencyRepositoryProvider);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await repo.update(currency.copyWith(isActive: isActive));
+      final updatedList = (state.value ?? []).map((c) => c.id == currency.id ? c.copyWith(isActive: isActive) : c).toList();
+      return updatedList;
+    });
+  }
+}
+
+===== FILE: lib\features\currencies\presentation\currencies_screen.dart =====
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/widgets/entity_list_screen.dart';
+import 'currencies_provider.dart';
+
+class CurrenciesScreen extends ConsumerWidget {
+  final VoidCallback onBack;
+  const CurrenciesScreen({super.key, required this.onBack});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currenciesAsync = ref.watch(currenciesProvider);
+
+    return currenciesAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Ошибка: $error')),
+      data: (currencies) {
+        return EntityListScreen(
+          title: 'Валюты',
+          itemCount: currencies.length,
+          itemBuilder: (context, index) {
+            final currency = currencies[index];
+            return ListTile(
+              leading: Text(
+                currency.symbol ?? '',
+                style: const TextStyle(fontSize: 20),
+              ),
+              title: Text(currency.name),
+              subtitle: Text('${currency.code} · ${currency.country ?? ''}'),
+              trailing: Switch(
+                value: currency.isActive,
+                onChanged: (value) {
+                  ref.read(currenciesProvider.notifier).setCurrencyActive(currency, value);
+                },
+              ),
+            );
+          },
+          onBack: onBack,
+          // Без кнопок добавления
+        );
+      },
+    );
+  }
+}
+
+===== FILE: lib\features\projects\data\projects_table.dart =====
+
+import 'package:drift/drift.dart';
+
+class Projects extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().withLength(min: 1, max: 100)();
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+  TextColumn get icon => text().nullable()();
+}
+
+===== FILE: lib\features\projects\data\project_repository.dart =====
+
+import '../../../core/database/app_database.dart';
+
+class ProjectRepository {
+  final AppDatabase _db;
+  ProjectRepository(this._db);
+
+  Future<List<Project>> getAll() => _db.select(_db.projects).get();
+  Future<Project?> getById(int id) => (_db.select(_db.projects)..where((t) => t.id.equals(id))).getSingleOrNull();
+  Future<int> insert(ProjectsCompanion entry) => _db.into(_db.projects).insert(entry);
+  Future<bool> update(Project project) => _db.update(_db.projects).replace(project);
+  Future<int> delete(int id) => (_db.delete(_db.projects)..where((t) => t.id.equals(id))).go();
+}
+
+===== FILE: lib\features\projects\presentation\projects_provider.dart =====
+
+import 'package:drift/drift.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/database/app_database.dart';
+import '../../../core/database/database_provider.dart';
+import '../data/project_repository.dart';
+
+final projectRepositoryProvider = Provider<ProjectRepository>((ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return ProjectRepository(db);
+});
+
+final projectsProvider = AsyncNotifierProvider<ProjectsNotifier, List<Project>>(ProjectsNotifier.new);
+
+class ProjectsNotifier extends AsyncNotifier<List<Project>> {
+  @override
+  Future<List<Project>> build() async {
+    final repo = ref.watch(projectRepositoryProvider);
+    return repo.getAll();
+  }
+
+  Future<void> addProject(String name, {String? icon}) async {
+    final repo = ref.watch(projectRepositoryProvider);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final id = await repo.insert(ProjectsCompanion.insert(name: name, icon: Value(icon)));
+      final newProject = Project(id: id, name: name, isActive: true, icon: icon);
+      return [...state.value ?? [], newProject];
+    });
+  }
+
+  Future<void> updateProject(Project project) async {
+    final repo = ref.watch(projectRepositoryProvider);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await repo.update(project);
+      final updatedList = (state.value ?? []).map((p) => p.id == project.id ? project : p).toList();
+      return updatedList;
+    });
+  }
+
+  Future<void> deleteProject(int id) async {
+    final repo = ref.watch(projectRepositoryProvider);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await repo.delete(id);
+      return (state.value ?? []).where((p) => p.id != id).toList();
+    });
+  }
+}
+
+===== FILE: lib\features\projects\presentation\projects_screen.dart =====
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:drift/drift.dart' as drift;
+import '../../../core/database/app_database.dart';
+import '../../../core/widgets/entity_form.dart';
+import '../../../core/widgets/entity_list_screen.dart';
+import 'projects_provider.dart';
+
+class ProjectsScreen extends ConsumerWidget {
+  final VoidCallback onBack;
+  const ProjectsScreen({super.key, required this.onBack});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final projectsAsync = ref.watch(projectsProvider);
+
+    return projectsAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Ошибка: $error')),
+      data: (projects) {
+        return EntityListScreen(
+          title: 'Проекты',
+          itemCount: projects.length,
+          itemBuilder: (context, index) {
+            final project = projects[index];
+            return ListTile(
+              leading: Icon(
+                project.icon != null
+                    ? _iconFromName(project.icon!)
+                    : Icons.folder,
+              ),
+              title: Text(project.name),
+              trailing: IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () => _showProjectForm(context, ref, project: project),
+              ),
+              onTap: () => _showProjectForm(context, ref, project: project),
+            );
+          },
+          onBack: onBack,
+          showAddItem: true,
+          addItemLabel: 'Проект',
+          onAddItem: () => _showProjectForm(context, ref),
+        );
+      },
+    );
+  }
+
+  IconData _iconFromName(String name) {
+    const icons = {
+      'folder': Icons.folder,
+      'home': Icons.home,
+      'star': Icons.star,
+      'work': Icons.work,
+      'shopping_cart': Icons.shopping_cart,
+      'account_balance_wallet': Icons.account_balance_wallet,
+      'credit_card': Icons.credit_card,
+      'account_balance': Icons.account_balance,
+      'receipt': Icons.receipt,
+      'category': Icons.category,
+      'person': Icons.person,
+      'group': Icons.group,
+      'settings': Icons.settings,
+      'favorite': Icons.favorite,
+      'flag': Icons.flag,
+      'attach_money': Icons.attach_money,
+    };
+    return icons[name] ?? Icons.folder;
+  }
+
+  void _showProjectForm(BuildContext context, WidgetRef ref, {Project? project}) {
+    final nameController = TextEditingController(text: project?.name ?? '');
+    final isEditing = project != null;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return EntityForm(
+          title: isEditing ? 'Редактирование проекта' : 'Новый проект',
+          nameController: nameController,
+          initialIconName: project?.icon,
+          onSave: (iconName) {
+            if (isEditing) {
+              ref.read(projectsProvider.notifier).updateProject(
+                project.copyWith(
+                  name: nameController.text.trim(),
+                  icon: iconName != null ? drift.Value(iconName) : const drift.Value.absent(),
+                ),
+              );
+            } else {
+              ref.read(projectsProvider.notifier).addProject(
+                nameController.text.trim(),
+                icon: iconName,
+              );
+            }
+          },
+          onDelete: isEditing
+              ? () {
+                  ref.read(projectsProvider.notifier).deleteProject(project.id);
+                  Navigator.pop(context);
+                }
+              : null,
+          showDelete: isEditing,
+          isEditing: isEditing,
+        );
+      },
+    );
+  }
+}
+
+===== FILE: lib\services\currency_json_service.dart =====
+
+import 'dart:convert';
+import 'package:flutter/services.dart';
+
+class CurrencyJsonItem {
+  final String code;
+  final int numCode;
+  final String name;
+  final String? symbol;
+  final int nominal;
+  final List<String> countries;
+
+  CurrencyJsonItem({
+    required this.code,
+    required this.numCode,
+    required this.name,
+    this.symbol,
+    required this.nominal,
+    required this.countries,
+  });
+
+  factory CurrencyJsonItem.fromJson(Map<String, dynamic> json) {
+    return CurrencyJsonItem(
+      code: json['code'] as String,
+      numCode: json['numCode'] as int,
+      name: json['name'] as String,
+      symbol: json['symbol'] as String?,
+      nominal: json['nominal'] as int? ?? 1,
+      countries: (json['countries'] as List<dynamic>? ?? []).cast<String>(),
+    );
+  }
+}
+
+Future<List<CurrencyJsonItem>> loadCurrenciesFromJson() async {
+  final raw = await rootBundle.loadString('assets/currencies.json');
+  final data = json.decode(raw) as List<dynamic>;
+  return data.map((e) => CurrencyJsonItem.fromJson(e as Map<String, dynamic>)).toList();
+}
+
+===== FILE: lib\main.dart =====
+
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:drift/native.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+import 'core/theme/app_theme.dart';
+import 'core/widgets/app_scaffold.dart';
+import 'core/database/app_database.dart';
+import 'core/database/database_provider.dart';
+import 'core/database/initial_data.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final dbDir = await getApplicationDocumentsDirectory();
+  final dbFile = p.join(dbDir.path, 'wallet_app.sqlite');
+  final db = AppDatabase(NativeDatabase(File(dbFile)));
+  await seedInitialData(db);
+  runApp(ProviderScope(
+    overrides: [appDatabaseProvider.overrideWithValue(db)],
+    child: const WalletApp(),
+  ));
+}
+
+class WalletApp extends StatelessWidget {
+  const WalletApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Кошелёк',
+      theme: AppTheme.lightTheme,
+      debugShowCheckedModeBanner: false,
+      home: const AppScaffold(),
+    );
+  }
+}
+
+===== FILE: pubspec.yaml =====
+
+name: wallet_app
+description: A new Flutter project.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^2.4.0
+  drift: ^2.14.0
+  sqlite3_flutter_libs: ^0.5.0
+  path_provider: ^2.1.0
+  path: ^1.8.3
+  google_sign_in: ^6.1.0
+  googleapis: ^11.0.0
+  http: ^1.1.0
+  intl: ^0.20.3
+  dio: ^5.3.0
+  logger: ^1.4.0
+  uuid: ^4.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.0
+  drift_dev: ^2.14.0
+  mockito: ^5.4.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/currencies.json
