@@ -7,6 +7,8 @@ class EntityFormBody extends StatefulWidget {
   final ValueChanged<String>? onIconSelected;
   final List<Widget>? extraFields;
   final TextCapitalization textCapitalization;
+  final IconData? nameSuffixIcon;
+  final VoidCallback? onNameSuffixIconTap;
 
   const EntityFormBody({
     super.key,
@@ -15,6 +17,8 @@ class EntityFormBody extends StatefulWidget {
     this.onIconSelected,
     this.extraFields,
     this.textCapitalization = TextCapitalization.words,
+    this.nameSuffixIcon,
+    this.onNameSuffixIconTap,
   });
 
   @override
@@ -45,9 +49,17 @@ class EntityFormBodyState extends State<EntityFormBody> {
         TextFormField(
           controller: widget.nameController,
           textCapitalization: widget.textCapitalization,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Название',
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
+            suffixIcon: widget.nameSuffixIcon != null
+                ? IconButton(
+                    icon: Icon(widget.nameSuffixIcon,
+                        color: Colors.indigo),
+                    onPressed: widget.onNameSuffixIconTap,
+                    tooltip: 'Выбрать из контактов',
+                  )
+                : null,
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {

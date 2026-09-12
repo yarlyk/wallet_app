@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/database/app_database.dart';
+import '../../../core/utils/contacts_utils.dart';
 import '../../../core/utils/phone_utils.dart';
+import '../../../core/widgets/contact_picker_dialog.dart';
 import '../../../core/widgets/entity_form_screen.dart';
 import '../../../core/widgets/project_multi_select_dialog.dart';
 import 'counterparties_provider.dart';
@@ -100,6 +102,23 @@ class _CounterpartyFormScreenState
     }
   }
 
+  Future<void> _pickContact() async {
+    final picked = await showDialog<PickedContact>(
+      context: context,
+      builder: (_) => const ContactPickerDialog(),
+    );
+    if (picked == null) return;
+    setState(() {
+      _nameController.text = picked.name;
+      if (picked.phone != null && picked.phone!.isNotEmpty) {
+        _phoneController.text = formatPhoneRu(picked.phone!);
+      }
+      if (picked.email != null && picked.email!.isNotEmpty) {
+        _emailController.text = picked.email!;
+      }
+    });
+  }
+
   Future<void> _pickGroups() async {
     final result = await showDialog<List<int>>(
       context: context,
@@ -180,6 +199,8 @@ class _CounterpartyFormScreenState
       title: isEditing ? 'Редактировать контрагента' : 'Новый контрагент',
       nameController: _nameController,
       initialIconName: widget.counterparty?.icon,
+      nameSuffixIcon: Icons.contacts,
+      onNameSuffixIconTap: _pickContact,
       isEditing: isEditing,
       showDelete: isEditing,
       onCancel: widget.onCancel,
@@ -337,3 +358,5 @@ class _GroupMultiSelectDialogState
     );
   }
 }
+
+

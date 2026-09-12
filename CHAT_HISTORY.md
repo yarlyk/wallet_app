@@ -158,3 +158,14 @@
 - Кнопка "+ Контрагент" заменена на компактную иконку Icons.person_add.
 - flutter analyze: No issues found!
 - Следующий шаг: импорт контрагентов из контактов (Android + iOS).
+
+## 2026-09-13 (Импорт контактов)
+- Подключён flutter_contacts 2.5.0.
+- Android: добавлено разрешение READ_CONTACTS в AndroidManifest.xml.
+- iOS: добавлено NSContactsUsageDescription в Info.plist.
+- Создан contacts_utils.dart: ensureContactsPermission, loadContacts (имя, первый телефон, первый email).
+- Создан ContactPickerDialog — список контактов с поиском.
+- EntityFormBody/EntityFormScreen: добавлены nameSuffixIcon и onNameSuffixIconTap.
+- CounterpartyFormScreen: в поле "Название" — иконка контактов, тап подставляет имя, телефон (нормализованный через formatPhoneRu) и email.
+- phone_utils.dart: выделена функция formatPhoneRu для нормализации произвольного ввода.
+- flutter analyze: No issues found!

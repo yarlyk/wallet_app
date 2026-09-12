@@ -13,6 +13,8 @@ class EntityFormScreen extends StatefulWidget {
   final bool isEditing;
   final VoidCallback onCancel;
   final TextCapitalization textCapitalization;
+  final IconData? nameSuffixIcon;
+  final VoidCallback? onNameSuffixIconTap;
 
   const EntityFormScreen({
     super.key,
@@ -27,6 +29,8 @@ class EntityFormScreen extends StatefulWidget {
     this.isEditing = false,
     required this.onCancel,
     this.textCapitalization = TextCapitalization.words,
+    this.nameSuffixIcon,
+    this.onNameSuffixIconTap,
   });
 
   @override
@@ -82,6 +86,8 @@ class _EntityFormScreenState extends State<EntityFormScreen> {
               onIconSelected: widget.onIconSelected,
               extraFields: widget.extraFields,
               textCapitalization: widget.textCapitalization,
+              nameSuffixIcon: widget.nameSuffixIcon,
+              onNameSuffixIconTap: widget.onNameSuffixIconTap,
             ),
           ),
         ),
