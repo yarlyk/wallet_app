@@ -34,6 +34,8 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
   void _openCreateAccount() {
     setState(() {
       _editingAccount = null;
+      _editingGroup = null;
+      _creatingGroup = false;
       _showForm = true;
     });
   }
@@ -41,6 +43,8 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
   void _openEditAccount(Account a) {
     setState(() {
       _editingAccount = a;
+      _editingGroup = null;
+      _creatingGroup = false;
       _showForm = true;
     });
   }
@@ -50,6 +54,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
     setState(() {
       _creatingGroup = true;
       _editingGroup = null;
+      _editingAccount = null;
       _showForm = true;
     });
   }
@@ -59,6 +64,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
     setState(() {
       _editingGroup = g;
       _creatingGroup = false;
+      _editingAccount = null;
       _showForm = true;
     });
   }
@@ -67,6 +73,59 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
   void dispose() {
     _groupNameController.dispose();
     super.dispose();
+  }
+
+  int _countDescendantAccounts(
+    int groupId,
+    List<AccountGroup> groups,
+    List<AccountWithCurrency> accounts,
+  ) {
+    int total = accounts.where((a) => a.account.groupId == groupId).length;
+    for (final g in groups.where((g) => g.parentId == groupId)) {
+      total += _countDescendantAccounts(g.id, groups, accounts);
+    }
+    return total;
+  }
+
+  String _pluralAccounts(int n) {
+    final mod10 = n % 10;
+    final mod100 = n % 100;
+    if (mod10 == 1 && mod100 != 11) return '$n вложенный счёт';
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
+      return '$n вложенных счёта';
+    }
+    return '$n вложенных счетов';
+  }
+
+  Future<bool> _tryDeleteGroup(
+    AccountGroup group,
+    List<AccountGroup> groups,
+    List<AccountWithCurrency> accounts,
+  ) async {
+    final count = _countDescendantAccounts(group.id, groups, accounts);
+    if (count > 0) {
+      if (!mounted) return false;
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Нельзя удалить группу'),
+          content: Text(
+            'Внутри группы ${_pluralAccounts(count)}.\n\n'
+            'Переместите счета в другую группу или оставьте без группы, '
+            'затем повторите удаление.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Понятно'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    }
+    await ref.read(accountsProvider.notifier).deleteGroup(group.id);
+    return true;
   }
 
   @override
@@ -104,11 +163,11 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
                 }
               },
               onDelete: isEditing
-                  ? () async {
-                      await ref
-                          .read(accountsProvider.notifier)
-                          .deleteGroup(_editingGroup!.id);
-                    }
+                  ? () => _tryDeleteGroup(
+                        _editingGroup!,
+                        state.groups,
+                        state.accounts,
+                      )
                   : null,
             );
           }
@@ -187,6 +246,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
       subtitle: Text('${_typeLabel(a.type)} · $balance'),
       trailing: IconButton(
         icon: const Icon(Icons.edit),
+        color: Colors.indigo,
         onPressed: () => _openEditAccount(a),
       ),
       onTap: () => _openEditAccount(a),
@@ -209,7 +269,8 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
         leading: Icon(iconFromName(group.icon)),
         title: Text(group.name),
         trailing: IconButton(
-          icon: const Icon(Icons.edit),
+          icon: const Icon(Icons.more_vert),
+          tooltip: 'Редактировать группу',
           onPressed: () => _openEditGroup(group),
         ),
         children: [

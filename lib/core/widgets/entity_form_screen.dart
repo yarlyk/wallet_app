@@ -8,7 +8,7 @@ class EntityFormScreen extends StatefulWidget {
   final ValueChanged<String>? onIconSelected;
   final List<Widget>? extraFields;
   final Future<void> Function(String? iconName) onSave;
-  final Future<void> Function()? onDelete;
+  final Future<bool> Function()? onDelete;
   final bool showDelete;
   final bool isEditing;
   final VoidCallback onCancel;
@@ -53,8 +53,8 @@ class _EntityFormScreenState extends State<EntityFormScreen> {
     if (widget.onDelete == null) return;
     setState(() => _saving = true);
     try {
-      await widget.onDelete!.call();
-      if (mounted) widget.onCancel();
+      final deleted = await widget.onDelete!.call();
+      if (deleted && mounted) widget.onCancel();
     } finally {
       if (mounted) setState(() => _saving = false);
     }

@@ -116,15 +116,12 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
   }
 
   Future<void> _pickGroup() async {
-    final result = await showDialog<int?>(
+    final result = await showDialog<SelectOption<int?>>(
       context: context,
       builder: (_) => const GroupPickerDialog(),
     );
-    // result == null означает либо отмену, либо выбор "Без группы".
-    // В MVP считаем, что null = "без группы" либо отмена — оставляем как есть.
-    if (result != null) {
-      setState(() => _selectedGroupId = result);
-    }
+    if (result == null) return; // отмена
+    setState(() => _selectedGroupId = result.value);
   }
 
   Future<void> _pickType() async {
@@ -217,12 +214,15 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
       gracePeriodDays: Value(_selectedType == 'card' && _isCreditCard
           ? int.tryParse(_gracePeriodDaysController.text)
           : null),
-      cardLast4Digits: Value(_selectedType == 'card'
+      cardLast4Digits: Value(_selectedType == 'card' &&
+              _cardLast4Controller.text.isNotEmpty
           ? _cardLast4Controller.text
           : null),
-      accountLast4Digits: Value(_selectedType == 'bank'
-          ? _accountLast4Controller.text
-          : null),
+      accountLast4Digits: Value(
+          (_selectedType == 'card' || _selectedType == 'bank') &&
+                  _accountLast4Controller.text.isNotEmpty
+              ? _accountLast4Controller.text
+              : null),
       smsSenderName: Value(_smsSenderNameController.text.isNotEmpty
           ? _smsSenderNameController.text
           : null),
@@ -271,6 +271,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
                 await ref
                     .read(accountsProvider.notifier)
                     .deleteAccount(widget.account!.id);
+                return true;
               }
             : null,
         extraFields: [
@@ -363,6 +364,28 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
               validator: _validateLast4,
             ),
             const SizedBox(height: 16),
+            TextFormField(
+              controller: _accountLast4Controller,
+              decoration: const InputDecoration(
+                labelText: 'Последние 4 цифры счёта карты',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(4),
+              ],
+              validator: _validateLast4,
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _smsSenderNameController,
+              decoration: const InputDecoration(
+                labelText: 'Имя отправителя SMS/Push',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
             if (_isCreditCard) ...[
               TextFormField(
                 controller: _creditLimitController,
@@ -406,3 +429,5 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
     );
   }
 }
+
+

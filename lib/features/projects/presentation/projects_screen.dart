@@ -82,6 +82,7 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                 await ref
                     .read(projectsProvider.notifier)
                     .deleteProject(_editingProject!.id);
+                return true;
               }
             : null,
       );

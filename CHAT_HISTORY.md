@@ -126,3 +126,8 @@
 - AppScaffold: активирован пункт «Счета» в Drawer (флаг _showAccounts), вынесен _closeAllPanels.
 - flutter analyze: No issues found!
 - Следующий шаг: тест на устройстве, рефактор схемы (paymentDueDate → paymentDueDay int 1–28), затем категории.
+
+## 2026-09-13 (продолжение)
+- Исправлен GroupPickerDialog: "Без группы" возвращает SelectOption<int?>(value: null) вместо null, что позволяло отличать выбор "без группы" от отмены.
+- account_form_screen._pickGroup принимает SelectOption<int?> и корректно сбрасывает _selectedGroupId в null.
+- flutter analyze: No issues found!

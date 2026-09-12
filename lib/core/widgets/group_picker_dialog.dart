@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/accounts/presentation/accounts_provider.dart';
 import 'entity_form_body.dart';
 import 'icon_picker.dart';
+import 'select_dialog.dart';
 
 class GroupPickerDialog extends ConsumerWidget {
   const GroupPickerDialog({super.key});
@@ -42,12 +43,18 @@ class GroupPickerDialog extends ConsumerWidget {
               children: [
                 ListTile(
                   title: const Text('Без группы'),
-                  onTap: () => Navigator.pop(context, null),
+                  onTap: () => Navigator.pop(
+                    context,
+                    const SelectOption<int?>(value: null, label: 'Без группы'),
+                  ),
                 ),
                 ...groups.map((group) => ListTile(
                       leading: Icon(iconFromName(group.icon)),
                       title: Text(group.name),
-                      onTap: () => Navigator.pop(context, group.id),
+                      onTap: () => Navigator.pop(
+                        context,
+                        SelectOption<int?>(value: group.id, label: group.name),
+                      ),
                     )),
               ],
             ),
@@ -64,7 +71,10 @@ class GroupPickerDialog extends ConsumerWidget {
                   builder: (_) => const _FirstGroupForm(),
                 );
                 if (newId != null && context.mounted) {
-                  Navigator.pop(context, newId);
+                  Navigator.pop(
+                    context,
+                    SelectOption<int?>(value: newId, label: ''),
+                  );
                 }
               },
               icon: const Icon(Icons.add),
