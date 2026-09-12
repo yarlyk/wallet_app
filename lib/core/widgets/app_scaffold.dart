@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import '../../features/accounts/presentation/accounts_screen.dart';
+import '../../features/categories/presentation/categories_screen.dart';
 import '../../features/currencies/presentation/currencies_screen.dart';
 import '../../features/projects/presentation/projects_screen.dart';
 
@@ -16,8 +17,10 @@ class _AppScaffoldState extends State<AppScaffold> {
   bool _showProjects = false;
   bool _showCurrencies = false;
   bool _showAccounts = false;
+  bool _showCategories = false;
 
-  bool get _anyPanelOpen => _showProjects || _showCurrencies || _showAccounts;
+  bool get _anyPanelOpen =>
+      _showProjects || _showCurrencies || _showAccounts || _showCategories;
 
   static const List<String> _titles = [
     'Сводка',
@@ -40,6 +43,7 @@ class _AppScaffoldState extends State<AppScaffold> {
       _showProjects = false;
       _showCurrencies = false;
       _showAccounts = false;
+      _showCategories = false;
     });
   }
 
@@ -141,12 +145,22 @@ class _AppScaffoldState extends State<AppScaffold> {
                   _showAccounts = true;
                   _showProjects = false;
                   _showCurrencies = false;
+                  _showCategories = false;
                 });
               },
             ),
-            const ListTile(
-              leading: Icon(Icons.category),
-              title: Text('Категории'),
+            ListTile(
+              leading: const Icon(Icons.category),
+              title: const Text('Категории'),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  _showCategories = true;
+                  _showAccounts = false;
+                  _showProjects = false;
+                  _showCurrencies = false;
+                });
+              },
             ),
             ListTile(
               leading: const Icon(Icons.folder),
@@ -157,6 +171,7 @@ class _AppScaffoldState extends State<AppScaffold> {
                   _showProjects = true;
                   _showCurrencies = false;
                   _showAccounts = false;
+                  _showCategories = false;
                 });
               },
             ),
@@ -169,6 +184,7 @@ class _AppScaffoldState extends State<AppScaffold> {
                   _showCurrencies = true;
                   _showProjects = false;
                   _showAccounts = false;
+                  _showCategories = false;
                 });
               },
             ),
@@ -183,22 +199,24 @@ class _AppScaffoldState extends State<AppScaffold> {
           ],
         ),
       ),
-      body: _showAccounts
-          ? AccountsScreen(onBack: _closeAllPanels)
-          : _showProjects
-              ? ProjectsScreen(onBack: _closeAllPanels)
-              : _showCurrencies
-                  ? CurrenciesScreen(onBack: _closeAllPanels)
-                  : IndexedStack(
-                      index: _currentIndex,
-                      children: const [
-                        Center(child: Text('Сводка')),
-                        Center(child: Text('Лента')),
-                        Center(child: Text('Отчёт')),
-                        Center(child: Text('Заём')),
-                        Center(child: Text('Увед')),
-                      ],
-                    ),
+      body: _showCategories
+          ? CategoriesScreen(onBack: _closeAllPanels)
+          : _showAccounts
+              ? AccountsScreen(onBack: _closeAllPanels)
+              : _showProjects
+                  ? ProjectsScreen(onBack: _closeAllPanels)
+                  : _showCurrencies
+                      ? CurrenciesScreen(onBack: _closeAllPanels)
+                      : IndexedStack(
+                          index: _currentIndex,
+                          children: const [
+                            Center(child: Text('Сводка')),
+                            Center(child: Text('Лента')),
+                            Center(child: Text('Отчёт')),
+                            Center(child: Text('Заём')),
+                            Center(child: Text('Увед')),
+                          ],
+                        ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
@@ -211,9 +229,7 @@ class _AppScaffoldState extends State<AppScaffold> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            _showProjects = false;
-            _showCurrencies = false;
-            _showAccounts = false;
+            _closeAllPanels();
           });
         },
       ),
