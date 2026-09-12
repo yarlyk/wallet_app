@@ -2,6 +2,7 @@
 import 'package:drift/drift.dart' hide Column;
 import '../../../core/database/app_database.dart';
 import '../../../core/database/database_provider.dart';
+import '../../transactions/presentation/transactions_provider.dart';
 import '../data/account_repository.dart';
 
 final accountRepositoryProvider = Provider<AccountRepository>((ref) {
@@ -18,6 +19,9 @@ class AccountsState {
 class AccountsNotifier extends AsyncNotifier<AccountsState> {
   @override
   Future<AccountsState> build() async {
+    // Реагируем на любые изменения транзакций: пересчитываем балансы.
+    ref.watch(transactionsProvider);
+
     final repo = ref.watch(accountRepositoryProvider);
     final groupsFuture = repo.watchActiveGroups().first;
     final accountsFuture = repo.watchActiveAccounts().first;
@@ -87,3 +91,4 @@ class AccountsNotifier extends AsyncNotifier<AccountsState> {
 }
 
 final accountsProvider = AsyncNotifierProvider<AccountsNotifier, AccountsState>(AccountsNotifier.new);
+

@@ -56,6 +56,7 @@ class IconPicker extends StatefulWidget {
 
 class _IconPickerState extends State<IconPicker> {
   Future<void> _selectIcon() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final selected = await showModalBottomSheet<String>(
       context: context,
       builder: (context) {
@@ -110,3 +111,4 @@ class _IconPickerState extends State<IconPicker> {
     );
   }
 }
+

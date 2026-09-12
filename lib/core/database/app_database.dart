@@ -11,6 +11,7 @@ import '../../features/counterparties/data/counterparty_groups_table.dart';
 import '../../features/counterparties/data/counterparty_projects_table.dart';
 import '../../features/currencies/data/currencies_table.dart';
 import '../../features/projects/data/projects_table.dart';
+import '../../features/transactions/data/transactions_table.dart';
 
 part 'app_database.g.dart';
 
@@ -27,12 +28,13 @@ part 'app_database.g.dart';
   CounterpartyGroupParents,
   CounterpartyGroupLinks,
   CounterpartyProjects,
+  Transactions,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -50,6 +52,17 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(counterpartyGroupParents);
             await m.createTable(counterpartyGroupLinks);
             await m.createTable(counterpartyProjects);
+          }
+          if (from < 6) {
+            await m.createTable(transactions);
+          }
+          if (from < 7) {
+            await m.addColumn(transactions, transactions.counterpartyId);
+          }
+          if (from < 8) {
+            // Делаем projectId nullable — пересоздаём таблицу.
+            await m.deleteTable('transactions');
+            await m.createTable(transactions);
           }
         },
       );

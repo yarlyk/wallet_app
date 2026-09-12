@@ -103,6 +103,7 @@ class _CounterpartyFormScreenState
   }
 
   Future<void> _pickContact() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final picked = await showDialog<PickedContact>(
       context: context,
       builder: (_) => const ContactPickerDialog(),
@@ -120,6 +121,7 @@ class _CounterpartyFormScreenState
   }
 
   Future<void> _pickGroups() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final result = await showDialog<List<int>>(
       context: context,
       builder: (_) => _GroupMultiSelectDialog(
@@ -130,6 +132,7 @@ class _CounterpartyFormScreenState
   }
 
   Future<void> _pickProjects() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final result = await showDialog<List<int>>(
       context: context,
       builder: (_) => ProjectMultiSelectDialog(
@@ -358,5 +361,8 @@ class _GroupMultiSelectDialogState
     );
   }
 }
+
+
+
 
 

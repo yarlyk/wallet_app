@@ -4,6 +4,7 @@ import '../../features/categories/presentation/categories_screen.dart';
 import '../../features/counterparties/presentation/counterparties_screen.dart';
 import '../../features/currencies/presentation/currencies_screen.dart';
 import '../../features/projects/presentation/projects_screen.dart';
+import '../../features/transactions/presentation/transactions_screen.dart';
 
 class AppScaffold extends StatefulWidget {
   const AppScaffold({super.key});
@@ -201,7 +202,7 @@ class _AppScaffoldState extends State<AppScaffold> {
                               index: _currentIndex,
                               children: const [
                                 Center(child: Text('Сводка')),
-                                Center(child: Text('Лента')),
+                                TransactionsScreen(),
                                 Center(child: Text('Отчёт')),
                                 Center(child: Text('Заём')),
                                 Center(child: Text('Увед')),
@@ -223,15 +224,14 @@ class _AppScaffoldState extends State<AppScaffold> {
           });
         },
       ),
-      floatingActionButton:
-          (_currentIndex == 0 || _currentIndex == 1) && !_anyPanelOpen
-              ? FloatingActionButton(
-                  onPressed: () {
-                    // TODO: add new transaction
-                  },
-                  child: const Icon(Icons.add),
-                )
-              : null,
+      floatingActionButton: _currentIndex == 0 && !_anyPanelOpen
+          ? FloatingActionButton(
+              onPressed: () {
+                // TODO: add new transaction
+              },
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 }

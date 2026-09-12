@@ -110,7 +110,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
     if (currencyIds.length > 1) {
       return 'Группа · ${list.length} счётов';
     }
-    final total = list.fold<double>(0, (s, a) => s + a.account.initialBalance);
+    final total = list.fold<double>(0, (s, a) => s + a.balance);
     final symbol = list.first.currency.symbol ?? list.first.currency.code;
     return 'Группа · ${formatAmount(total)} $symbol';
   }
@@ -257,7 +257,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
     final a = awc.account;
     final c = awc.currency;
     final balance =
-        '${formatAmount(a.initialBalance)} ${c.symbol ?? c.code}';
+        '${formatAmount(awc.balance)} ${c.symbol ?? c.code}';
     return ListTile(
       leading: Icon(iconFromName(a.icon), color: Colors.indigo),
       title: Text(a.name),
@@ -316,3 +316,6 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
     }
   }
 }
+
+
+

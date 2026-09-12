@@ -135,6 +135,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
   }
 
   Future<void> _pickGroup() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final result = await showDialog<SelectOption<int?>>(
       context: context,
       builder: (_) => const GroupPickerDialog(),
@@ -144,6 +145,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
   }
 
   Future<void> _pickType() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final result = await showDialog<String>(
       context: context,
       builder: (_) => SelectDialog<String>(
@@ -161,6 +163,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
   }
 
   Future<void> _pickCurrency(List<Currency> currencies) async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final result = await showDialog<int>(
       context: context,
       builder: (_) => SelectDialog<int>(
@@ -179,6 +182,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
   }
 
   Future<void> _pickProjects() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final result = await showDialog<List<int>>(
       context: context,
       builder: (_) => ProjectMultiSelectDialog(
@@ -446,4 +450,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
     );
   }
 }
+
+
+
 

@@ -48,6 +48,7 @@ class _CounterpartyGroupFormScreenState
   }
 
   Future<void> _pickParents() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final result = await showDialog<List<int>>(
       context: context,
       builder: (_) => CounterpartyGroupMultiSelectDialog(
@@ -120,3 +121,4 @@ class _CounterpartyGroupFormScreenState
     );
   }
 }
+

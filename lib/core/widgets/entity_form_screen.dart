@@ -15,6 +15,9 @@ class EntityFormScreen extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final IconData? nameSuffixIcon;
   final VoidCallback? onNameSuffixIconTap;
+  final String nameLabel;
+  final bool nameRequired;
+  final bool showIconPicker;
 
   const EntityFormScreen({
     super.key,
@@ -31,6 +34,9 @@ class EntityFormScreen extends StatefulWidget {
     this.textCapitalization = TextCapitalization.words,
     this.nameSuffixIcon,
     this.onNameSuffixIconTap,
+    this.nameLabel = 'Название',
+    this.nameRequired = true,
+    this.showIconPicker = true,
   });
 
   @override
@@ -88,6 +94,9 @@ class _EntityFormScreenState extends State<EntityFormScreen> {
               textCapitalization: widget.textCapitalization,
               nameSuffixIcon: widget.nameSuffixIcon,
               onNameSuffixIconTap: widget.onNameSuffixIconTap,
+              nameLabel: widget.nameLabel,
+              nameRequired: widget.nameRequired,
+              showIconPicker: widget.showIconPicker,
             ),
           ),
         ),

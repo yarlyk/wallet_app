@@ -47,6 +47,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
   }
 
   Future<void> _pickParents() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     final result = await showDialog<List<int>>(
       context: context,
       builder: (_) => CategoryMultiSelectDialog(
@@ -119,3 +120,6 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     );
   }
 }
+
+
+
