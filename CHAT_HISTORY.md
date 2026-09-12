@@ -118,3 +118,11 @@
 - Старый entity_form.dart удалён.
 - flutter analyze: 0 ошибок, 9 info в app_scaffold.dart (исправим при рефакторе AppScaffold).
 - Следующий шаг: SelectDialog<T> для выбора типа счёта и валюты, затем форма счёта.
+
+## 2026-09-12 (поздно вечером)
+- Создан SelectDialog<T> — переиспользуемое МО выбора из списка.
+- Создан account_form_screen.dart на базе EntityFormScreen: группа (GroupPickerDialog), проекты (ProjectMultiSelectDialog), тип счёта и валюта (SelectDialog), начальный баланс, условные поля карты/банка.
+- Создан accounts_screen.dart — список счетов: счета без группы сверху, затем группы верхнего уровня (ExpansionTile с вложенностью), карандаш для редактирования.
+- AppScaffold: активирован пункт «Счета» в Drawer (флаг _showAccounts), вынесен _closeAllPanels.
+- flutter analyze: No issues found!
+- Следующий шаг: тест на устройстве, рефактор схемы (paymentDueDate → paymentDueDay int 1–28), затем категории.

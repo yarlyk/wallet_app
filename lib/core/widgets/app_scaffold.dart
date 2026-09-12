@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import '../../features/accounts/presentation/accounts_screen.dart';
 import '../../features/currencies/presentation/currencies_screen.dart';
 import '../../features/projects/presentation/projects_screen.dart';
 
@@ -14,6 +15,9 @@ class _AppScaffoldState extends State<AppScaffold> {
   String _selectedBalanceOption = 'Доступно: 0 ₽';
   bool _showProjects = false;
   bool _showCurrencies = false;
+  bool _showAccounts = false;
+
+  bool get _anyPanelOpen => _showProjects || _showCurrencies || _showAccounts;
 
   static const List<String> _titles = [
     'Сводка',
@@ -30,6 +34,14 @@ class _AppScaffoldState extends State<AppScaffold> {
     Icons.handshake,
     Icons.notifications,
   ];
+
+  void _closeAllPanels() {
+    setState(() {
+      _showProjects = false;
+      _showCurrencies = false;
+      _showAccounts = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +66,7 @@ class _AppScaffoldState extends State<AppScaffold> {
               value: _selectedBalanceOption,
               isExpanded: true,
               alignment: Alignment.center,
-              items: [
+              items: const [
                 DropdownMenuItem(
                   value: 'Доступно: 0 ₽',
                   child: SizedBox(
@@ -120,9 +132,17 @@ class _AppScaffoldState extends State<AppScaffold> {
                 ],
               ),
             ),
-            const ListTile(
-              leading: Icon(Icons.account_balance_wallet),
-              title: Text('Счета'),
+            ListTile(
+              leading: const Icon(Icons.account_balance_wallet),
+              title: const Text('Счета'),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  _showAccounts = true;
+                  _showProjects = false;
+                  _showCurrencies = false;
+                });
+              },
             ),
             const ListTile(
               leading: Icon(Icons.category),
@@ -136,6 +156,7 @@ class _AppScaffoldState extends State<AppScaffold> {
                 setState(() {
                   _showProjects = true;
                   _showCurrencies = false;
+                  _showAccounts = false;
                 });
               },
             ),
@@ -147,6 +168,7 @@ class _AppScaffoldState extends State<AppScaffold> {
                 setState(() {
                   _showCurrencies = true;
                   _showProjects = false;
+                  _showAccounts = false;
                 });
               },
             ),
@@ -161,28 +183,22 @@ class _AppScaffoldState extends State<AppScaffold> {
           ],
         ),
       ),
-      body: _showProjects
-          ? ProjectsScreen(onBack: () {
-              setState(() {
-                _showProjects = false;
-              });
-            })
-          : _showCurrencies
-              ? CurrenciesScreen(onBack: () {
-                  setState(() {
-                    _showCurrencies = false;
-                  });
-                })
-              : IndexedStack(
-                  index: _currentIndex,
-                  children: const [
-                    Center(child: Text('Сводка')),
-                    Center(child: Text('Лента')),
-                    Center(child: Text('Отчёт')),
-                    Center(child: Text('Заём')),
-                    Center(child: Text('Увед')),
-                  ],
-                ),
+      body: _showAccounts
+          ? AccountsScreen(onBack: _closeAllPanels)
+          : _showProjects
+              ? ProjectsScreen(onBack: _closeAllPanels)
+              : _showCurrencies
+                  ? CurrenciesScreen(onBack: _closeAllPanels)
+                  : IndexedStack(
+                      index: _currentIndex,
+                      children: const [
+                        Center(child: Text('Сводка')),
+                        Center(child: Text('Лента')),
+                        Center(child: Text('Отчёт')),
+                        Center(child: Text('Заём')),
+                        Center(child: Text('Увед')),
+                      ],
+                    ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
@@ -197,17 +213,19 @@ class _AppScaffoldState extends State<AppScaffold> {
             _currentIndex = index;
             _showProjects = false;
             _showCurrencies = false;
+            _showAccounts = false;
           });
         },
       ),
-      floatingActionButton: (_currentIndex == 0 || _currentIndex == 1) && !_showProjects && !_showCurrencies
-          ? FloatingActionButton(
-              onPressed: () {
-                // TODO: add new transaction
-              },
-              child: const Icon(Icons.add),
-            )
-          : null,
+      floatingActionButton:
+          (_currentIndex == 0 || _currentIndex == 1) && !_anyPanelOpen
+              ? FloatingActionButton(
+                  onPressed: () {
+                    // TODO: add new transaction
+                  },
+                  child: const Icon(Icons.add),
+                )
+              : null,
     );
   }
 }
