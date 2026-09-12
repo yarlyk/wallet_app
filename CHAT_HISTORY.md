@@ -101,3 +101,11 @@
 - У валют убрана возможность добавления/поиска по стране, оставлен только просмотр и переключатель активности.
 - У валют иконки отображают символ валюты.
 - Следующий шаг: реализовать счета (иерархия, группы, типы).
+## 2026-09-12 
+- Созданы таблицы AccountGroups, Accounts, AccountProjects.
+- Создан AccountRepository и AccountGroupRepository.
+- Создан accountsProvider (AsyncNotifier) с CRUD для счетов и групп, связи с проектами.
+- Создан GroupPickerDialog (переиспользуемое МО выбора группы с возможностью создать первую).
+- Создан ProjectMultiSelectDialog (мультивыбор проектов).
+- flutter analyze: ошибок и warning нет, остались 12 info (стилистика).
+- Следующий шаг: переписать account_form_screen.dart на базе EntityForm с extraFields.
