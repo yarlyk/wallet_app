@@ -4,11 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' hide Column;
 import '../../../core/database/app_database.dart';
 import '../../../core/utils/amount_utils.dart';
+import '../../../core/utils/plural_utils.dart';
 import '../../../core/widgets/entity_form_screen.dart';
 import '../../../core/widgets/group_picker_dialog.dart';
 import '../../../core/widgets/project_multi_select_dialog.dart';
 import '../../../core/widgets/select_dialog.dart';
 import '../../currencies/presentation/currencies_provider.dart';
+import '../../transactions/presentation/transactions_provider.dart';
 import 'accounts_provider.dart';
 
 const _accountTypeOptions = <SelectOption<String>>[
@@ -267,6 +269,40 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
     return true;
   }
 
+  Future<bool> _tryDelete() async {
+    final account = widget.account;
+    if (account == null) return false;
+
+    final count = await ref
+        .read(transactionsNotifierProvider)
+        .countForAccount(account.id);
+
+    if (count > 0) {
+      if (!mounted) return false;
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Нельзя удалить счёт'),
+          content: Text(
+            'Счёт участвует в ${pluralRu(count, 'транзакции', 'транзакциях', 'транзакциях')}.\n\n'
+            'Удалите или перенесите эти операции на другой счёт, '
+            'затем повторите удаление.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Понятно'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    }
+
+    await ref.read(accountsProvider.notifier).deleteAccount(account.id);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final currenciesAsync = ref.watch(currenciesProvider);
@@ -292,14 +328,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
         showDelete: widget.account != null,
         onCancel: widget.onCancel,
         onSave: _save,
-        onDelete: widget.account != null
-            ? () async {
-                await ref
-                    .read(accountsProvider.notifier)
-                    .deleteAccount(widget.account!.id);
-                return true;
-              }
-            : null,
+        onDelete: widget.account != null ? _tryDelete : null,
         extraFields: [
           const SizedBox(height: 16),
           _selectField(

@@ -2,9 +2,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' as drift;
 import '../../../core/database/app_database.dart';
+import '../../../core/utils/plural_utils.dart';
 import '../../../core/widgets/entity_form_screen.dart';
 import '../../../core/widgets/entity_list_screen.dart';
 import '../../../core/widgets/icon_picker.dart';
+import '../../transactions/presentation/transactions_provider.dart';
 import 'projects_provider.dart';
 
 class ProjectsScreen extends ConsumerStatefulWidget {
@@ -49,6 +51,37 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
     super.dispose();
   }
 
+  Future<bool> _tryDelete(Project project) async {
+    final count = await ref
+        .read(transactionsNotifierProvider)
+        .countForProject(project.id);
+
+    if (count > 0) {
+      if (!mounted) return false;
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Нельзя удалить проект'),
+          content: Text(
+            'Проект участвует в ${pluralRu(count, 'транзакции', 'транзакциях', 'транзакциях')}.\n\n'
+            'Удалите или переназначьте эти операции на другой проект, '
+            'затем повторите удаление.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Понятно'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    }
+
+    await ref.read(projectsProvider.notifier).deleteProject(project.id);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_showForm) {
@@ -79,12 +112,7 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
           return true;
         },
         onDelete: isEditing
-            ? () async {
-                await ref
-                    .read(projectsProvider.notifier)
-                    .deleteProject(_editingProject!.id);
-                return true;
-              }
+            ? () => _tryDelete(_editingProject!)
             : null,
       );
     }

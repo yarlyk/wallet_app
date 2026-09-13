@@ -121,29 +121,44 @@ class TransactionRepository {
         updatedAt: Value(DateTime.now()),
       ));
 
-  Future<bool> isAccountUsed(int accountId) async {
-    final rows = await (_db.select(_db.transactions)
-          ..where((t) =>
-              t.accountId.equals(accountId) |
-              t.toAccountId.equals(accountId))
-          ..limit(1))
-        .get();
-    return rows.isNotEmpty;
+  /// Сколько транзакций ссылается на счёт (как на источник или получателя).
+  Future<int> countTransactionsForAccount(int accountId) async {
+    final expr = _db.transactions.id.count();
+    final query = _db.selectOnly(_db.transactions)
+      ..addColumns([expr])
+      ..where(_db.transactions.accountId.equals(accountId) |
+          _db.transactions.toAccountId.equals(accountId));
+    final row = await query.getSingle();
+    return row.read(expr) ?? 0;
   }
 
-  Future<bool> isCategoryUsed(int categoryId) async {
-    final rows = await (_db.select(_db.transactions)
-          ..where((t) => t.categoryId.equals(categoryId))
-          ..limit(1))
-        .get();
-    return rows.isNotEmpty;
+  /// Сколько транзакций ссылается на категорию.
+  Future<int> countTransactionsForCategory(int categoryId) async {
+    final expr = _db.transactions.id.count();
+    final query = _db.selectOnly(_db.transactions)
+      ..addColumns([expr])
+      ..where(_db.transactions.categoryId.equals(categoryId));
+    final row = await query.getSingle();
+    return row.read(expr) ?? 0;
   }
 
-  Future<bool> isProjectUsed(int projectId) async {
-    final rows = await (_db.select(_db.transactions)
-          ..where((t) => t.projectId.equals(projectId))
-          ..limit(1))
-        .get();
-    return rows.isNotEmpty;
+  /// Сколько транзакций ссылается на проект.
+  Future<int> countTransactionsForProject(int projectId) async {
+    final expr = _db.transactions.id.count();
+    final query = _db.selectOnly(_db.transactions)
+      ..addColumns([expr])
+      ..where(_db.transactions.projectId.equals(projectId));
+    final row = await query.getSingle();
+    return row.read(expr) ?? 0;
+  }
+
+  /// Сколько транзакций ссылается на контрагента.
+  Future<int> countTransactionsForCounterparty(int counterpartyId) async {
+    final expr = _db.transactions.id.count();
+    final query = _db.selectOnly(_db.transactions)
+      ..addColumns([expr])
+      ..where(_db.transactions.counterpartyId.equals(counterpartyId));
+    final row = await query.getSingle();
+    return row.read(expr) ?? 0;
   }
 }

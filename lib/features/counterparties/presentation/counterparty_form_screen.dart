@@ -5,9 +5,11 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/utils/contacts_utils.dart';
 import '../../../core/utils/phone_utils.dart';
+import '../../../core/utils/plural_utils.dart';
 import '../../../core/widgets/contact_picker_dialog.dart';
 import '../../../core/widgets/entity_form_screen.dart';
 import '../../../core/widgets/project_multi_select_dialog.dart';
+import '../../transactions/presentation/transactions_provider.dart';
 import 'counterparties_provider.dart';
 
 class CounterpartyFormScreen extends ConsumerStatefulWidget {
@@ -196,6 +198,39 @@ class _CounterpartyFormScreenState
     return true;
   }
 
+  Future<bool> _tryDelete() async {
+    final cp = widget.counterparty;
+    if (cp == null) return false;
+
+    final count = await ref
+        .read(transactionsNotifierProvider)
+        .countForCounterparty(cp.id);
+
+    if (count > 0) {
+      if (!mounted) return false;
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Нельзя удалить контрагента'),
+          content: Text(
+            'Контрагент участвует в ${pluralRu(count, 'транзакции', 'транзакциях', 'транзакциях')}.\n\n'
+            'Удалите или переназначьте эти операции, затем повторите удаление.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Понятно'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    }
+
+    await ref.read(counterpartiesProvider.notifier).deleteCounterparty(cp.id);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.counterparty != null;
@@ -209,14 +244,7 @@ class _CounterpartyFormScreenState
       showDelete: isEditing,
       onCancel: widget.onCancel,
       onSave: _save,
-      onDelete: isEditing
-          ? () async {
-              await ref
-                  .read(counterpartiesProvider.notifier)
-                  .deleteCounterparty(widget.counterparty!.id);
-              return true;
-            }
-          : null,
+      onDelete: isEditing ? _tryDelete : null,
       extraFields: [
         const SizedBox(height: 16),
         _selectField(

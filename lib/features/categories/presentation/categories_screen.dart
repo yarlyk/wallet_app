@@ -1,7 +1,9 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/database/app_database.dart';
+import '../../../core/utils/plural_utils.dart';
 import '../../../core/widgets/icon_picker.dart';
+import '../../transactions/presentation/transactions_provider.dart';
 import 'categories_provider.dart';
 import 'category_form_screen.dart';
 
@@ -53,16 +55,6 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     return result;
   }
 
-  String _pluralCategories(int n) {
-    final mod10 = n % 10;
-    final mod100 = n % 100;
-    if (mod10 == 1 && mod100 != 11) return '$n вложенная категория';
-    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
-      return '$n вложенных категории';
-    }
-    return '$n вложенных категорий';
-  }
-
   Future<bool> _tryDeleteCategory(
     Category category,
     Map<int, List<int>> parentIds,
@@ -75,7 +67,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
         builder: (ctx) => AlertDialog(
           title: const Text('Нельзя удалить категорию'),
           content: Text(
-            'Внутри категории ${_pluralCategories(descendants.length)}.\n\n'
+            'Внутри категории ${pluralRu(descendants.length, 'вложенная категория', 'вложенные категории', 'вложенных категорий')}.\n\n'
             'Сначала удалите или переместите вложенные категории, '
             'затем повторите удаление.',
           ),
@@ -89,6 +81,32 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
       );
       return false;
     }
+
+    final used = await ref
+        .read(transactionsNotifierProvider)
+        .countForCategory(category.id);
+
+    if (used > 0) {
+      if (!mounted) return false;
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Нельзя удалить категорию'),
+          content: Text(
+            'Категория участвует в ${pluralRu(used, 'транзакции', 'транзакциях', 'транзакциях')}.\n\n'
+            'Удалите или переназначьте эти операции, затем повторите удаление.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Понятно'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    }
+
     await ref.read(categoriesProvider.notifier).deleteCategory(category.id);
     return true;
   }
@@ -114,7 +132,6 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
         final categories = state.categories;
         final parentIds = state.parentIds;
 
-        // Корневые — те, у кого нет ни одного родителя.
         final roots = categories
             .where((c) => (parentIds[c.id] ?? const []).isEmpty)
             .toList();
@@ -170,12 +187,10 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     Map<int, List<int>> parentIds,
     Set<int> ancestorChain,
   ) {
-    // Дети — все категории, у которых в parentIds есть node.id.
     final children = all
         .where((c) => (parentIds[c.id] ?? const []).contains(node.id))
         .toList();
 
-    // Защита от циклов: если ребёнок уже в цепочке предков — пропускаем.
     final filtered =
         children.where((c) => !ancestorChain.contains(c.id)).toList();
 

@@ -31,11 +31,15 @@ class TransactionsNotifier {
 
   Future<void> setDraft(int id, bool isDraft) => _repo.setDraft(id, isDraft);
 
-  Future<bool> isAccountUsed(int id) => _repo.isAccountUsed(id);
-  Future<bool> isCategoryUsed(int id) => _repo.isCategoryUsed(id);
-  Future<bool> isProjectUsed(int id) => _repo.isProjectUsed(id);
+  Future<int> countForAccount(int id) =>
+      _repo.countTransactionsForAccount(id);
+  Future<int> countForCategory(int id) =>
+      _repo.countTransactionsForCategory(id);
+  Future<int> countForProject(int id) =>
+      _repo.countTransactionsForProject(id);
+  Future<int> countForCounterparty(int id) =>
+      _repo.countTransactionsForCounterparty(id);
 }
 
 final transactionsNotifierProvider =
     Provider<TransactionsNotifier>((ref) => TransactionsNotifier(ref));
-
