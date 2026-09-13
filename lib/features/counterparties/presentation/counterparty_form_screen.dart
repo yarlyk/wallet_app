@@ -160,7 +160,7 @@ class _CounterpartyFormScreenState
     );
   }
 
-  Future<void> _save(String? iconName) async {
+  Future<bool> _save(String? iconName) async {
     final notifier = ref.read(counterpartiesProvider.notifier);
     final entry = CounterpartiesCompanion(
       name: Value(_nameController.text.trim()),
@@ -193,6 +193,7 @@ class _CounterpartyFormScreenState
         _projectIds.toList(),
       );
     }
+    return true;
   }
 
   @override
@@ -361,8 +362,3 @@ class _GroupMultiSelectDialogState
     );
   }
 }
-
-
-
-
-

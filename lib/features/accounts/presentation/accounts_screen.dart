@@ -179,6 +179,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
                         null,
                       );
                 }
+                return true;
               },
               onDelete: isEditing
                   ? () => _tryDeleteGroup(
@@ -316,6 +317,3 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
     }
   }
 }
-
-
-

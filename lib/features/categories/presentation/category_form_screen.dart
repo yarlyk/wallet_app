@@ -75,7 +75,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     );
   }
 
-  Future<void> _save(String? iconName) async {
+  Future<bool> _save(String? iconName) async {
     final notifier = ref.read(categoriesProvider.notifier);
     if (widget.category == null) {
       await notifier.addCategory(
@@ -91,6 +91,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
         _parentIds.toList(),
       );
     }
+    return true;
   }
 
   @override
@@ -120,6 +121,3 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     );
   }
 }
-
-
-

@@ -219,7 +219,9 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
     return g.name;
   }
 
-  Future<void> _save(String? iconName) async {
+  Future<bool> _save(String? iconName) async {
+    if (_selectedCurrencyId == null) return false;
+
     final entry = AccountsCompanion(
       groupId: Value(_selectedGroupId),
       name: Value(_nameController.text.trim()),
@@ -262,6 +264,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
       await notifier.setProjectIdsForAccount(
           widget.account!.id, _selectedProjectIds.toList());
     }
+    return true;
   }
 
   @override
@@ -450,7 +453,3 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
     );
   }
 }
-
-
-
-

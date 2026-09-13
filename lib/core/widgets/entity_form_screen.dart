@@ -7,7 +7,12 @@ class EntityFormScreen extends StatefulWidget {
   final String? initialIconName;
   final ValueChanged<String>? onIconSelected;
   final List<Widget>? extraFields;
-  final Future<void> Function(String? iconName) onSave;
+
+  /// Сохранение. Возвращает true, если запись успешно сохранена и форму
+  /// можно закрыть. false — данные невалидны или сохранение невозможно,
+  /// форма остаётся открытой.
+  final Future<bool> Function(String? iconName) onSave;
+
   final Future<bool> Function()? onDelete;
   final bool showDelete;
   final bool isEditing;
@@ -51,11 +56,22 @@ class _EntityFormScreenState extends State<EntityFormScreen> {
   Future<void> _handleSave() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
+    var ok = false;
     try {
-      await widget.onSave(_bodyKey.currentState?.selectedIconName);
-      if (mounted) widget.onCancel();
+      ok = await widget.onSave(_bodyKey.currentState?.selectedIconName);
     } finally {
       if (mounted) setState(() => _saving = false);
+    }
+    if (!mounted) return;
+    if (ok) {
+      widget.onCancel();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Проверьте обязательные поля'),
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 

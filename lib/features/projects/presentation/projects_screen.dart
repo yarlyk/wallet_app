@@ -76,6 +76,7 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
               icon: iconName,
             );
           }
+          return true;
         },
         onDelete: isEditing
             ? () async {
@@ -118,5 +119,3 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
     );
   }
 }
-
-

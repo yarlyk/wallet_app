@@ -76,7 +76,7 @@ class _CounterpartyGroupFormScreenState
     );
   }
 
-  Future<void> _save(String? iconName) async {
+  Future<bool> _save(String? iconName) async {
     final notifier = ref.read(counterpartiesProvider.notifier);
     if (widget.group == null) {
       await notifier.addGroup(
@@ -92,6 +92,7 @@ class _CounterpartyGroupFormScreenState
         _parentIds.toList(),
       );
     }
+    return true;
   }
 
   @override
@@ -121,4 +122,3 @@ class _CounterpartyGroupFormScreenState
     );
   }
 }
-

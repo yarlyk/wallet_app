@@ -52,6 +52,10 @@ class _TransactionFormScreenState
   DateTime _occurredAt = DateTime.now();
   bool _isDraft = true;
 
+  /// Ошибки полей, показываются как errorText под соответствующим полем.
+  /// Ключи: type, amount, account, toAccount, category, project.
+  final Map<String, String> _errors = {};
+
   @override
   void initState() {
     super.initState();
@@ -87,6 +91,7 @@ class _TransactionFormScreenState
     required String label,
     required String value,
     required VoidCallback onTap,
+    String? errorText,
   }) {
     return InkWell(
       onTap: onTap,
@@ -95,6 +100,7 @@ class _TransactionFormScreenState
           labelText: label,
           border: const OutlineInputBorder(),
           suffixIcon: const Icon(Icons.arrow_drop_down),
+          errorText: errorText,
         ),
         child: Text(value, overflow: TextOverflow.ellipsis),
       ),
@@ -114,7 +120,15 @@ class _TransactionFormScreenState
     if (r != null) {
       setState(() {
         _type = r;
-        if (_type != 'transfer') _toAccountId = null;
+        _errors.remove('type');
+        if (_type != 'transfer') {
+          _toAccountId = null;
+          _errors.remove('toAccount');
+        }
+        if (_type == 'transfer') {
+          _errors.remove('category');
+          _errors.remove('project');
+        }
       });
     }
   }
@@ -146,8 +160,10 @@ class _TransactionFormScreenState
       setState(() {
         if (isTo) {
           _toAccountId = r;
+          _errors.remove('toAccount');
         } else {
           _accountId = r;
+          _errors.remove('account');
         }
       });
     }
@@ -162,6 +178,8 @@ class _TransactionFormScreenState
       _amountController.text = _toAmountController.text;
       _toAmountController.text = tmpAmount;
       _rateController.clear();
+      _errors.remove('account');
+      _errors.remove('toAccount');
     });
   }
 
@@ -193,7 +211,12 @@ class _TransactionFormScreenState
       context: context,
       builder: (_) => const CategoryPickerDialog(),
     );
-    if (r != null) setState(() => _categoryId = r);
+    if (r != null) {
+      setState(() {
+        _categoryId = r;
+        _errors.remove('category');
+      });
+    }
   }
 
   Future<void> _pickProject() async {
@@ -210,7 +233,12 @@ class _TransactionFormScreenState
         selectedValue: _projectId,
       ),
     );
-    if (r != null) setState(() => _projectId = r);
+    if (r != null) {
+      setState(() {
+        _projectId = r;
+        _errors.remove('project');
+      });
+    }
   }
 
   Future<void> _pickCounterparty() async {
@@ -270,6 +298,7 @@ class _TransactionFormScreenState
     if (result != null) {
       setState(() {
         _amountController.text = formatAmount(result);
+        if (result > 0) _errors.remove('amount');
       });
       _recalcToAmountFromRate();
     }
@@ -286,7 +315,6 @@ class _TransactionFormScreenState
       });
     }
   }
-
 
   /// Курс из полей amount и toAmount (ЦБ-стиль: RUB за 1 единицу валюты).
   void _recalcRateFromAmounts() {
@@ -414,18 +442,49 @@ class _TransactionFormScreenState
     return 'Курс ($fromSym/$toSym)';
   }
 
-  Future<void> _save(String? _) async {
-    if (_type == null) return;
-    final amount = parseAmount(_amountController.text);
-    if (amount <= 0) return;
-    if (_accountId == null) return;
-    if (_type != 'transfer' && _projectId == null) return;
-    if (_type == 'transfer' && _toAccountId == null) return;
-    if (_type != 'transfer' && _categoryId == null) return;
+  Future<bool> _save(String? _) async {
+    final newErrors = <String, String>{};
+
+    if (_type == null) {
+      newErrors['type'] = 'Выберите тип операции';
+    } else {
+      final amount = parseAmount(_amountController.text);
+      if (amount <= 0) newErrors['amount'] = 'Введите сумму';
+
+      if (_accountId == null) {
+        newErrors['account'] = _type == 'transfer'
+            ? 'Выберите счёт-отправитель'
+            : 'Выберите счёт';
+      }
+
+      if (_type == 'transfer') {
+        if (_toAccountId == null) {
+          newErrors['toAccount'] = 'Выберите счёт-получатель';
+        }
+      } else {
+        if (_categoryId == null) {
+          newErrors['category'] = 'Выберите категорию';
+        }
+        if (_projectId == null) {
+          newErrors['project'] = 'Выберите проект';
+        }
+      }
+    }
+
+    if (newErrors.isNotEmpty) {
+      setState(() {
+        _errors
+          ..clear()
+          ..addAll(newErrors);
+      });
+      return false;
+    }
+
+    setState(() => _errors.clear());
 
     final entry = TransactionsCompanion(
       type: Value(_type!),
-      amount: Value(amount),
+      amount: Value(parseAmount(_amountController.text)),
       occurredAt: Value(_occurredAt),
       accountId: Value(_accountId!),
       toAccountId: Value(_type == 'transfer' ? _toAccountId : null),
@@ -451,6 +510,7 @@ class _TransactionFormScreenState
     } else {
       await notifier.update(widget.transaction!.id, entry);
     }
+    return true;
   }
 
   @override
@@ -503,6 +563,7 @@ class _TransactionFormScreenState
           label: 'Тип',
           value: _typeLabel(),
           onTap: _pickType,
+          errorText: _errors['type'],
         ),
         if (_type == null) ...[
           const SizedBox(height: 24),
@@ -524,6 +585,7 @@ class _TransactionFormScreenState
               border: const OutlineInputBorder(),
               suffixText: fromSymbol.isEmpty ? null : fromSymbol,
               suffixIcon: const Icon(Icons.calculate),
+              errorText: _errors['amount'],
             ),
             onTap: _pickAmountViaCalculator,
           ),
@@ -532,6 +594,7 @@ class _TransactionFormScreenState
             label: isTransfer ? 'Счёт-отправитель' : 'Счёт',
             value: _accountName(_accountId),
             onTap: () => _pickAccount(isTo: false),
+            errorText: _errors['account'],
           ),
           if (isTransfer) ...[
             const SizedBox(height: 8),
@@ -547,6 +610,7 @@ class _TransactionFormScreenState
               label: 'Счёт-получатель',
               value: _accountName(_toAccountId),
               onTap: () => _pickAccount(isTo: true),
+              errorText: _errors['toAccount'],
             ),
             if (showDifferentCurrency) ...[
               const SizedBox(height: 16),
@@ -615,6 +679,7 @@ class _TransactionFormScreenState
               label: 'Категория',
               value: _categoryName(),
               onTap: _pickCategory,
+              errorText: _errors['category'],
             ),
             const SizedBox(height: 16),
             _counterpartyField(),
@@ -623,6 +688,7 @@ class _TransactionFormScreenState
               label: 'Проект',
               value: _projectName(),
               onTap: _pickProject,
+              errorText: _errors['project'],
             ),
           ],
           const SizedBox(height: 16),
@@ -647,9 +713,3 @@ class _TransactionFormScreenState
     );
   }
 }
-
-
-
-
-
-
